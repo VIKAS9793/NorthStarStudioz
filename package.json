@@ -1,0 +1,14 @@
+{
+  "name": "northstar-studioz-website",
+  "private": true,
+  "description": "Build tooling for the NorthStar Studioz website. The site itself is static HTML/CSS in website/.",
+  "type": "module",
+  "scripts": {
+    "build": "esbuild src/gate/headset.js --bundle --minify --format=esm --target=es2020 --legal-comments=eof --outfile=website/assets/js/gate-3d.js",
+    "verify": "node scripts/verify.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2",
+    "three": "0.170.0"
+  }
+}

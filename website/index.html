@@ -1,400 +1,349 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NorthStar Studioz | Spatial Computing & Mixed Reality Game Studio</title>
-  <meta name="description" content="NorthStar Studioz is an independent spatial computing and mixed reality game studio founded by Vikas Sahani, specializing in tactile physics, bare-hand tracking, and high-performance Meta Horizon OS titles.">
-  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-jfKskw97S0Wn2c/o6hx9Q2izr7Y2uMeyXoC8+xqCT5s=' 'sha256-zEsbks1f0qj8FtyZts3g7UNymtXeO9bfhYjqFdzKLrE='; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'self'; manifest-src 'self'; media-src 'none'; frame-src 'none'; worker-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'; require-trusted-types-for 'script'; trusted-types 'none'; upgrade-insecure-requests">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <title>NorthStar Studioz — Independent Mixed Reality Game Studio</title>
+  <meta name="description" content="NorthStar Studioz is an independent studio in India designing tactile, hands-first mixed reality games for Meta Quest, played on the tables and in the rooms you already have.">
+  <link rel="canonical" href="https://vikas9793.github.io/NorthStarStudioz/">
+  <meta name="theme-color" content="#04060d">
+  <meta name="color-scheme" content="dark">
 
-  <!-- Open Graph & Social Sharing -->
+  <!-- Intro gate: shown once per session, never for reduced-motion users or deep links. Runs before first paint to avoid a flash. -->
+  <script>
+    (function () {
+      var d = document.documentElement;
+      d.classList.add('js');
+      try {
+        if (!matchMedia('(prefers-reduced-motion: reduce)').matches && !sessionStorage.getItem('ns-gate') && !location.hash) {
+          d.classList.add('gate-on');
+          var l = document.createElement('link');
+          l.rel = 'modulepreload'; l.href = 'assets/js/gate-3d.js';
+          document.head.appendChild(l);
+        }
+      } catch (e) {}
+    })();
+  </script>
+
+  <link rel="preload" href="assets/fonts/unbounded.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/manrope.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="styles.css">
+  <script type="module" src="assets/js/site.js"></script>
+
+  <link rel="icon" href="assets/favicon.png" type="image/png">
+  <link rel="apple-touch-icon" href="assets/brand/apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+
+  <!-- Social cards -->
   <meta property="og:type" content="website">
+  <meta property="og:site_name" content="NorthStar Studioz">
   <meta property="og:url" content="https://vikas9793.github.io/NorthStarStudioz/">
-  <meta property="og:title" content="NorthStar Studioz | Spatial Computing & Mixed Reality Game Studio">
-  <meta property="og:description" content="Independent spatial computing game studio crafting tactile, physics-driven Mixed Reality titles for Meta Horizon OS.">
+  <meta property="og:title" content="NorthStar Studioz — Independent Mixed Reality Game Studio">
+  <meta property="og:description" content="Tactile, hands-first mixed reality games for Meta Quest, designed for the room you already live in.">
   <meta property="og:image" content="https://vikas9793.github.io/NorthStarStudioz/assets/og_image.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-
-  <!-- Twitter Cards -->
+  <meta property="og:image:alt" content="NorthStar Studioz emblem: a figure on a mountain peak wearing a headset beneath a bright north star.">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="NorthStar Studioz | Spatial Computing & Mixed Reality Game Studio">
-  <meta name="twitter:description" content="Independent spatial computing game studio crafting tactile, physics-driven Mixed Reality titles for Meta Horizon OS.">
-  <meta name="twitter:image" content="https://vikas9793.github.io/NorthStarStudioz/assets/og_image.jpg">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://vikas9793.github.io/NorthStarStudioz/#studio",
+        "name": "NorthStar Studioz",
+        "url": "https://vikas9793.github.io/NorthStarStudioz/",
+        "logo": "https://vikas9793.github.io/NorthStarStudioz/assets/brand/logo-320.webp",
+        "description": "Independent studio designing tactile, hands-first mixed reality games for Meta Quest.",
+        "email": "studioznorthstar@gmail.com",
+        "founder": { "@type": "Person", "name": "Vikas Sahani", "url": "https://github.com/VIKAS9793" },
+        "address": { "@type": "PostalAddress", "addressCountry": "IN" },
+        "knowsAbout": ["Mixed reality", "Hand tracking", "Spatial computing", "Game development", "OpenXR"],
+        "sameAs": ["https://github.com/VIKAS9793/NorthStarStudioz"]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://vikas9793.github.io/NorthStarStudioz/#website",
+        "url": "https://vikas9793.github.io/NorthStarStudioz/",
+        "name": "NorthStar Studioz",
+        "publisher": { "@id": "https://vikas9793.github.io/NorthStarStudioz/#studio" },
+        "inLanguage": "en"
+      }
+    ]
+  }
+  </script>
+
+  <script type="speculationrules">
+    { "prerender": [{ "where": { "href_matches": ["*/privacy.html", "*/terms.html"] }, "eagerness": "moderate" }] }
+  </script>
 </head>
 <body>
+  <a class="skip-link" href="#main">Skip to content</a>
 
-  <!-- Navigation -->
-  <header>
-    <div class="container nav-bar">
-      <a href="index.html" class="brand" id="brand-logo">
-        <img src="assets/logo.webp" alt="NorthStar Studioz Logo" class="brand-logo-img">
-        <span>NorthStar Studioz</span>
+  <!-- ===================== Intro gate ===================== -->
+  <div class="gate" id="gate" role="dialog" aria-modal="true" aria-labelledby="gate-title">
+    <div class="gate__sky" aria-hidden="true"><span class="gate__star"></span></div>
+    <canvas class="gate__canvas" aria-hidden="true"></canvas>
+    <div class="gate__emblem" aria-hidden="true"></div>
+
+    <p class="gate__title" id="gate-title">
+      <span class="gate__word gate__word--north">NorthStar</span>
+      <span class="gate__word gate__word--studio">Studioz</span>
+    </p>
+
+    <div class="gate__foot">
+      <p class="gate__tag">Independent mixed reality studio</p>
+      <button class="gate__enter" type="button" data-gate-enter>
+        <span>Enter the studio</span>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <p class="gate__hint">Best experienced on a larger screen</p>
+    </div>
+    <button class="gate__skip" type="button" data-gate-skip>Skip intro</button>
+    <div class="gate__flash" aria-hidden="true"></div>
+  </div>
+
+  <!-- ===================== Header ===================== -->
+  <header class="site-header">
+    <div class="wrap site-header__bar">
+      <a class="brand" href="./" aria-label="NorthStar Studioz home">
+        <img src="assets/brand/logo-96.webp" width="36" height="36" alt="">
+        <span>NorthStar <b>Studioz</b></span>
       </a>
-      <ul class="nav-links">
-        <li><a href="#niches" id="nav-niches">Game Niches</a></li>
-        <li><a href="#specializations" id="nav-specializations">Platform Tech</a></li>
-        <li><a href="#studio" id="nav-studio">About Studio</a></li>
-        <li><a href="privacy.html" id="nav-privacy">Privacy</a></li>
-        <li><a href="terms.html" id="nav-terms">Terms</a></li>
-        <li><a href="https://github.com/VIKAS9793/NorthStarStudioz" target="_blank" rel="noopener noreferrer" class="nav-btn" id="nav-github-profile">GitHub Repo</a></li>
-      </ul>
+      <nav class="nav" aria-label="Primary">
+        <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="nav-list">
+          <span class="sr-only">Menu</span><i></i><i></i>
+        </button>
+        <ul class="nav__list" id="nav-list">
+          <li><a href="#focus">Focus</a></li>
+          <li><a href="#players">Players</a></li>
+          <li><a href="#platform">Platform</a></li>
+          <li><a href="#studio">Studio</a></li>
+          <li><a class="btn btn--small" href="#contact">Contact</a></li>
+        </ul>
+      </nav>
     </div>
   </header>
 
-  <main>
-    <div class="container">
-      
-      <!-- Studio Hero Header -->
-      <section class="hero-section" id="hero-area">
-        <canvas id="spatial-canvas" class="spatial-bg-canvas"></canvas>
-        
-        <div class="hero-grid">
-          <div class="hero-content">
-            <div class="badge-tag">
-              <span class="pulse-dot"></span>
-              Meta Horizon OS Developer &bull; India
-            </div>
-            
-            <h1 class="hero-title">
-              Pioneering Tactile Mixed Reality & Spatial Physics
-            </h1>
-            
-            <p class="hero-subtitle">
-              NorthStar Studioz crafts tactile, physics-driven spatial computing games. We engineer software that transforms physical rooms into interactive playfields using bare-hand interactions and high-performance XR architecture.
-            </p>
-
-            <div class="hero-cta">
-              <a href="#niches" class="btn-primary" id="cta-explore-niches">
-                Explore Studio Focus ✦
-              </a>
-              <a href="mailto:studioznorthstar@gmail.com" class="btn-secondary" id="cta-contact-studio">
-                Contact Studio
-              </a>
-            </div>
-
-            <!-- Tech Stack Badges -->
-            <div class="tech-strip">
-              <span class="tech-badge">Meta Horizon OS</span>
-              <span class="tech-badge">Khronos OpenXR</span>
-              <span class="tech-badge">Meta Interaction SDK</span>
-              <span class="tech-badge">Unity 6 URP</span>
-              <span class="tech-badge">Snapdragon XR2 Gen 2</span>
-            </div>
-          </div>
-
-          <!-- 3D Interactive Spatial Viewport -->
-          <div class="hero-spatial-stage" id="spatial-stage">
-            <div class="vr-viewport-card" id="vr-card">
-              <div class="spatial-aura"></div>
-              <div class="spatial-reticle"></div>
-              <div class="hud-chip hud-chip-top">
-                <span class="chip-dot"></span>
-                <span>4MP Stereo Passthrough</span>
-              </div>
-              <img src="assets/hero_vr_headset.webp" alt="Meta Horizon OS Spatial Computing Headset" class="vr-floating-headset" id="hero-vr-headset">
-              <div class="hud-chip hud-chip-bottom">
-                <span class="chip-dot"></span>
-                <span>Optical Hand Tracking 2.0</span>
-              </div>
-            </div>
+  <main id="main">
+    <!-- ===================== Hero ===================== -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero__sky" aria-hidden="true"></div>
+      <div class="wrap hero__grid">
+        <div class="hero__copy">
+          <p class="eyebrow"><span class="dot" aria-hidden="true"></span>Independent mixed reality studio · India</p>
+          <h1 id="hero-title" class="display" tabindex="-1">Games that live <span class="grad">in your room.</span></h1>
+          <p class="lede">NorthStar Studioz designs tactile, hands-first mixed reality for Meta Quest. Physics you can reach out and touch, played on the table you already own.</p>
+          <div class="hero__cta">
+            <a class="btn" href="#focus">What we make</a>
+            <a class="btn btn--ghost" href="#contact">Get in touch</a>
           </div>
         </div>
 
-        <!-- Telemetry Metrics Strip -->
-        <div class="telemetry-strip">
-          <div class="telemetry-item">
-            <span class="telemetry-value">90 FPS</span>
-            <span class="telemetry-label">Locked Target Baseline</span>
-          </div>
-          <div class="telemetry-item">
-            <span class="telemetry-value">&lt; 11 ms</span>
-            <span class="telemetry-label">Motion-To-Photon Latency</span>
-          </div>
-          <div class="telemetry-item">
-            <span class="telemetry-value">100%</span>
-            <span class="telemetry-label">Stationary Comfort Rating</span>
-          </div>
-          <div class="telemetry-item">
-            <span class="telemetry-value">OpenXR</span>
-            <span class="telemetry-label">Unified Spatial Standard</span>
-          </div>
-        </div>
-      </section>
+        <figure class="hero__art" aria-hidden="true">
+          <svg viewBox="0 0 520 460" class="room">
+            <defs>
+              <linearGradient id="g-surface" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#2f7bff" stop-opacity=".22"/>
+                <stop offset="1" stop-color="#8b6cff" stop-opacity=".06"/>
+              </linearGradient>
+              <linearGradient id="g-arc" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0" stop-color="#3be3ff"/>
+                <stop offset="1" stop-color="#8b6cff"/>
+              </linearGradient>
+              <radialGradient id="g-anchor">
+                <stop offset="0" stop-color="#3be3ff" stop-opacity=".9"/>
+                <stop offset="1" stop-color="#3be3ff" stop-opacity="0"/>
+              </radialGradient>
+            </defs>
+            <!-- room mesh: floor lines -->
+            <g class="room__mesh" stroke="#7da2ff" stroke-opacity=".14" fill="none">
+              <path d="M20 420 L260 300 L500 420"/>
+              <path d="M80 450 L260 330 L440 450"/>
+              <path d="M140 460 L260 360 L380 460"/>
+              <path d="M260 300 V40"/>
+              <path d="M20 420 V120 L260 40"/>
+              <path d="M500 420 V120 L260 40"/>
+            </g>
+            <!-- table surface -->
+            <path class="room__table" d="M110 300 L270 228 L430 290 L270 372 Z" fill="url(#g-surface)" stroke="#3be3ff" stroke-opacity=".55"/>
+            <g stroke="#3be3ff" stroke-opacity=".16">
+              <path d="M150 282 L310 354"/><path d="M190 264 L350 336"/><path d="M230 246 L390 318"/>
+              <path d="M150 318 L310 246"/><path d="M190 336 L350 264"/>
+            </g>
+            <path d="M110 300 V318 L270 390 L430 308 V290" fill="none" stroke="#3be3ff" stroke-opacity=".25"/>
+            <!-- ramp -->
+            <path d="M178 284 L232 192 L250 200 L198 294 Z" fill="#8b6cff" fill-opacity=".22" stroke="#8b6cff" stroke-opacity=".7"/>
+            <!-- kinetic arc -->
+            <path id="arc" class="room__arc" d="M240 196 C 300 120, 370 170, 352 300" fill="none" stroke="url(#g-arc)" stroke-width="2" stroke-dasharray="4 7"/>
+            <circle class="room__ball" r="9" fill="#e9f6ff"/>
+            <!-- anchor -->
+            <circle cx="352" cy="304" r="34" fill="url(#g-anchor)" class="room__pulse"/>
+            <ellipse cx="352" cy="304" rx="22" ry="10" fill="none" stroke="#3be3ff" stroke-width="1.5"/>
+            <ellipse cx="352" cy="304" rx="5" ry="2.4" fill="#3be3ff"/>
+            <!-- HUD labels -->
+            <g class="room__hud" font-size="11" font-family="Manrope, system-ui, sans-serif" letter-spacing=".08em" fill="#b9c8ef">
+              <rect x="300" y="352" width="128" height="26" rx="13" fill="#0a1124" stroke="#3be3ff" stroke-opacity=".35"/>
+              <text x="316" y="369">ANCHOR · TABLE</text>
+              <rect x="60" y="170" width="118" height="26" rx="13" fill="#0a1124" stroke="#8b6cff" stroke-opacity=".4"/>
+              <text x="76" y="187">PINCH · PLACE</text>
+            </g>
+            <!-- north star -->
+            <g class="room__star" transform="translate(408 86)">
+              <path d="M0 -30 L4 -4 L30 0 L4 4 L0 30 L-4 4 L-30 0 L-4 -4 Z" fill="#fff"/>
+              <circle r="10" fill="#9ec5ff" opacity=".45"/>
+            </g>
+          </svg>
+          <figcaption class="sr-only">Illustration: a real table in a room, mapped as a play surface with an anchor point.</figcaption>
+        </figure>
+      </div>
 
-      <!-- Studio Game Development Niches -->
-      <section id="niches" class="game-showcase">
-        <div class="game-header">
+      <div class="wrap">
+        <dl class="facts">
+          <div><dt>Platform</dt><dd>Meta Quest 3 · 3S</dd></div>
+          <div><dt>Input</dt><dd>Hand tracking first</dd></div>
+          <div><dt>Format</dt><dd>Mixed reality, stationary play</dd></div>
+          <div><dt>Status</dt><dd><span class="dot" aria-hidden="true"></span>Prototyping our first title</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- ===================== Focus ===================== -->
+    <section class="section" id="focus" aria-labelledby="focus-title">
+      <div class="wrap">
+        <header class="section__head reveal">
+          <p class="eyebrow">Our focus</p>
+          <h2 id="focus-title" class="h2">Four principles behind everything we build.</h2>
+        </header>
+
+        <ol class="pillars">
+          <li class="pillar reveal">
+            <span class="pillar__num">01</span>
+            <svg class="pillar__icon" viewBox="0 0 48 48" aria-hidden="true"><path d="M17 26V12a3 3 0 0 1 6 0v11m0-1V9a3 3 0 0 1 6 0v13m0-1v-8a3 3 0 0 1 6 0v15c0 8-5 13-12 13-5 0-8-2-11-7l-5-8a3 3 0 0 1 5-3l2 3"/></svg>
+            <h3>Hands first</h3>
+            <p>Your fingers are the controller. Pinch, grab, turn and snap, designed around natural hand tracking. Controllers are a fallback, not the default.</p>
+          </li>
+          <li class="pillar reveal">
+            <span class="pillar__num">02</span>
+            <svg class="pillar__icon" viewBox="0 0 48 48" aria-hidden="true"><path d="M6 30 24 21l18 9-18 9z"/><path d="M6 30v4l18 9 18-9v-4"/><circle cx="24" cy="12" r="4"/><path d="M24 16v9"/></svg>
+            <h3>Your room is the level</h3>
+            <p>Passthrough and scene understanding turn real tables, floors and walls into play surfaces. No black void, no boundary redraw. Just your space, with something new in it.</p>
+          </li>
+          <li class="pillar reveal">
+            <span class="pillar__num">03</span>
+            <svg class="pillar__icon" viewBox="0 0 48 48" aria-hidden="true"><path d="M8 20v8m8-14v20m8-26v32m8-26v20m8-14v8"/></svg>
+            <h3>Sound you can feel</h3>
+            <p>Touch lives in the ears too. We design with sampled real materials such as wood, brass and ceramic, placed in spatial audio so every click and roll lands where it happens.</p>
+          </li>
+          <li class="pillar reveal">
+            <span class="pillar__num">04</span>
+            <svg class="pillar__icon" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 6 39 12v11c0 10-6 16-15 19C15 39 9 33 9 23V12z"/><path d="m17 24 5 5 9-10"/></svg>
+            <h3>Comfort by design</h3>
+            <p>Stationary play with no artificial locomotion. The real room stays visible, so experiences work for first-timers and long sessions alike.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ===================== Players ===================== -->
+    <section class="section section--tint" id="players" aria-labelledby="players-title">
+      <div class="wrap">
+        <header class="section__head reveal">
+          <p class="eyebrow">Who we make games for</p>
+          <h2 id="players-title" class="h2">Designed for people, not just headsets.</h2>
+        </header>
+        <div class="cards">
+          <article class="card reveal">
+            <p class="card__kicker">The wind-down player</p>
+            <p>Fifteen to thirty minutes after work. Calm, satisfying problem-solving in the living room instead of high-speed intensity.</p>
+          </article>
+          <article class="card reveal">
+            <p class="card__kicker">The headset host</p>
+            <p>The person handing a headset to a friend or parent for the first time. It has to make sense in seconds, without a tutorial wall.</p>
+          </article>
+          <article class="card reveal">
+            <p class="card__kicker">The tinkerer</p>
+            <p>Fans of chain reactions and contraptions who will happily spend an hour getting something to work just right.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== Platform ===================== -->
+    <section class="section" id="platform" aria-labelledby="platform-title">
+      <div class="wrap platform">
+        <header class="section__head reveal">
+          <p class="eyebrow">Platform</p>
+          <h2 id="platform-title" class="h2">Built for Meta Quest, on open standards.</h2>
+          <p class="muted">Standalone first: everything runs on the headset, with no PC required.</p>
+        </header>
+
+        <ul class="stack reveal">
+          <li><span class="stack__label">Runtime</span><strong>Meta Horizon OS</strong><span>Native standalone builds for Meta Quest 3 and Quest 3S.</span></li>
+          <li><span class="stack__label">Standard</span><strong>OpenXR + Meta XR SDK</strong><span>Open standards at the core, with Meta’s hand, passthrough and scene APIs where they make the experience better.</span></li>
+          <li><span class="stack__label">Engine</span><strong>Unity · URP</strong><span>A mobile-first render pipeline tuned for standalone headset chipsets.</span></li>
+        </ul>
+
+        <div class="bar reveal">
+          <h3 class="bar__title">The bar we hold ourselves to</h3>
+          <ul class="bar__list">
+            <li>Hold the headset’s native refresh rate, every frame.</li>
+            <li>Open straight into passthrough, in your room, within seconds.</li>
+            <li>Respect the system: boundary, tracking loss and the Meta button always behave as players expect.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== Studio ===================== -->
+    <section class="section section--tint" id="studio" aria-labelledby="studio-title">
+      <div class="wrap studio">
+        <div class="studio__copy reveal">
+          <p class="eyebrow">The studio</p>
+          <h2 id="studio-title" class="h2">Small on purpose. Guided by one north star.</h2>
+          <p>NorthStar Studioz is an independent studio founded in India by Vikas Sahani. We pick one niche, tactile mixed reality, and build for it carefully. We ship when it’s ready.</p>
+        </div>
+        <aside class="founder reveal" aria-label="Founder">
+          <img src="assets/brand/logo-320.webp" width="88" height="88" alt="" loading="lazy" decoding="async">
           <div>
-            <div class="badge-tag" style="margin-bottom: 12px;">CREATIVE FOCUS</div>
-            <h2 class="game-title">Our Game Development Niches</h2>
-            <p style="color: var(--text-muted); font-size: 1.1rem; margin-top: 6px; margin-bottom: 0;">
-              Where tactile physics, real-world presence, and intuitive mechanics intersect
-            </p>
+            <p class="founder__name">Vikas Sahani</p>
+            <p class="founder__role">Founder &amp; developer</p>
+            <a href="https://github.com/VIKAS9793" rel="noopener">github.com/VIKAS9793</a>
           </div>
-          <div class="game-meta-pills">
-            <span class="pill pill-cyan">Color Passthrough</span>
-            <span class="pill pill-purple">Bare-Hand Tracking</span>
-            <span class="pill pill-amber">VRC Comfortable (0% Nausea)</span>
-          </div>
-        </div>
+        </aside>
+      </div>
+    </section>
 
-        <p style="font-size: 1.05rem; line-height: 1.7; color: #cbd5e1; margin-bottom: 28px;">
-          Rather than building traditional enclosed VR games that induce fatigue or require bulky controllers, NorthStar Studioz specializes in high-retention Mixed Reality (MR) categories designed to be played seamlessly in everyday living spaces.
-        </p>
-
-        <!-- Feature Grid -->
-        <div class="feature-grid">
-          <div class="feature-box">
-            <div class="feature-icon">👐</div>
-            <h3>Bare-Hands First Interaction</h3>
-            <p>We build games that treat hands and fingers as the primary input. Utilizing Meta's Interaction SDK, players grab, pinch, rotate, and manipulate physics objects naturally without picking up controllers.</p>
-          </div>
-
-          <div class="feature-box">
-            <div class="feature-icon">🏠</div>
-            <h3>Room-Scale & Surface Meshing</h3>
-            <p>Our games treat real coffee tables, desks, floors, and walls as active play surfaces. By leveraging scene understanding, virtual physics directly bounce and interact with physical architecture.</p>
-          </div>
-
-          <div class="feature-box">
-            <div class="feature-icon">🎵</div>
-            <h3>Tactile ASMR Soundscapes</h3>
-            <p>Every interaction is tuned for acoustic satisfaction. We integrate micro-sampled real-world materials (wood, brass, ceramic, marble) with true 3D spatialized binaural audio for deep immersion.</p>
-          </div>
-
-          <div class="feature-box">
-            <div class="feature-icon">🧩</div>
-            <h3>Spatial Puzzles & Micro-Sandboxes</h3>
-            <p>We focus on kinetic chain reactions, gravity puzzles, and open-ended sandboxes that offer immediate pick-up-and-play delight with endless player experimentation.</p>
-          </div>
-
-          <div class="feature-box">
-            <div class="feature-icon">🛡️</div>
-            <h3>Zero Motion Sickness (100% Comfort)</h3>
-            <p>By rooting experiences in the player's physical environment via Passthrough, our games eliminate vestibular mismatch and boundary anxiety, achieving the highest 'Comfortable' rating.</p>
-          </div>
-
-          <div class="feature-box">
-            <div class="feature-icon">☁️</div>
-            <h3>Persistent Spatial Anchors</h3>
-            <p>Apparatuses and creations stay locked where you put them. Using Meta Spatial Anchors and Cloud Storage, your workbench reappears in the exact physical room location session after session.</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- Platform & Engineering Specializations -->
-      <section id="specializations" class="content-card" style="margin-top: 40px;">
-        <div class="badge-tag">ENGINEERING DISCIPLINE</div>
-        <h2 style="font-size: 2rem; margin-top: 0;">Platform & Hardware Specializations</h2>
-        <p style="font-size: 1.05rem; color: var(--text-muted); margin-bottom: 28px;">
-          Optimized specifically for the mobile compute and thermal profiles of modern standalone XR chipsets.
-        </p>
-
-        <div class="feature-grid">
-          <div class="feature-box">
-            <div style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--neon-cyan); margin-bottom: 8px;">TARGET RUNTIME</div>
-            <h3>Meta Horizon OS</h3>
-            <p>Native standalone builds deployed across Meta Quest 3, Quest 3S, Quest 2, and Quest Pro, positioned for upcoming third-party Horizon OS spatial headsets.</p>
-          </div>
-
-          <div class="feature-box">
-            <div style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--neon-cyan); margin-bottom: 8px;">STANDARDS</div>
-            <h3>Khronos OpenXR</h3>
-            <p>Built strictly on industry-standard OpenXR extensions, deprecating legacy proprietary APIs for long-term compatibility and cross-device scalability.</p>
-          </div>
-
-          <div class="feature-box">
-            <div style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--neon-cyan); margin-bottom: 8px;">PERFORMANCE BUDGET</div>
-            <h3>Locked 90 FPS on Mobile XR</h3>
-            <p>Engineered with Universal Render Pipeline (URP), Vulkan multithreaded rendering, Single-Pass Multiview, and strict draw-call budgeting (<120 calls/frame) to prevent thermal throttling.</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- Developer & Studio Profile Section -->
-      <section id="studio" class="developer-profile">
-        <div class="dev-avatar">
-          <img src="assets/logo.webp" alt="NorthStar Studioz Emblem" class="dev-avatar-img">
-        </div>
-        <div class="dev-info">
-          <div class="badge-tag" style="margin-bottom: 8px;">STUDIO FOUNDER & LEAD</div>
-          <h3>Vikas Sahani</h3>
-          <div class="dev-role">XR Developer &bull; Founder of NorthStar Studioz &bull; India</div>
-          <p class="dev-bio">
-            Independent spatial computing creator passionate about building world-class mixed-reality software. Focused on combining tactile physics, spatial audio, and seamless hand-tracking to create memorable, accessible, and high-retention experiences on the Meta Horizon OS ecosystem.
-          </p>
-          <div class="dev-links">
-            <a href="https://github.com/VIKAS9793/NorthStarStudioz" target="_blank" rel="noopener noreferrer" id="dev-github-link">
-              <span>✦</span> GitHub: @VIKAS9793/NorthStarStudioz
-            </a>
-            <a href="mailto:studioznorthstar@gmail.com" id="dev-email-link">
-              <span>✉</span> studioznorthstar@gmail.com
-            </a>
-          </div>
-        </div>
-      </section>
-
-    </div>
+    <!-- ===================== Contact ===================== -->
+    <section class="section contact" id="contact" aria-labelledby="contact-title">
+      <div class="wrap contact__inner reveal">
+        <p class="eyebrow">Contact</p>
+        <h2 id="contact-title" class="display display--sm">Players, press, partners: <span class="grad">say hello.</span></h2>
+        <a class="btn btn--big" href="mailto:studioznorthstar@gmail.com">studioznorthstar@gmail.com</a>
+      </div>
+    </section>
   </main>
 
-  <!-- Footer -->
-  <footer>
-    <div class="container footer-content">
-      <div class="footer-links">
-        <a href="#niches" id="footer-niches">Game Niches</a>
-        <a href="#specializations" id="footer-specializations">Platform Tech</a>
-        <a href="#studio" id="footer-about">About Studio</a>
-        <a href="privacy.html" id="footer-privacy-link">Privacy Policy</a>
-        <a href="terms.html" id="footer-terms-link">Terms of Service</a>
-        <a href="https://github.com/VIKAS9793/NorthStarStudioz" target="_blank" rel="noopener noreferrer" id="footer-github-link">GitHub Repository</a>
-      </div>
-      <p class="copyright">
-        &copy; 2026 NorthStar Studioz. Founded by Vikas Sahani. All rights reserved.<br>
-        Meta Horizon Store, Meta Quest, and Meta Horizon OS are trademarks of Meta Platforms, Inc.
-      </p>
+  <footer class="site-footer">
+    <div class="wrap site-footer__grid">
+      <a class="brand" href="./">
+        <img src="assets/brand/logo-96.webp" width="32" height="32" alt="" loading="lazy">
+        <span>NorthStar <b>Studioz</b></span>
+      </a>
+      <nav aria-label="Footer">
+        <ul class="site-footer__links">
+          <li><a href="privacy.html">Privacy</a></li>
+          <li><a href="terms.html">Terms</a></li>
+          <li><a href="https://github.com/VIKAS9793/NorthStarStudioz" rel="noopener">GitHub</a></li>
+          <li><a href="mailto:studioznorthstar@gmail.com">Email</a></li>
+        </ul>
+      </nav>
+      <p class="site-footer__legal">© 2026 NorthStar Studioz. Meta, Meta Quest and Meta Horizon OS are trademarks of Meta Platforms, Inc. NorthStar Studioz is an independent developer and is not affiliated with or endorsed by Meta.</p>
     </div>
   </footer>
-
-  <!-- Interactive Spatial Engine & Motion Scripts -->
-  <script>
-    // --- 1. Interactive 3D Parallax on VR Headset Viewport ---
-    (function init3DParallax() {
-      const stage = document.getElementById('spatial-stage');
-      const card = document.getElementById('vr-card');
-      if (!stage || !card) return;
-
-      let currentX = 0, currentY = 0;
-      let targetX = 0, targetY = 0;
-
-      stage.addEventListener('mousemove', (e) => {
-        const rect = stage.getBoundingClientRect();
-        const x = (e.clientX - rect.left) / rect.width - 0.5;
-        const y = (e.clientY - rect.top) / rect.height - 0.5;
-        targetX = x * 26; // max 26deg yaw
-        targetY = -y * 22; // max 22deg pitch
-      });
-
-      stage.addEventListener('mouseleave', () => {
-        targetX = 0;
-        targetY = 0;
-      });
-
-      function renderParallax() {
-        currentX += (targetX - currentX) * 0.08;
-        currentY += (targetY - currentY) * 0.08;
-        card.style.transform = `perspective(1000px) rotateY(${currentX.toFixed(2)}deg) rotateX(${currentY.toFixed(2)}deg)`;
-        requestAnimationFrame(renderParallax);
-      }
-      renderParallax();
-    })();
-
-    // --- 2. Ambient Spatial Anchors & Constellation Canvas ---
-    (function initSpatialCanvas() {
-      const canvas = document.getElementById('spatial-canvas');
-      if (!canvas) return;
-      const ctx = canvas.getContext('2d');
-      let width, height;
-      const points = [];
-      const POINT_COUNT = 36;
-      let mouse = { x: null, y: null };
-
-      function resize() {
-        const parent = canvas.parentElement;
-        width = canvas.width = parent.offsetWidth;
-        height = canvas.height = parent.offsetHeight;
-      }
-      resize();
-      window.addEventListener('resize', resize);
-
-      for (let i = 0; i < POINT_COUNT; i++) {
-        points.push({
-          x: Math.random() * (width || 800),
-          y: Math.random() * (height || 500),
-          vx: (Math.random() - 0.5) * 0.45,
-          vy: (Math.random() - 0.5) * 0.45,
-          radius: Math.random() * 1.8 + 1,
-          color: Math.random() > 0.4 ? 'rgba(0, 242, 254, ' : 'rgba(139, 92, 246, '
-        });
-      }
-
-      window.addEventListener('mousemove', (e) => {
-        const rect = canvas.getBoundingClientRect();
-        if (e.clientY >= rect.top && e.clientY <= rect.bottom) {
-          mouse.x = e.clientX - rect.left;
-          mouse.y = e.clientY - rect.top;
-        } else {
-          mouse.x = null;
-          mouse.y = null;
-        }
-      });
-
-      function animate() {
-        ctx.clearRect(0, 0, width, height);
-
-        for (let i = 0; i < points.length; i++) {
-          const p = points[i];
-          p.x += p.vx;
-          p.y += p.vy;
-
-          if (p.x < 0 || p.x > width) p.vx *= -1;
-          if (p.y < 0 || p.y > height) p.vy *= -1;
-
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-          ctx.fillStyle = p.color + '0.7)';
-          ctx.fill();
-
-          for (let j = i + 1; j < points.length; j++) {
-            const p2 = points[j];
-            const dist = Math.hypot(p.x - p2.x, p.y - p2.y);
-            if (dist < 110) {
-              ctx.beginPath();
-              ctx.moveTo(p.x, p.y);
-              ctx.lineTo(p2.x, p2.y);
-              ctx.strokeStyle = `rgba(0, 242, 254, ${(1 - dist / 110) * 0.16})`;
-              ctx.lineWidth = 0.8;
-              ctx.stroke();
-            }
-          }
-
-          if (mouse.x !== null) {
-            const mDist = Math.hypot(p.x - mouse.x, p.y - mouse.y);
-            if (mDist < 140) {
-              ctx.beginPath();
-              ctx.moveTo(p.x, p.y);
-              ctx.lineTo(mouse.x, mouse.y);
-              ctx.strokeStyle = `rgba(139, 92, 246, ${(1 - mDist / 140) * 0.28})`;
-              ctx.lineWidth = 1;
-              ctx.stroke();
-            }
-          }
-        }
-        requestAnimationFrame(animate);
-      }
-      animate();
-    })();
-
-    // --- 3. Feature Cards Interactive 3D Tilt ---
-    (function initCardTilt() {
-      const cards = document.querySelectorAll('.feature-box');
-      cards.forEach(card => {
-        card.addEventListener('mousemove', (e) => {
-          const rect = card.getBoundingClientRect();
-          const x = (e.clientX - rect.left) / rect.width - 0.5;
-          const y = (e.clientY - rect.top) / rect.height - 0.5;
-          card.style.transform = `translateY(-6px) perspective(800px) rotateX(${-y * 8}deg) rotateY(${x * 8}deg)`;
-        });
-        card.addEventListener('mouseleave', () => {
-          card.style.transform = 'translateY(0) perspective(800px) rotateX(0deg) rotateY(0deg)';
-        });
-      });
-    })();
-  </script>
 </body>
 </html>
