@@ -71,6 +71,98 @@ if (reticle && finePointer && !reduceMotion) {
   reticle?.remove();
 }
 
+/* ---------- Curved monitor: side-scrolling panes shaped like a curved screen ---------- */
+const monitor = document.querySelector('.monitor');
+if (monitor) initMonitor(monitor);
+
+function initMonitor(monitor) {
+  const screen = monitor.querySelector('.monitor__screen');
+  const panes = [...monitor.querySelectorAll('.prompt')];
+  const bar = monitor.querySelector('.monitor__progress span');
+  const prevBtn = monitor.querySelector('[data-monitor="prev"]');
+  const nextBtn = monitor.querySelector('[data-monitor="next"]');
+  const SAMPLES = 16;
+  let raf = 0;
+
+  // Inset of the screen's top/bottom edge at horizontal position u (0..1 across
+  // the visible screen): zero at the edges, deepest in the middle.
+  const inset = (u, depth) => depth * (1 - (2 * u - 1) ** 2);
+
+  function outline(rect, view, depth, extra) {
+    const top = [], bottom = [];
+    for (let j = 0; j <= SAMPLES; j++) {
+      const f = j / SAMPLES;
+      const u = Math.min(1, Math.max(0, (rect.left + f * rect.width - view.left) / view.width));
+      const y = (inset(u, depth) + extra).toFixed(1);
+      const x = (f * 100).toFixed(2);
+      top.push(`${x}% ${y}px`);
+      bottom.unshift(`${x}% calc(100% - ${y}px)`);
+    }
+    return `polygon(${top.join(',')},${bottom.join(',')})`;
+  }
+
+  function render() {
+    raf = 0;
+    const view = screen.getBoundingClientRect();
+    const depth = Math.round(Math.min(48, Math.max(10, view.width * 0.04)));
+    monitor.style.setProperty('--d', `${depth}px`);
+    for (const pane of panes) {
+      const r = pane.getBoundingClientRect();
+      if (r.right < view.left - r.width || r.left > view.right + r.width) continue; // far off-screen
+      pane.style.setProperty('--curve', outline(r, view, depth, 0));
+      pane.style.setProperty('--curve-in', outline(r, view, depth, 1));
+    }
+    monitor.classList.add('is-curved');
+
+    const max = screen.scrollWidth - screen.clientWidth;
+    const shown = screen.clientWidth / screen.scrollWidth;
+    bar.style.width = `${shown * 100}%`;
+    bar.style.translate = `${max > 0 ? (screen.scrollLeft / max) * ((1 - shown) / shown) * 100 : 0}% 0`;
+    prevBtn.disabled = screen.scrollLeft <= 1;
+    nextBtn.disabled = screen.scrollLeft >= max - 1;
+  }
+  const schedule = () => { if (!raf) raf = requestAnimationFrame(render); };
+  screen.addEventListener('scroll', schedule, { passive: true });
+  new ResizeObserver(schedule).observe(screen);
+  document.fonts?.ready.then(schedule);
+  schedule();
+
+  // One pane per click, landing on a snap point so no pane is left cut off.
+  const step = () => panes[1].parentElement.offsetLeft - panes[0].parentElement.offsetLeft;
+  const behavior = reduceMotion ? 'auto' : 'smooth';
+  prevBtn.addEventListener('click', () => screen.scrollBy({ left: -step(), behavior }));
+  nextBtn.addEventListener('click', () => screen.scrollBy({ left: step(), behavior }));
+
+  // Mouse drag to scroll ("grab the screen"); touch and trackpads scroll natively.
+  let drag = null;
+  screen.addEventListener('pointerdown', (e) => {
+    if (e.pointerType !== 'mouse' || e.button !== 0) return;
+    drag = { x: e.clientX, left: screen.scrollLeft, moved: false, id: e.pointerId };
+  });
+  screen.addEventListener('pointermove', (e) => {
+    if (!drag) return;
+    const dx = e.clientX - drag.x;
+    if (!drag.moved && Math.abs(dx) > 4) {
+      drag.moved = true;
+      screen.setPointerCapture(drag.id);
+      screen.classList.add('is-dragging');
+    }
+    if (drag.moved) screen.scrollLeft = drag.left - dx;
+  });
+  const endDrag = () => {
+    if (!drag) return;
+    const moved = drag.moved;
+    drag = null;
+    if (!moved) return;
+    screen.classList.remove('is-dragging');
+    // Settle on the nearest whole pane.
+    const s = step();
+    screen.scrollTo({ left: Math.round(screen.scrollLeft / s) * s, behavior });
+  };
+  screen.addEventListener('pointerup', endDrag);
+  screen.addEventListener('pointercancel', endDrag);
+}
+
 /* ---------- Reveal fallback (browsers without scroll-driven animations) ---------- */
 if (!reduceMotion && !CSS.supports('animation-timeline: view()')) {
   root.classList.add('io');

@@ -333,7 +333,6 @@ main { position: relative; z-index: 1; padding-bottom: 120px; }
 }
 
 /* How it plays */
-.arc--four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .prompt { display: grid; align-content: start; gap: 14px; height: 100%; padding: 28px 24px 24px; transition: transform 0.45s var(--spring), border-color 0.3s, box-shadow 0.4s; }
 .prompt:hover { transform: translateZ(40px) translateY(-6px); border-color: rgba(255, 181, 71, 0.45); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 50px 90px -40px rgba(255, 107, 53, 0.45); }
 .prompt__glyph {
@@ -344,8 +343,6 @@ main { position: relative; z-index: 1; padding-bottom: 120px; }
 .prompt h3 { font: 800 1.6rem/1 var(--font-display); text-transform: uppercase; letter-spacing: 0; }
 .prompt p { color: var(--dim); font-size: 0.98rem; }
 .prompt__step { margin-top: auto; padding-top: 8px; font: 500 0.66rem/1 var(--font-mono); letter-spacing: 0.16em; text-transform: uppercase; color: var(--faint); }
-@media (max-width: 1099px) { .arc--four { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-@media (max-width: 560px) { .arc--four { grid-template-columns: 1fr; } }
 
 /* Who it's for — save slots */
 .slots { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(14px, 1.6vw, 24px); }
@@ -628,45 +625,79 @@ main { position: relative; z-index: 1; padding-bottom: 120px; }
 .foot--page { padding-bottom: 48px; }
 .env--static .env__sun { top: 55%; }
 
-/* ---------- Curved monitor: "How it plays" on wide screens ----------
-   Four panes shaped like a curved display seen from the front: the outer
-   panes are wider and taller at their outer edge, the middle panes short
-   and nearly flat. The curve is a 2D silhouette (clip-path), so the text
-   stays flat and sharp. Generated: inset(u) = 38px * (1 - (2u - 1)^2). */
-@media (min-width: 1100px) {
-  .arc--four { grid-template-columns: 1.3fr 1fr 1fr 1.3fr; gap: 3px; perspective: 1400px; position: relative; padding-bottom: 70px; }
-  .arc--four .arc__slot { transform: none; }
-  .arc--four .prompt {
-    border: 0; box-shadow: none; border-radius: 0;
-    background: rgba(243, 239, 231, 0.16); /* shows as the 1px bezel */
-    clip-path: var(--curve);
-    padding: 66px 30px 62px;
-    transition: transform 0.45s var(--spring), background-color 0.3s;
+
+/* =========================================================
+   Curved monitor: "How it plays"
+   A side-scrolling screen. Panes snap so whole panes are always in view at
+   rest (never cut off). site.js reshapes every pane on scroll to the outline
+   of a curved display seen head-on: tall and curved at the screen's edges,
+   short and flat in the middle. The curve is a 2D silhouette (clip-path),
+   so text stays flat and sharp.
+   ========================================================= */
+.monitor { position: relative; --d: 0px; }
+.monitor__screen {
+  --per: 3; --gap: 4px;
+  overflow-x: auto; overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  border-radius: 26px;
+  cursor: grab;
+}
+.monitor__screen::-webkit-scrollbar { display: none; }
+.monitor__screen:focus-visible { outline-offset: 6px; }
+.monitor__screen.is-dragging { cursor: grabbing; scroll-snap-type: none; user-select: none; }
+.monitor__track { display: flex; gap: var(--gap); }
+.monitor__pane { display: flex; flex: 0 0 calc((100% - (var(--per) - 1) * var(--gap)) / var(--per)); scroll-snap-align: start; }
+.monitor .prompt { width: 100%; }
+.monitor .prompt::after { display: none; } /* no grab handle per pane; the screen has a stand */
+@media (max-width: 1099px) { .monitor__screen { --per: 2; } }
+@media (max-width: 640px) { .monitor__screen { --per: 1; } }
+
+/* Curved shape, applied once site.js has measured the panes. */
+.monitor.is-curved .prompt {
+  border: 0; box-shadow: none; border-radius: 0;
+  background: rgba(243, 239, 231, 0.16); /* shows as the 1px bezel */
+  clip-path: var(--curve);
+  padding-top: calc(var(--d) + 28px); padding-bottom: calc(var(--d) + 24px);
+  transition: background-color 0.3s;
+}
+.monitor.is-curved .prompt::before {
+  content: ""; position: absolute; inset: 0 1px; z-index: 0; clip-path: var(--curve-in);
+  background: linear-gradient(180deg, var(--window-hi), var(--window)), var(--night);
+}
+.monitor.is-curved .prompt > * { position: relative; z-index: 1; }
+.monitor.is-curved .prompt:hover { transform: none; background: rgba(255, 181, 71, 0.6); }
+.monitor.is-curved .prompt:hover .prompt__glyph { box-shadow: 0 0 24px rgba(255, 181, 71, 0.35); }
+
+/* Stand: a neck under the screen and a base that holds the controls. */
+.monitor__controls {
+  position: relative; display: flex; align-items: center; gap: 12px;
+  width: max-content; margin: 30px auto 0; padding: 6px;
+  border-radius: 999px; background: rgba(12, 14, 22, 0.8); border: 1px solid var(--edge-strong);
+  box-shadow: 0 16px 40px -14px rgba(0, 0, 0, 0.9);
+}
+.monitor__controls::before {
+  content: ""; position: absolute; left: 50%; bottom: 100%; width: 44px; height: 30px; translate: -50% 0;
+  background: linear-gradient(180deg, rgba(243, 239, 231, 0.05), rgba(243, 239, 231, 0.16));
+  clip-path: polygon(30% 0, 70% 0, 82% 100%, 18% 100%);
+}
+.monitor__btn {
+  display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; cursor: pointer;
+  background: rgba(243, 239, 231, 0.06); border: 1px solid var(--edge); color: var(--bone);
+  transition: background-color 0.2s, opacity 0.2s, transform 0.25s var(--spring);
+}
+.monitor__btn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.monitor__btn:hover:not(:disabled) { background: rgba(255, 181, 71, 0.18); transform: scale(1.06); }
+.monitor__btn:disabled { opacity: 0.3; cursor: default; }
+.monitor__progress { position: relative; width: 120px; height: 4px; border-radius: 999px; background: rgba(243, 239, 231, 0.12); overflow: hidden; }
+.monitor__progress span { position: absolute; inset: 0 auto 0 0; width: 50%; border-radius: inherit; background: linear-gradient(90deg, var(--ember), var(--sun)); }
+
+/* The screen flies in as one piece rather than pane by pane. */
+.monitor .window { animation: none; }
+.io .monitor .window { opacity: 1; translate: 0 0 0; }
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .monitor { animation: approach linear both; animation-timeline: view(); animation-range: entry 0% entry 85%; }
   }
-  .arc--four .prompt::before {
-    content: ""; position: absolute; inset: 0 1px; z-index: 0; clip-path: var(--curve-in);
-    background: linear-gradient(180deg, var(--window-hi), var(--window)), var(--night);
-  }
-  .arc--four .prompt > * { position: relative; z-index: 1; }
-  .arc--four .prompt::after { display: none; }
-  .arc--four .prompt:hover { transform: translateZ(36px); background: rgba(255, 181, 71, 0.55); box-shadow: none; }
-  .arc--four .arc__slot:first-child .prompt { border-radius: 26px 0 0 26px; }
-  .arc--four .arc__slot:last-child .prompt { border-radius: 0 26px 26px 0; }
-  /* Light falls on the near (outer) edges of a curved screen. */
-  .arc--four .arc__slot:first-child .prompt::before { background: linear-gradient(90deg, rgba(255, 181, 71, 0.08), transparent 55%), linear-gradient(180deg, var(--window-hi), var(--window)), var(--night); }
-  .arc--four .arc__slot:last-child .prompt::before { background: linear-gradient(270deg, rgba(255, 181, 71, 0.08), transparent 55%), linear-gradient(180deg, var(--window-hi), var(--window)), var(--night); }
-  /* Monitor stand */
-  .arc--four::before {
-    content: ""; position: absolute; left: 50%; bottom: 14px; width: 120px; height: 46px; translate: -50% 0;
-    background: linear-gradient(180deg, rgba(243, 239, 231, 0.14), rgba(243, 239, 231, 0.04));
-    clip-path: polygon(38% 0, 62% 0, 70% 78%, 100% 86%, 100% 100%, 0 100%, 0 86%, 30% 78%);
-  }
-  .arc--four::after {
-    content: ""; position: absolute; left: 50%; bottom: 6px; width: 260px; height: 14px; translate: -50% 0;
-    background: radial-gradient(closest-side, rgba(0, 0, 0, 0.6), transparent); /* stand shadow */
-  }
-  .arc--four .arc__slot:nth-child(1) .prompt { --curve: polygon(0.00% 0.0px, 6.25% 2.6px, 12.50% 5.2px, 18.75% 7.6px, 25.00% 10.0px, 31.25% 12.2px, 37.50% 14.4px, 43.75% 16.5px, 50.00% 18.4px, 56.25% 20.3px, 62.50% 22.1px, 68.75% 23.8px, 75.00% 25.4px, 81.25% 26.9px, 87.50% 28.3px, 93.75% 29.6px, 100.00% 30.8px, 100.00% calc(100% - 30.8px), 93.75% calc(100% - 29.6px), 87.50% calc(100% - 28.3px), 81.25% calc(100% - 26.9px), 75.00% calc(100% - 25.4px), 68.75% calc(100% - 23.8px), 62.50% calc(100% - 22.1px), 56.25% calc(100% - 20.3px), 50.00% calc(100% - 18.4px), 43.75% calc(100% - 16.5px), 37.50% calc(100% - 14.4px), 31.25% calc(100% - 12.2px), 25.00% calc(100% - 10.0px), 18.75% calc(100% - 7.6px), 12.50% calc(100% - 5.2px), 6.25% calc(100% - 2.6px), 0.00% calc(100% - 0.0px)); --curve-in: polygon(0.00% 1.0px, 6.25% 3.6px, 12.50% 6.2px, 18.75% 8.6px, 25.00% 11.0px, 31.25% 13.2px, 37.50% 15.4px, 43.75% 17.5px, 50.00% 19.4px, 56.25% 21.3px, 62.50% 23.1px, 68.75% 24.8px, 75.00% 26.4px, 81.25% 27.9px, 87.50% 29.3px, 93.75% 30.6px, 100.00% 31.8px, 100.00% calc(100% - 31.8px), 93.75% calc(100% - 30.6px), 87.50% calc(100% - 29.3px), 81.25% calc(100% - 27.9px), 75.00% calc(100% - 26.4px), 68.75% calc(100% - 24.8px), 62.50% calc(100% - 23.1px), 56.25% calc(100% - 21.3px), 50.00% calc(100% - 19.4px), 43.75% calc(100% - 17.5px), 37.50% calc(100% - 15.4px), 31.25% calc(100% - 13.2px), 25.00% calc(100% - 11.0px), 18.75% calc(100% - 8.6px), 12.50% calc(100% - 6.2px), 6.25% calc(100% - 3.6px), 0.00% calc(100% - 1.0px)); }
-  .arc--four .arc__slot:nth-child(2) .prompt { --curve: polygon(0.00% 30.8px, 6.25% 31.7px, 12.50% 32.5px, 18.75% 33.3px, 25.00% 34.0px, 31.25% 34.6px, 37.50% 35.2px, 43.75% 35.7px, 50.00% 36.2px, 56.25% 36.6px, 62.50% 37.0px, 68.75% 37.3px, 75.00% 37.6px, 81.25% 37.7px, 87.50% 37.9px, 93.75% 38.0px, 100.00% 38.0px, 100.00% calc(100% - 38.0px), 93.75% calc(100% - 38.0px), 87.50% calc(100% - 37.9px), 81.25% calc(100% - 37.7px), 75.00% calc(100% - 37.6px), 68.75% calc(100% - 37.3px), 62.50% calc(100% - 37.0px), 56.25% calc(100% - 36.6px), 50.00% calc(100% - 36.2px), 43.75% calc(100% - 35.7px), 37.50% calc(100% - 35.2px), 31.25% calc(100% - 34.6px), 25.00% calc(100% - 34.0px), 18.75% calc(100% - 33.3px), 12.50% calc(100% - 32.5px), 6.25% calc(100% - 31.7px), 0.00% calc(100% - 30.8px)); --curve-in: polygon(0.00% 31.8px, 6.25% 32.7px, 12.50% 33.5px, 18.75% 34.3px, 25.00% 35.0px, 31.25% 35.6px, 37.50% 36.2px, 43.75% 36.7px, 50.00% 37.2px, 56.25% 37.6px, 62.50% 38.0px, 68.75% 38.3px, 75.00% 38.6px, 81.25% 38.7px, 87.50% 38.9px, 93.75% 39.0px, 100.00% 39.0px, 100.00% calc(100% - 39.0px), 93.75% calc(100% - 39.0px), 87.50% calc(100% - 38.9px), 81.25% calc(100% - 38.7px), 75.00% calc(100% - 38.6px), 68.75% calc(100% - 38.3px), 62.50% calc(100% - 38.0px), 56.25% calc(100% - 37.6px), 50.00% calc(100% - 37.2px), 43.75% calc(100% - 36.7px), 37.50% calc(100% - 36.2px), 31.25% calc(100% - 35.6px), 25.00% calc(100% - 35.0px), 18.75% calc(100% - 34.3px), 12.50% calc(100% - 33.5px), 6.25% calc(100% - 32.7px), 0.00% calc(100% - 31.8px)); }
-  .arc--four .arc__slot:nth-child(3) .prompt { --curve: polygon(0.00% 38.0px, 6.25% 38.0px, 12.50% 37.9px, 18.75% 37.7px, 25.00% 37.6px, 31.25% 37.3px, 37.50% 37.0px, 43.75% 36.6px, 50.00% 36.2px, 56.25% 35.7px, 62.50% 35.2px, 68.75% 34.6px, 75.00% 34.0px, 81.25% 33.3px, 87.50% 32.5px, 93.75% 31.7px, 100.00% 30.8px, 100.00% calc(100% - 30.8px), 93.75% calc(100% - 31.7px), 87.50% calc(100% - 32.5px), 81.25% calc(100% - 33.3px), 75.00% calc(100% - 34.0px), 68.75% calc(100% - 34.6px), 62.50% calc(100% - 35.2px), 56.25% calc(100% - 35.7px), 50.00% calc(100% - 36.2px), 43.75% calc(100% - 36.6px), 37.50% calc(100% - 37.0px), 31.25% calc(100% - 37.3px), 25.00% calc(100% - 37.6px), 18.75% calc(100% - 37.7px), 12.50% calc(100% - 37.9px), 6.25% calc(100% - 38.0px), 0.00% calc(100% - 38.0px)); --curve-in: polygon(0.00% 39.0px, 6.25% 39.0px, 12.50% 38.9px, 18.75% 38.7px, 25.00% 38.6px, 31.25% 38.3px, 37.50% 38.0px, 43.75% 37.6px, 50.00% 37.2px, 56.25% 36.7px, 62.50% 36.2px, 68.75% 35.6px, 75.00% 35.0px, 81.25% 34.3px, 87.50% 33.5px, 93.75% 32.7px, 100.00% 31.8px, 100.00% calc(100% - 31.8px), 93.75% calc(100% - 32.7px), 87.50% calc(100% - 33.5px), 81.25% calc(100% - 34.3px), 75.00% calc(100% - 35.0px), 68.75% calc(100% - 35.6px), 62.50% calc(100% - 36.2px), 56.25% calc(100% - 36.7px), 50.00% calc(100% - 37.2px), 43.75% calc(100% - 37.6px), 37.50% calc(100% - 38.0px), 31.25% calc(100% - 38.3px), 25.00% calc(100% - 38.6px), 18.75% calc(100% - 38.7px), 12.50% calc(100% - 38.9px), 6.25% calc(100% - 39.0px), 0.00% calc(100% - 39.0px)); }
-  .arc--four .arc__slot:nth-child(4) .prompt { --curve: polygon(0.00% 30.8px, 6.25% 29.6px, 12.50% 28.3px, 18.75% 26.9px, 25.00% 25.4px, 31.25% 23.8px, 37.50% 22.1px, 43.75% 20.3px, 50.00% 18.4px, 56.25% 16.5px, 62.50% 14.4px, 68.75% 12.2px, 75.00% 10.0px, 81.25% 7.6px, 87.50% 5.2px, 93.75% 2.6px, 100.00% 0.0px, 100.00% calc(100% - 0.0px), 93.75% calc(100% - 2.6px), 87.50% calc(100% - 5.2px), 81.25% calc(100% - 7.6px), 75.00% calc(100% - 10.0px), 68.75% calc(100% - 12.2px), 62.50% calc(100% - 14.4px), 56.25% calc(100% - 16.5px), 50.00% calc(100% - 18.4px), 43.75% calc(100% - 20.3px), 37.50% calc(100% - 22.1px), 31.25% calc(100% - 23.8px), 25.00% calc(100% - 25.4px), 18.75% calc(100% - 26.9px), 12.50% calc(100% - 28.3px), 6.25% calc(100% - 29.6px), 0.00% calc(100% - 30.8px)); --curve-in: polygon(0.00% 31.8px, 6.25% 30.6px, 12.50% 29.3px, 18.75% 27.9px, 25.00% 26.4px, 31.25% 24.8px, 37.50% 23.1px, 43.75% 21.3px, 50.00% 19.4px, 56.25% 17.5px, 62.50% 15.4px, 68.75% 13.2px, 75.00% 11.0px, 81.25% 8.6px, 87.50% 6.2px, 93.75% 3.6px, 100.00% 1.0px, 100.00% calc(100% - 1.0px), 93.75% calc(100% - 3.6px), 87.50% calc(100% - 6.2px), 81.25% calc(100% - 8.6px), 75.00% calc(100% - 11.0px), 68.75% calc(100% - 13.2px), 62.50% calc(100% - 15.4px), 56.25% calc(100% - 17.5px), 50.00% calc(100% - 19.4px), 43.75% calc(100% - 21.3px), 37.50% calc(100% - 23.1px), 31.25% calc(100% - 24.8px), 25.00% calc(100% - 26.4px), 18.75% calc(100% - 27.9px), 12.50% calc(100% - 29.3px), 6.25% calc(100% - 30.6px), 0.00% calc(100% - 31.8px)); }
 }
