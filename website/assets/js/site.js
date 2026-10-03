@@ -375,11 +375,15 @@ if (!reduceMotion && !CSS.supports('animation-timeline: view()')) {
   document.querySelectorAll('.window, .zone__head, .zone--contact > *').forEach((el) => io.observe(el));
 }
 
-/* ---------- Ambient building blocks (decorative, loaded last) ---------- */
+/* ---------- Ambient building blocks and rocket (decorative, loaded last) ---------- */
 const blocksCanvas = document.querySelector('.env__blocks');
 if (blocksCanvas && !reduceMotion) {
   const idle = window.requestIdleCallback || ((cb) => setTimeout(cb, 1200));
-  const go = () => idle(() => import('./ambient.js').then((m) => m.startBlocks(blocksCanvas)).catch(() => {}), { timeout: 4000 });
+  const rocket = document.querySelector('.env__rocket');
+  const go = () => idle(() => import('./ambient.js').then((m) => {
+    m.startBlocks(blocksCanvas);
+    if (rocket) m.startRocket(rocket);
+  }).catch(() => {}), { timeout: 4000 });
   if (document.readyState === 'complete') go(); else addEventListener('load', go, { once: true });
 }
 

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-UwckGPF+8+l5vjdqxF6wEvg8WxuOH6wyUQQgjG2rTX4=' 'sha256-zEsbks1f0qj8FtyZts3g7UNymtXeO9bfhYjqFdzKLrE=' https://www.googletagmanager.com; style-src 'self'; img-src 'self' https://*.google-analytics.com https://*.googletagmanager.com; font-src 'self'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; manifest-src 'self'; media-src 'none'; frame-src 'none'; worker-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'; require-trusted-types-for 'script'; trusted-types ns-ga; upgrade-insecure-requests">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-EcHmrf6U525uPR07hQ+ZnS2SMNOCq/3lg8GQDUNsf3s=' 'sha256-zEsbks1f0qj8FtyZts3g7UNymtXeO9bfhYjqFdzKLrE=' https://www.googletagmanager.com; style-src 'self'; img-src 'self' https://*.google-analytics.com https://*.googletagmanager.com; font-src 'self'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; manifest-src 'self'; media-src 'none'; frame-src 'none'; worker-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'; require-trusted-types-for 'script'; trusted-types ns-ga; upgrade-insecure-requests">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <title>NorthStar Studioz — Independent Mixed Reality Game Studio</title>
   <meta name="description" content="NorthStar Studioz makes tactile mixed reality games for Meta Quest. Play with your bare hands, on the furniture you already own. Independent studio, India.">
@@ -33,7 +33,10 @@
             document.head.appendChild(l);
           };
           add('preload', 'assets/fonts/unbounded.woff2', 'font');
-          add('preload', 'assets/brand/headset.webp', 'image');
+          var img = document.createElement('link');
+          img.rel = 'preload'; img.as = 'image'; img.href = 'assets/brand/headset.webp';
+          img.imageSrcset = 'assets/brand/headset.webp 1x, assets/brand/headset@2x.webp 2x';
+          document.head.appendChild(img);
         }
       } catch (e) {}
     })();
@@ -155,7 +158,7 @@
         <text x="80" y="128">LD</text>
       </svg>
     </div>
-    <img class="gate__still" src="assets/brand/headset.webp" width="641" height="318" alt="" aria-hidden="true" decoding="async">
+    <img class="gate__still" src="assets/brand/headset.webp" srcset="assets/brand/headset.webp 1x, assets/brand/headset@2x.webp 2x" width="641" height="318" alt="" aria-hidden="true" decoding="async">
     <canvas class="gate__canvas" aria-hidden="true"></canvas>
 
     <p class="gate__title" id="gate-title">

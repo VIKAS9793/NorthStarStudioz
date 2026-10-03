@@ -122,3 +122,27 @@ export function startBlocks(canvas) {
   document.addEventListener('visibilitychange', () => (document.hidden ? stop() : run()));
   run();
 }
+
+// A small rocket launches from behind the far ridge at random intervals, from a
+// random spot either side of the centred copy, with its own drift and height.
+export function startRocket(el) {
+  let timer = 0;
+  const launch = () => {
+    if (document.hidden) return schedule(5000);
+    const leftSide = Math.random() < 0.5;
+    const x = leftSide ? rand(6, 30) : rand(70, 92);
+    const drift = rand(5, 12) * (leftSide ? 1 : -1); // arc away from the centre
+    el.style.setProperty('--x', `${x.toFixed(1)}%`);
+    el.style.setProperty('--dx', `${drift.toFixed(1)}vw`);
+    el.style.setProperty('--dy', `${-rand(38, 55).toFixed(1)}vh`);
+    el.style.setProperty('--tilt', `${(drift > 0 ? 1 : -1) * rand(14, 30).toFixed(1)}deg`);
+    el.style.setProperty('--dur', `${rand(4.8, 6.6).toFixed(2)}s`);
+    el.classList.remove('is-flying');
+    void el.offsetWidth; // restart the animation
+    el.classList.add('is-flying');
+    schedule(rand(25000, 55000));
+  };
+  const schedule = (ms) => { clearTimeout(timer); timer = setTimeout(launch, ms); };
+  el.addEventListener('animationend', (e) => { if (e.animationName === 'rocket-fly') el.classList.remove('is-flying'); });
+  schedule(rand(5000, 12000));
+}
