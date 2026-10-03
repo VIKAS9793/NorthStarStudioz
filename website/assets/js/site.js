@@ -462,6 +462,39 @@ function afterGate(fn) {
   mo.observe(root, { attributes: true, attributeFilter: ['class'] });
 }
 
+/* ---------- Intro gate backdrop: faint data columns at the screen edges ----------
+   Drawn once on a 2D canvas (seeded, so it is the same every visit), away
+   from the wordmark. */
+function drawGateData(canvas) {
+  const ctx = canvas?.getContext('2d');
+  if (!ctx) return;
+  const W = innerWidth, H = innerHeight;
+  const dpr = Math.min(devicePixelRatio || 1, 2);
+  canvas.width = Math.round(W * dpr);
+  canvas.height = Math.round(H * dpr);
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+  let seed = 7;
+  const rand = () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
+
+  // Data columns: rows of digits fading out toward the middle and the edges.
+  const cell = 12;
+  ctx.font = `500 10px ${getComputedStyle(root).getPropertyValue('--font-mono') || 'monospace'}`;
+  ctx.textBaseline = 'top';
+  for (let x = 8; x < W; x += cell * 1.3) {
+    const u = x / W;
+    const edge = Math.max(0, 1 - Math.min(u, 1 - u) / 0.28); // 1 at the screen edges, 0 past 28%
+    if (edge <= 0 || rand() < 0.45) continue;
+    const top = rand() * H * 0.6, len = H * (0.15 + rand() * 0.35);
+    for (let y = top; y < top + len && y < H; y += cell) {
+      if (rand() < 0.25) continue;
+      const fade = Math.sin(((y - top) / len) * Math.PI);
+      ctx.fillStyle = `rgba(150, 175, 230, ${((0.05 + 0.13 * edge * fade) * (W < 640 ? 0.55 : 1)).toFixed(3)})`;
+      ctx.fillText(String((rand() * 10) | 0), x, y);
+    }
+  }
+}
+
 /* ---------- Intro gate ---------- */
 const gate = document.getElementById('gate');
 if (gate && root.classList.contains('gate-on')) runGate(gate);
@@ -474,6 +507,7 @@ function runGate(gate) {
   const outside = [...document.body.children].filter((el) => el !== gate && el.tagName !== 'SCRIPT');
   outside.forEach((el) => { el.inert = true; });
   enterBtn.focus({ preventScroll: true });
+  drawGateData(gate.querySelector('.gate__data'));
 
   let scene = null;
   let leaving = false;

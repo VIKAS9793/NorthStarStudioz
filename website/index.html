@@ -137,6 +137,24 @@
   <!-- ===================== Intro gate ===================== -->
   <div class="gate" id="gate" role="dialog" aria-modal="true" aria-labelledby="gate-title">
     <div class="gate__sky" aria-hidden="true"><span class="gate__star"></span></div>
+    <canvas class="gate__data" aria-hidden="true"></canvas>
+    <div class="gate__hud" aria-hidden="true">
+      <svg class="gate__callout gate__callout--left" viewBox="0 0 220 140">
+        <text x="6" y="18">HAND TRACKING</text>
+        <path d="M6 24h72l52 34" />
+        <text x="6" y="98">000.00</text>
+        <path d="M54 94h76" /><circle class="gate__node" cx="54" cy="94" r="2.5" />
+        <g class="gate__rings"><circle cx="176" cy="70" r="40" /><path d="M176 18a52 52 0 0 1 45 26M176 122a52 52 0 0 1-45-26" /><circle cx="176" cy="70" r="24" /></g>
+      </svg>
+      <svg class="gate__callout gate__callout--right" viewBox="0 0 220 140">
+        <g class="gate__rings"><circle cx="44" cy="70" r="40" /><path d="M44 18a52 52 0 0 0-45 26M44 122a52 52 0 0 0 45-26" /><circle cx="44" cy="70" r="24" /></g>
+        <path d="M90 52l40-28h84" />
+        <text x="214" y="18" text-anchor="end">AR CALIBRATION</text>
+        <path d="M90 94h46" /><circle class="gate__node" cx="136" cy="94" r="2.5" />
+        <text x="214" y="98" text-anchor="end">6DOF 0.000</text>
+        <text x="80" y="128">LD</text>
+      </svg>
+    </div>
     <img class="gate__still" src="assets/brand/headset.webp" width="641" height="318" alt="" aria-hidden="true" decoding="async">
     <canvas class="gate__canvas" aria-hidden="true"></canvas>
 
@@ -147,6 +165,7 @@
 
     <div class="gate__foot">
       <p class="gate__tag">Independent mixed reality studio</p>
+      <svg class="gate__trail" viewBox="0 0 360 200" aria-hidden="true"><path d="M2 196C120 190 250 130 356 4" /><path d="M2 186C130 176 248 118 346 2" /></svg>
       <button class="gate__enter" type="button" data-gate-enter>
         <span>Enter the studio</span>
         <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
