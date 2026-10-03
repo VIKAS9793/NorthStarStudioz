@@ -1,7 +1,19 @@
-# ✦ NorthStar Studioz
+<p align="center">
+  <img src="website/assets/logo.png" alt="NorthStar Studioz" width="220" style="border-radius: 50%;">
+</p>
 
-> **Independent Spatial Computing & Mixed Reality Game Studio**  
-> *Crafting tactile, physics-driven experiences for Meta Horizon OS & Spatial Platforms.*
+<h1 align="center">✦ NorthStar Studioz ✦</h1>
+
+<p align="center">
+  <strong>Independent Spatial Computing & Mixed Reality Game Studio</strong><br>
+  <em>Crafting tactile, physics-driven experiences for Meta Horizon OS & Spatial Platforms.</em>
+</p>
+
+<p align="center">
+  <a href="https://vikas9793.github.io/NorthStarStudioz/"><img src="https://img.shields.io/badge/Live_Portal-NorthStar_Studioz-00f2fe?style=for-the-badge" alt="Live Portal"></a>
+  <a href="https://vikas9793.github.io/NorthStarStudioz/privacy.html"><img src="https://img.shields.io/badge/Policy-Privacy_Compliant-8b5cf6?style=for-the-badge" alt="Privacy Policy"></a>
+  <a href="https://github.com/VIKAS9793/NorthStarStudioz"><img src="https://img.shields.io/badge/Runtime-Meta_Horizon_OS-blue?style=for-the-badge" alt="Runtime"></a>
+</p>
 
 ---
 
@@ -31,9 +43,6 @@ NorthStar Studioz focuses on high-retention, low-friction spatial categories des
 * **Target Runtime:** Native standalone deployment on **Meta Horizon OS** (Meta Quest 3, Quest 3S, Quest 2, Quest Pro) and upcoming third-party spatial headsets.
 * **Open Standards:** Built strictly on **Khronos OpenXR** for cross-device compatibility.
 * **Performance Baseline:** Universal Render Pipeline (URP), Vulkan multithreaded rendering, Single-Pass Multiview, and strict draw-call budgeting (<120 calls/frame) to maintain a locked **90 FPS**.
-
----
-
 ---
 
 ## ⚖️ Studio Governance & Policies
