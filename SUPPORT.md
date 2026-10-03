@@ -1,6 +1,6 @@
 # Support & Community
 
-Welcome to the **NorthStar Studioz** support portal for **NorthStar MR**.
+Welcome to the **NorthStar Studioz** community and developer support portal.
 
 ## Getting Help
 

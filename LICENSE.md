@@ -5,7 +5,7 @@
 ---
 
 ### 1. Ownership & Intellectual Property
-All software, source code, game mechanics, 3D models, textures, shaders, animations, audio recordings, sound design, documentation, and visual designs associated with **NorthStar MR** and **NorthStar Studioz** are the proprietary intellectual property of **Vikas Sahani** and **NorthStar Studioz** ("the Owner").
+All software, source code, game mechanics, 3D models, textures, shaders, animations, audio recordings, sound design, documentation, and visual designs created and published by **NorthStar Studioz** are the proprietary intellectual property of **Vikas Sahani** and **NorthStar Studioz** ("the Owner").
 
 ### 2. Permitted Use
 This repository is made publicly viewable for verification, portfolio demonstration, and educational review purposes. You are granted permission to:
@@ -17,7 +17,7 @@ Except as expressly permitted above or authorized in writing by the Owner, you m
 * Reproduce, distribute, sublicense, sell, rent, lease, or commercially exploit any portion of the software, game code, or associated media assets.
 * Build, compile, and distribute binary packages (including `.apk`, `.aab`, or executable builds) to commercial storefronts (such as the Meta Horizon Store, Steam, SideQuest, or other digital distribution channels).
 * Extract, re-license, or redistribute proprietary 3D assets, audio soundscapes, or game systems.
-* Use the trademarks, logos, or studio branding of "NorthStar Studioz" or "NorthStar MR" without prior written consent.
+* Use the trademarks, logos, or studio branding of "NorthStar Studioz" without prior written consent.
 
 ### 4. Warranty Disclaimer
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY.

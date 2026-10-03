@@ -17,27 +17,33 @@
 
 ---
 
-## 🎮 Debut Spatial Project (Codename: *Project Kinetic*)
+## 🎯 Studio Game Development Niches
+NorthStar Studioz focuses on high-retention, low-friction spatial categories designed for everyday living spaces:
 
-An unannounced debut commercial mixed-reality title under active development by NorthStar Studioz for the **Meta Horizon Store** (Meta Quest 3, Quest 3S, Quest 2, and Quest Pro). *(Final commercial title to be revealed ahead of launch).*
+* **Bare-Hands First Interaction:** Natural finger gestures (pinch, grab, rotate, snap) via Meta Interaction SDK without controller dependency.
+* **Room-Scale & Surface Meshing:** Utilizing Color Passthrough and real-world room geometry (tabletops, walls, floors) as active play surfaces.
+* **Tactile ASMR Soundscapes:** Tuning physics interactions with micro-sampled real materials (walnut, brass, ceramic) and 3D spatialized binaural audio.
+* **Zero Motion Sickness (100% Comfort):** Stationary tabletop gameplay that completely eliminates vestibular mismatch and boundary anxiety.
 
-* **Genre:** Tactile Mixed Reality Physics Sandbox & Kinetic Spatial Puzzles
-* **Core Experience:** Bare-hand pinch/grab interactions in full Color Passthrough, turning real tabletops into living Rube Goldberg kinetic apparatuses.
-* **Comfort Rating:** "Comfortable" (100% stationary, zero artificial motion sickness).
-* **Technical Baseline:** Unity 6 LTS / 2022.3 LTS (URP) &bull; Khronos OpenXR &bull; Meta Interaction SDK &bull; Locked 90 FPS.
+---
+
+## 🛠️ Platform & Engineering Specializations
+* **Target Runtime:** Native standalone deployment on **Meta Horizon OS** (Meta Quest 3, Quest 3S, Quest 2, Quest Pro) and upcoming third-party spatial headsets.
+* **Open Standards:** Built strictly on **Khronos OpenXR** for cross-device compatibility.
+* **Performance Baseline:** Universal Render Pipeline (URP), Vulkan multithreaded rendering, Single-Pass Multiview, and strict draw-call budgeting (<120 calls/frame) to maintain a locked **90 FPS**.
 
 ---
 
 ## 📚 Studio Knowledge Base & Documentation (`docs/`)
 
-Our design, market research, and technical architecture are systematically documented:
+Our platform research, game design documents, and technical architecture are systematically documented:
 
 1. [docs/01_META_PLATFORM_INTELLIGENCE.md](docs/01_META_PLATFORM_INTELLIGENCE.md)
    * Official Meta market data, $2.5B+ store spend, 300+ $1M titles, Quest 3 retention metrics, and why Standalone beats PC VR.
 2. [docs/02_MARKET_NICHE_AND_VALUE_PROPOSITION.md](docs/02_MARKET_NICHE_AND_VALUE_PROPOSITION.md)
    * Competitive teardown (Cubism, Track Craft, Puzzling Places), Unique Value Proposition (UVP), and target player profiles.
 3. [docs/03_GAME_DESIGN_DOCUMENT_GDD.md](docs/03_GAME_DESIGN_DOCUMENT_GDD.md)
-   * Full Game Design Document for *NorthStar MR* covering core loop, modular kinetic components, and campaign progression.
+   * Comprehensive Game Design Document (GDD) covering core loop, modular kinetic components, and campaign progression.
 4. [docs/04_TECHNICAL_ARCHITECTURE_AND_VRCS.md](docs/04_TECHNICAL_ARCHITECTURE_AND_VRCS.md)
    * Technical stack, URP performance budgets (90 FPS, <120 draw calls), and Virtual Reality Check (VRC) QA compliance.
 5. [docs/05_DEVELOPMENT_ROADMAP_AND_MILESTONES.md](docs/05_DEVELOPMENT_ROADMAP_AND_MILESTONES.md)

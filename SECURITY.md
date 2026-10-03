@@ -2,11 +2,11 @@
 
 ## Supported Versions
 
-NorthStar MR and the NorthStar Studioz web portal receive active security updates.
+NorthStar Studioz applications and the official web portal receive active security updates.
 
-| Version / Project | Supported          |
+| Project / Software | Supported          |
 | ----------------- | ------------------ |
-| NorthStar MR v1.x | :white_check_mark: |
+| Studio Applications | :white_check_mark: |
 | Studio Web Portal | :white_check_mark: |
 
 ## Reporting a Vulnerability
@@ -14,7 +14,7 @@ NorthStar MR and the NorthStar Studioz web portal receive active security update
 At NorthStar Studioz, user privacy and application security are top priorities. If you discover a potential security vulnerability, please report it responsibly:
 
 1. **Do NOT report security vulnerabilities through public GitHub issues.**
-2. Email your findings directly to **[studioznorthstar@gmail.com](mailto:studioznorthstar@gmail.com)** with the subject line: `[Security Vulnerability] NorthStar MR`.
+2. Email your findings directly to **[studioznorthstar@gmail.com](mailto:studioznorthstar@gmail.com)** with the subject line: `[Security Vulnerability] NorthStar Studioz`.
 3. Please include:
    * A description of the issue and potential impact.
    * Steps or a proof-of-concept to reproduce the behavior.
