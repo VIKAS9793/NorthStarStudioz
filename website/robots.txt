@@ -1,4 +1,28 @@
+# NorthStar Studioz — crawler policy
+# Everything here is public marketing content. Search engines, AI search and
+# answer engines, and AI training crawlers are all welcome (decision: Oct 2026).
+# To opt out of model training later, change "Allow" to "Disallow" for the
+# training bots only (GPTBot, ClaudeBot, Google-Extended, Applebot-Extended,
+# CCBot); search and answer bots stay allowed so the studio remains citable.
+
 User-agent: *
+Allow: /
+
+# AI search / answer engines (cite and link back)
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: Claude-SearchBot
+User-agent: Claude-User
+User-agent: PerplexityBot
+User-agent: Perplexity-User
+Allow: /
+
+# AI model training
+User-agent: GPTBot
+User-agent: ClaudeBot
+User-agent: Google-Extended
+User-agent: Applebot-Extended
+User-agent: CCBot
 Allow: /
 
 Sitemap: https://vikas9793.github.io/NorthStarStudioz/sitemap.xml

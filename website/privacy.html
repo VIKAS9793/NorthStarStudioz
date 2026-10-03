@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'self'; manifest-src 'self'; media-src 'none'; frame-src 'none'; worker-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'; require-trusted-types-for 'script'; trusted-types 'none'; upgrade-insecure-requests">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com; style-src 'self'; img-src 'self' https://*.google-analytics.com https://*.googletagmanager.com; font-src 'self'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; manifest-src 'self'; media-src 'none'; frame-src 'none'; worker-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'; require-trusted-types-for 'script'; trusted-types ns-ga; upgrade-insecure-requests">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <title>Privacy Policy — NorthStar Studioz</title>
   <meta name="description" content="How NorthStar Studioz games, applications and this website handle your data: minimal collection, no selling of data, no access to headset camera feeds.">
@@ -60,7 +60,7 @@
 
       <div class="legal__body">
         <div class="callout">
-          <p><strong>In short:</strong> we collect as little as possible. We never sell your data, we run no advertising or third-party analytics, and our apps cannot access your headset’s camera feeds. Any data our apps need is processed through Meta’s platform services under Meta’s own privacy policy.</p>
+          <p><strong>In short:</strong> we collect as little as possible. We never sell your data, we run no advertising, website analytics run only if you opt in, and our apps cannot access your headset’s camera feeds. Any data our apps need is processed through Meta’s platform services under Meta’s own privacy policy.</p>
         </div>
 
         <h2>1. Who we are</h2>
@@ -85,7 +85,10 @@
         <p>We do not sell, rent or trade your data. We do not use advertising networks or third-party analytics that profile you. Platform features such as entitlement checks, cloud saves and purchases are provided by <strong>Meta Platforms, Inc.</strong>, which processes that data under its own privacy policy.</p>
 
         <h2>5. This website</h2>
-        <p>This site is hosted on GitHub Pages. It sets no cookies and includes no analytics or third-party trackers, and its fonts are served from the same site. GitHub may log technical data such as IP addresses to operate the hosting service. The site stores one session-only flag in your browser so the intro animation plays only once per visit.</p>
+        <p>This site is hosted on GitHub Pages. By default it sets no cookies and loads nothing from third parties; its fonts are served from the same site. GitHub may log technical data such as IP addresses to operate the hosting service. Your browser stores two small choices for this site: that you have seen the intro this session, and your analytics choice below.</p>
+        <h2 id="analytics">Analytics (optional)</h2>
+        <p>If you choose <strong>Allow</strong>, the site loads Google Analytics 4 to count visits and see which pages are useful. Google Analytics sets first-party cookies (for example <code>_ga</code>) and uses your IP address to estimate a rough location. Google signals and ad personalisation are turned off, and the data is never used for advertising. If you choose <strong>No thanks</strong>, or make no choice, Google Analytics is never loaded. Google processes this data under the <a href="https://policies.google.com/privacy" rel="noopener">Google Privacy Policy</a>.</p>
+        <p><button type="button" class="btn btn--ghost" data-analytics-reset hidden>Change analytics choice</button></p>
 
         <h2>6. Children</h2>
         <p>Our apps are intended for users aged 13 and over, or the minimum age required in your country. We do not knowingly collect personal information from children under that age.</p>

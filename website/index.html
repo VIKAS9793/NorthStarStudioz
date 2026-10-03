@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-tzim9TmIcq63KfWlkNEBkemCczhKu8goOEvhORab0F4=' 'sha256-zEsbks1f0qj8FtyZts3g7UNymtXeO9bfhYjqFdzKLrE='; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'self'; manifest-src 'self'; media-src 'none'; frame-src 'none'; worker-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'; require-trusted-types-for 'script'; trusted-types 'none'; upgrade-insecure-requests">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-UwckGPF+8+l5vjdqxF6wEvg8WxuOH6wyUQQgjG2rTX4=' 'sha256-zEsbks1f0qj8FtyZts3g7UNymtXeO9bfhYjqFdzKLrE=' https://www.googletagmanager.com; style-src 'self'; img-src 'self' https://*.google-analytics.com https://*.googletagmanager.com; font-src 'self'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; manifest-src 'self'; media-src 'none'; frame-src 'none'; worker-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'; require-trusted-types-for 'script'; trusted-types ns-ga; upgrade-insecure-requests">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <title>NorthStar Studioz — Independent Mixed Reality Game Studio</title>
   <meta name="description" content="NorthStar Studioz makes tactile mixed reality games for Meta Quest. Play with your bare hands, on the furniture you already own. Independent studio, India.">
@@ -11,14 +11,18 @@
   <meta name="theme-color" content="#07090f">
   <meta name="color-scheme" content="dark">
 
-  <!-- Intro gate: shown once per session, never for reduced-motion users or deep links. Runs before first paint to avoid a flash.
+  <!-- Intro gate: shown once per session, never for reduced-motion users, deep links, or visitors arriving from search and AI engines. Runs before first paint to avoid a flash.
        Large screens get the live 3D headset; phones and small tablets get a light version (a still of the headset, no 3D download). -->
   <script>
     (function () {
       var d = document.documentElement;
       d.classList.add('js');
       try {
-        if (!matchMedia('(prefers-reduced-motion: reduce)').matches && !sessionStorage.getItem('ns-gate') && !location.hash) {
+        // Visitors arriving from a search or AI engine land straight on the content
+        // (no full-screen overlay between a search result and the page).
+        var fromSearch = /(^|\.)(google|bing|duckduckgo|yahoo|yandex|baidu|ecosia|brave|startpage|qwant|perplexity|chatgpt|openai|claude|copilot|gemini|you)\.[a-z.]+$/i
+          .test((document.referrer.match(/^https?:\/\/([^/]+)/) || [])[1] || '');
+        if (!fromSearch && !matchMedia('(prefers-reduced-motion: reduce)').matches && !sessionStorage.getItem('ns-gate') && !location.hash) {
           d.classList.add('gate-on');
           var lite = matchMedia('(max-width: 820px), (hover: none) and (pointer: coarse) and (max-width: 1180px)').matches;
           if (lite) d.classList.add('gate-lite');
@@ -68,17 +72,55 @@
         "logo": "https://vikas9793.github.io/NorthStarStudioz/assets/brand/logo-320.webp",
         "description": "Independent studio designing tactile, hands-first mixed reality games for Meta Quest.",
         "email": "studioznorthstar@gmail.com",
-        "founder": { "@type": "Person", "name": "Vikas Sahani", "url": "https://github.com/VIKAS9793" },
-        "address": { "@type": "PostalAddress", "addressCountry": "IN" },
-        "knowsAbout": ["Mixed reality", "Hand tracking", "Spatial computing", "Game development", "OpenXR"],
-        "sameAs": ["https://github.com/VIKAS9793/NorthStarStudioz"]
+        "founder": {
+          "@id": "https://vikas9793.github.io/NorthStarStudioz/#founder"
+        },
+        "address": {
+          "@type": "PostalAddress",
+          "addressCountry": "IN"
+        },
+        "knowsAbout": [
+          "Mixed reality",
+          "Hand tracking",
+          "Spatial computing",
+          "Passthrough games",
+          "Meta Quest",
+          "OpenXR",
+          "Game development"
+        ],
+        "sameAs": [
+          "https://github.com/VIKAS9793/NorthStarStudioz"
+        ],
+        "alternateName": [
+          "NorthStar Studios",
+          "NorthStar Studioz XR"
+        ],
+        "foundingLocation": {
+          "@type": "Place",
+          "name": "India"
+        }
+      },
+      {
+        "@type": "Person",
+        "@id": "https://vikas9793.github.io/NorthStarStudioz/#founder",
+        "name": "Vikas Sahani",
+        "jobTitle": "Founder & Developer",
+        "worksFor": {
+          "@id": "https://vikas9793.github.io/NorthStarStudioz/#studio"
+        },
+        "url": "https://github.com/VIKAS9793",
+        "sameAs": [
+          "https://github.com/VIKAS9793"
+        ]
       },
       {
         "@type": "WebSite",
         "@id": "https://vikas9793.github.io/NorthStarStudioz/#website",
         "url": "https://vikas9793.github.io/NorthStarStudioz/",
         "name": "NorthStar Studioz",
-        "publisher": { "@id": "https://vikas9793.github.io/NorthStarStudioz/#studio" },
+        "publisher": {
+          "@id": "https://vikas9793.github.io/NorthStarStudioz/#studio"
+        },
         "inLanguage": "en"
       }
     ]

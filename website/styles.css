@@ -712,3 +712,16 @@ main { position: relative; z-index: 1; padding-bottom: 120px; }
   }
 }
 .gate--3d.gate--exit .gate__still { animation: none; }
+
+/* ---------- Analytics choice (only shown when GA4 is configured) ---------- */
+.consent {
+  position: fixed; left: 16px; bottom: calc(max(14px, env(safe-area-inset-bottom)) + 84px); z-index: 45;
+  width: min(360px, calc(100vw - 32px)); padding: 16px 18px; border-radius: 18px;
+  background: rgba(12, 14, 22, 0.94); border: 1px solid var(--edge-strong);
+  box-shadow: 0 18px 50px -12px rgba(0, 0, 0, 0.85);
+  display: grid; gap: 12px; font-size: 0.92rem; color: #d6d0c4;
+  animation: rise-in 0.5s var(--ease-out) both;
+}
+.consent a { color: var(--sun); }
+.consent__actions { display: flex; gap: 8px; }
+.consent__btn { min-height: 38px; padding: 0 16px; font-size: 0.88rem; }
