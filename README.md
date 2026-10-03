@@ -1,42 +1,53 @@
-# NorthStar MR (by NorthStar Studioz)
+# ✦ NorthStar Studioz
 
-> **Tactile Mixed Reality Physics Sandbox & Kinetic Puzzles for Meta Horizon OS**
+> **Independent Spatial Computing & Mixed Reality Game Studio**  
+> *Crafting tactile, physics-driven experiences for Meta Horizon OS & Spatial Platforms.*
 
 ---
 
-## 📌 Project Overview
-* **Developer/Studio:** NorthStar Studioz
-* **Founder & Lead:** Vikas Sahani ([@VIKAS9793](https://github.com/VIKAS9793))
-* **Email:** studioznorthstar@gmail.com
-* **Remote Repository:** [https://github.com/VIKAS9793/NorthStarStudioz.git](https://github.com/VIKAS9793/NorthStarStudioz.git)
+## 🏛️ Studio Profile & Overview
+* **Studio Name:** NorthStar Studioz
+* **Founder & Lead Developer:** Vikas Sahani ([@VIKAS9793](https://github.com/VIKAS9793))
+* **Location:** India
+* **Primary Contact:** [studioznorthstar@gmail.com](mailto:studioznorthstar@gmail.com)
+* **Official Repository:** [https://github.com/VIKAS9793/NorthStarStudioz](https://github.com/VIKAS9793/NorthStarStudioz)
 * **Live Studio Portal:** [https://vikas9793.github.io/NorthStarStudioz/](https://vikas9793.github.io/NorthStarStudioz/)
-* **Privacy Policy URL (for Meta):** [https://vikas9793.github.io/NorthStarStudioz/privacy.html](https://vikas9793.github.io/NorthStarStudioz/privacy.html)
-* **Dashboard App Name:** `NorthStar MR`
-* **Target Ecosystem:** Meta Horizon Store (Standalone Meta Quest 3, Quest 3S, Quest 2, Quest Pro)
-* **Target Release Track:** Early Access
-* **Engine & Pipeline:** Unity 6 LTS / 2022.3 LTS (Universal Render Pipeline) + Meta OpenXR
+* **Official Privacy Policy:** [https://vikas9793.github.io/NorthStarStudioz/privacy.html](https://vikas9793.github.io/NorthStarStudioz/privacy.html)
+* **Terms of Service:** [https://vikas9793.github.io/NorthStarStudioz/terms.html](https://vikas9793.github.io/NorthStarStudioz/terms.html)
 
 ---
 
-## 📚 Project Documentation Repository (`docs/`)
+## 🎮 Debut Spatial Project (Codename: *Project Kinetic*)
 
-All market research, platform intelligence, technical architecture, and design specifications have been documented with verified sources:
+An unannounced debut commercial mixed-reality title under active development by NorthStar Studioz for the **Meta Horizon Store** (Meta Quest 3, Quest 3S, Quest 2, and Quest Pro). *(Final commercial title to be revealed ahead of launch).*
 
-1. [docs/01_META_PLATFORM_INTELLIGENCE.md](docs/01_META_PLATFORM_INTELLIGENCE.md) &nbsp;•&nbsp; [View on GitHub](https://github.com/VIKAS9793/NorthStarStudioz/blob/main/docs/01_META_PLATFORM_INTELLIGENCE.md)
+* **Genre:** Tactile Mixed Reality Physics Sandbox & Kinetic Spatial Puzzles
+* **Core Experience:** Bare-hand pinch/grab interactions in full Color Passthrough, turning real tabletops into living Rube Goldberg kinetic apparatuses.
+* **Comfort Rating:** "Comfortable" (100% stationary, zero artificial motion sickness).
+* **Technical Baseline:** Unity 6 LTS / 2022.3 LTS (URP) &bull; Khronos OpenXR &bull; Meta Interaction SDK &bull; Locked 90 FPS.
+
+---
+
+## 📚 Studio Knowledge Base & Documentation (`docs/`)
+
+Our design, market research, and technical architecture are systematically documented:
+
+1. [docs/01_META_PLATFORM_INTELLIGENCE.md](docs/01_META_PLATFORM_INTELLIGENCE.md)
    * Official Meta market data, $2.5B+ store spend, 300+ $1M titles, Quest 3 retention metrics, and why Standalone beats PC VR.
-2. [docs/02_MARKET_NICHE_AND_VALUE_PROPOSITION.md](docs/02_MARKET_NICHE_AND_VALUE_PROPOSITION.md) &nbsp;•&nbsp; [View on GitHub](https://github.com/VIKAS9793/NorthStarStudioz/blob/main/docs/02_MARKET_NICHE_AND_VALUE_PROPOSITION.md)
+2. [docs/02_MARKET_NICHE_AND_VALUE_PROPOSITION.md](docs/02_MARKET_NICHE_AND_VALUE_PROPOSITION.md)
    * Competitive teardown (Cubism, Track Craft, Puzzling Places), Unique Value Proposition (UVP), and target player profiles.
-3. [docs/03_GAME_DESIGN_DOCUMENT_GDD.md](docs/03_GAME_DESIGN_DOCUMENT_GDD.md) &nbsp;•&nbsp; [View on GitHub](https://github.com/VIKAS9793/NorthStarStudioz/blob/main/docs/03_GAME_DESIGN_DOCUMENT_GDD.md)
-   * Comprehensive Game Design Document covering the core loop, modular kinetic components, hand-tracking mechanics, and level campaign structure.
-4. [docs/04_TECHNICAL_ARCHITECTURE_AND_VRCS.md](docs/04_TECHNICAL_ARCHITECTURE_AND_VRCS.md) &nbsp;•&nbsp; [View on GitHub](https://github.com/VIKAS9793/NorthStarStudioz/blob/main/docs/04_TECHNICAL_ARCHITECTURE_AND_VRCS.md)
-   * Complete technical stack, URP performance budgets (90 FPS, <120 draw calls), and the step-by-step Virtual Reality Check (VRC) QA submission checklist.
-5. [docs/05_DEVELOPMENT_ROADMAP_AND_MILESTONES.md](docs/05_DEVELOPMENT_ROADMAP_AND_MILESTONES.md) &nbsp;•&nbsp; [View on GitHub](https://github.com/VIKAS9793/NorthStarStudioz/blob/main/docs/05_DEVELOPMENT_ROADMAP_AND_MILESTONES.md)
-   * 8-week solo developer sprint schedule from prototype to live Early Access store launch and Meta Horizon Start application.
+3. [docs/03_GAME_DESIGN_DOCUMENT_GDD.md](docs/03_GAME_DESIGN_DOCUMENT_GDD.md)
+   * Full Game Design Document for *NorthStar MR* covering core loop, modular kinetic components, and campaign progression.
+4. [docs/04_TECHNICAL_ARCHITECTURE_AND_VRCS.md](docs/04_TECHNICAL_ARCHITECTURE_AND_VRCS.md)
+   * Technical stack, URP performance budgets (90 FPS, <120 draw calls), and Virtual Reality Check (VRC) QA compliance.
+5. [docs/05_DEVELOPMENT_ROADMAP_AND_MILESTONES.md](docs/05_DEVELOPMENT_ROADMAP_AND_MILESTONES.md)
+   * 8-week sprint roadmap from prototype to live Early Access launch and Meta Horizon Start application.
 
 ---
 
-## ⚙️ Quick Start Checklist
-
-1. **Dashboard Configuration:** In the [Meta VR Developer Dashboard](https://developer.oculus.com/manage/), find your App ID under **Development > API**.
-2. **Device Hub:** Launch **Meta Quest Developer Hub (MQDH)** on your PC to enable wireless ADB casting and live framerate debugging.
-3. **Engine Initialization:** Initialize a Unity project with Android Build Support and add the `com.meta.xr.sdk.all` package via UPM.
+## ⚖️ Studio Governance & Policies
+* [LICENSE.md](LICENSE.md) — Proprietary Software & Intellectual Property License
+* [.github/CODEOWNERS](.github/CODEOWNERS) — Exclusive Studio Ownership by @VIKAS9793
+* [SECURITY.md](SECURITY.md) — Coordinated Vulnerability Disclosure Policy
+* [SUPPORT.md](SUPPORT.md) — Community Support & Inquiries
+* [CONTRIBUTING.md](CONTRIBUTING.md) — Feedback & Contribution Guidelines
