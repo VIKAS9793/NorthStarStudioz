@@ -65,3 +65,10 @@ desktop.ini
 .env.local
 secrets.json
 app_secret.txt
+
+# Private Studio Documents, Business Plans & Game Design Documents
+docs/
+plans/
+notes/
+*.private.*
+*.local.md

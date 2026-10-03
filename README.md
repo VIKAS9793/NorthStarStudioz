@@ -34,21 +34,6 @@ NorthStar Studioz focuses on high-retention, low-friction spatial categories des
 
 ---
 
-## 📚 Studio Knowledge Base & Documentation (`docs/`)
-
-Our platform research, game design documents, and technical architecture are systematically documented:
-
-1. [docs/01_META_PLATFORM_INTELLIGENCE.md](docs/01_META_PLATFORM_INTELLIGENCE.md)
-   * Official Meta market data, $2.5B+ store spend, 300+ $1M titles, Quest 3 retention metrics, and why Standalone beats PC VR.
-2. [docs/02_MARKET_NICHE_AND_VALUE_PROPOSITION.md](docs/02_MARKET_NICHE_AND_VALUE_PROPOSITION.md)
-   * Competitive teardown (Cubism, Track Craft, Puzzling Places), Unique Value Proposition (UVP), and target player profiles.
-3. [docs/03_GAME_DESIGN_DOCUMENT_GDD.md](docs/03_GAME_DESIGN_DOCUMENT_GDD.md)
-   * Comprehensive Game Design Document (GDD) covering core loop, modular kinetic components, and campaign progression.
-4. [docs/04_TECHNICAL_ARCHITECTURE_AND_VRCS.md](docs/04_TECHNICAL_ARCHITECTURE_AND_VRCS.md)
-   * Technical stack, URP performance budgets (90 FPS, <120 draw calls), and Virtual Reality Check (VRC) QA compliance.
-5. [docs/05_DEVELOPMENT_ROADMAP_AND_MILESTONES.md](docs/05_DEVELOPMENT_ROADMAP_AND_MILESTONES.md)
-   * 8-week sprint roadmap from prototype to live Early Access launch and Meta Horizon Start application.
-
 ---
 
 ## ⚖️ Studio Governance & Policies
