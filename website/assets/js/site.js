@@ -174,6 +174,93 @@ if (!reduceMotion && !CSS.supports('animation-timeline: view()')) {
   document.querySelectorAll('.window, .zone__head, .zone--contact > *').forEach((el) => io.observe(el));
 }
 
+/* ---------- Analytics: Google Analytics 4, opt-in only ---------- */
+// Paste the GA4 Measurement ID (looks like "G-XXXXXXXXXX") to turn analytics on.
+// Empty = off: no prompt, no request to Google, no cookies.
+const GA4_ID = '';
+const CONSENT_KEY = 'ns-analytics';
+if (GA4_ID) initAnalytics();
+
+function initAnalytics() {
+  let choice = null;
+  try { choice = localStorage.getItem(CONSENT_KEY); } catch {}
+  if (choice === 'granted') loadGA4();
+  else if (choice !== 'denied') afterGate(showConsent);
+  document.querySelectorAll('[data-analytics-reset]').forEach((btn) => {
+    btn.hidden = false;
+    btn.addEventListener('click', showConsent);
+  });
+}
+
+function saveChoice(value) { try { localStorage.setItem(CONSENT_KEY, value); } catch {} }
+
+function loadGA4() {
+  if (window.gtag) return;
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function gtag() { window.dataLayer.push(arguments); }; // GA expects the Arguments object
+  window.gtag('consent', 'default', { ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied', analytics_storage: 'granted' });
+  window.gtag('js', new Date());
+  window.gtag('config', GA4_ID, { allow_google_signals: false, allow_ad_personalization_signals: false });
+  const url = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(GA4_ID)}`;
+  // Trusted Types is enforced: this policy admits exactly one script URL.
+  const policy = window.trustedTypes?.createPolicy('ns-ga', {
+    createScriptURL: (u) => { if (u === url) return u; throw new TypeError('Script URL not allowed'); },
+  });
+  const script = document.createElement('script');
+  script.async = true;
+  script.src = policy ? policy.createScriptURL(url) : url;
+  document.head.append(script);
+}
+
+function revokeGA4() {
+  window.gtag?.('consent', 'update', { analytics_storage: 'denied' });
+  // Remove GA's first-party cookies for this site.
+  for (const c of document.cookie.split(';')) {
+    const name = c.split('=')[0].trim();
+    if (/^_ga/.test(name)) document.cookie = `${name}=; Max-Age=0; path=/; SameSite=Lax`;
+  }
+}
+
+function showConsent() {
+  if (document.querySelector('.consent')) return;
+  const box = document.createElement('div');
+  box.className = 'consent';
+  box.setAttribute('role', 'region');
+  box.setAttribute('aria-label', 'Analytics choice');
+  const text = document.createElement('p');
+  text.append('Help improve this site with anonymous analytics (Google Analytics)? ');
+  const more = document.createElement('a');
+  more.href = 'privacy.html#analytics';
+  more.textContent = 'Details';
+  text.append(more);
+  const actions = document.createElement('div');
+  actions.className = 'consent__actions';
+  const choose = (value) => {
+    saveChoice(value);
+    if (value === 'granted') loadGA4(); else revokeGA4();
+    box.remove();
+  };
+  for (const [label, value, cls] of [['Allow', 'granted', 'btn'], ['No thanks', 'denied', 'btn btn--ghost']]) {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = `${cls} consent__btn`;
+    b.textContent = label;
+    b.addEventListener('click', () => choose(value));
+    actions.append(b);
+  }
+  box.append(text, actions);
+  document.body.append(box);
+}
+
+// Run fn once the intro gate is gone (or straight away when there is none).
+function afterGate(fn) {
+  if (!root.classList.contains('gate-on')) return fn();
+  const mo = new MutationObserver(() => {
+    if (!root.classList.contains('gate-on')) { mo.disconnect(); fn(); }
+  });
+  mo.observe(root, { attributes: true, attributeFilter: ['class'] });
+}
+
 /* ---------- Intro gate ---------- */
 const gate = document.getElementById('gate');
 if (gate && root.classList.contains('gate-on')) runGate(gate);
