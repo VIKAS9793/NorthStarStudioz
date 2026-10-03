@@ -72,3 +72,6 @@ plans/
 notes/
 *.private.*
 *.local.md
+
+# Node tooling
+node_modules/

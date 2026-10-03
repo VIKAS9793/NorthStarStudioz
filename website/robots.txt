@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://vikas9793.github.io/NorthStarStudioz/sitemap.xml

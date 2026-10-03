@@ -1,0 +1,13 @@
+{
+  "name": "NorthStar Studioz",
+  "short_name": "NorthStar",
+  "description": "Independent mixed reality game studio.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#04060d",
+  "theme_color": "#04060d",
+  "icons": [
+    { "src": "assets/brand/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "assets/brand/logo-320.webp", "sizes": "320x320", "type": "image/webp" }
+  ]
+}
