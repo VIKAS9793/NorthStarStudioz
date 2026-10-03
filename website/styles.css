@@ -235,7 +235,7 @@ body::after { bottom: 0; height: 120px; background: linear-gradient(transparent,
 }
 
 .reticle {
-  position: fixed; left: 0; top: 0; z-index: 90; width: 30px; height: 30px; margin: -15px 0 0 -15px;
+  position: fixed; left: 0; top: 0; z-index: 110; width: 30px; height: 30px; margin: -15px 0 0 -15px; /* above the intro gate */
   border-radius: 50%; border: 1.5px solid rgba(243, 239, 231, 0.55);
   pointer-events: none; opacity: 0;
   transition: width 0.25s var(--spring), height 0.25s var(--spring), margin 0.25s var(--spring), border-color 0.2s, opacity 0.3s, background-color 0.2s;
@@ -333,13 +333,6 @@ main { position: relative; z-index: 1; padding-bottom: 120px; }
 }
 
 /* How it plays */
-.arc--four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-@media (min-width: 1100px) {
-  .arc--four .arc__slot:nth-child(1) { transform: rotateY(14deg); transform-origin: right center; }
-  .arc--four .arc__slot:nth-child(2) { transform: rotateY(4deg) translateZ(14px); }
-  .arc--four .arc__slot:nth-child(3) { transform: rotateY(-4deg) translateZ(14px); }
-  .arc--four .arc__slot:nth-child(4) { transform: rotateY(-14deg); transform-origin: left center; }
-}
 .prompt { display: grid; align-content: start; gap: 14px; height: 100%; padding: 28px 24px 24px; transition: transform 0.45s var(--spring), border-color 0.3s, box-shadow 0.4s; }
 .prompt:hover { transform: translateZ(40px) translateY(-6px); border-color: rgba(255, 181, 71, 0.45); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 50px 90px -40px rgba(255, 107, 53, 0.45); }
 .prompt__glyph {
@@ -350,8 +343,6 @@ main { position: relative; z-index: 1; padding-bottom: 120px; }
 .prompt h3 { font: 800 1.6rem/1 var(--font-display); text-transform: uppercase; letter-spacing: 0; }
 .prompt p { color: var(--dim); font-size: 0.98rem; }
 .prompt__step { margin-top: auto; padding-top: 8px; font: 500 0.66rem/1 var(--font-mono); letter-spacing: 0.16em; text-transform: uppercase; color: var(--faint); }
-@media (max-width: 1099px) { .arc--four { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-@media (max-width: 560px) { .arc--four { grid-template-columns: 1fr; } }
 
 /* Who it's for — save slots */
 .slots { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(14px, 1.6vw, 24px); }
@@ -633,3 +624,80 @@ main { position: relative; z-index: 1; padding-bottom: 120px; }
 .gate-on:not(.gate-leaving) .hero__copy > *, .gate-on:not(.gate-leaving) .arc--hero .window { animation-play-state: paused; }
 .foot--page { padding-bottom: 48px; }
 .env--static .env__sun { top: 55%; }
+
+
+/* =========================================================
+   Curved monitor: "How it plays"
+   A side-scrolling screen. Panes snap so whole panes are always in view at
+   rest (never cut off). site.js reshapes every pane on scroll to the outline
+   of a curved display seen head-on: tall and curved at the screen's edges,
+   short and flat in the middle. The curve is a 2D silhouette (clip-path),
+   so text stays flat and sharp.
+   ========================================================= */
+.monitor { position: relative; --d: 0px; }
+.monitor__screen {
+  --per: 3; --gap: 4px;
+  overflow-x: auto; overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  border-radius: 26px;
+  cursor: grab;
+}
+.monitor__screen::-webkit-scrollbar { display: none; }
+.monitor__screen:focus-visible { outline-offset: 6px; }
+.monitor__screen.is-dragging { cursor: grabbing; scroll-snap-type: none; user-select: none; }
+.monitor__track { display: flex; gap: var(--gap); }
+.monitor__pane { display: flex; flex: 0 0 calc((100% - (var(--per) - 1) * var(--gap)) / var(--per)); scroll-snap-align: start; }
+.monitor .prompt { width: 100%; }
+.monitor .prompt::after { display: none; } /* no grab handle per pane; the screen has a stand */
+@media (max-width: 1099px) { .monitor__screen { --per: 2; } }
+@media (max-width: 640px) { .monitor__screen { --per: 1; } }
+
+/* Curved shape, applied once site.js has measured the panes. */
+.monitor.is-curved .prompt {
+  border: 0; box-shadow: none; border-radius: 0;
+  background: rgba(243, 239, 231, 0.16); /* shows as the 1px bezel */
+  clip-path: var(--curve);
+  padding-top: calc(var(--d) + 28px); padding-bottom: calc(var(--d) + 24px);
+  transition: background-color 0.3s;
+}
+.monitor.is-curved .prompt::before {
+  content: ""; position: absolute; inset: 0 1px; z-index: 0; clip-path: var(--curve-in);
+  background: linear-gradient(180deg, var(--window-hi), var(--window)), var(--night);
+}
+.monitor.is-curved .prompt > * { position: relative; z-index: 1; }
+.monitor.is-curved .prompt:hover { transform: none; background: rgba(255, 181, 71, 0.6); }
+.monitor.is-curved .prompt:hover .prompt__glyph { box-shadow: 0 0 24px rgba(255, 181, 71, 0.35); }
+
+/* Stand: a neck under the screen and a base that holds the controls. */
+.monitor__controls {
+  position: relative; display: flex; align-items: center; gap: 12px;
+  width: max-content; margin: 30px auto 0; padding: 6px;
+  border-radius: 999px; background: rgba(12, 14, 22, 0.8); border: 1px solid var(--edge-strong);
+  box-shadow: 0 16px 40px -14px rgba(0, 0, 0, 0.9);
+}
+.monitor__controls::before {
+  content: ""; position: absolute; left: 50%; bottom: 100%; width: 44px; height: 30px; translate: -50% 0;
+  background: linear-gradient(180deg, rgba(243, 239, 231, 0.05), rgba(243, 239, 231, 0.16));
+  clip-path: polygon(30% 0, 70% 0, 82% 100%, 18% 100%);
+}
+.monitor__btn {
+  display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; cursor: pointer;
+  background: rgba(243, 239, 231, 0.06); border: 1px solid var(--edge); color: var(--bone);
+  transition: background-color 0.2s, opacity 0.2s, transform 0.25s var(--spring);
+}
+.monitor__btn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.monitor__btn:hover:not(:disabled) { background: rgba(255, 181, 71, 0.18); transform: scale(1.06); }
+.monitor__btn:disabled { opacity: 0.3; cursor: default; }
+.monitor__progress { position: relative; width: 120px; height: 4px; border-radius: 999px; background: rgba(243, 239, 231, 0.12); overflow: hidden; }
+.monitor__progress span { position: absolute; inset: 0 auto 0 0; width: 50%; border-radius: inherit; background: linear-gradient(90deg, var(--ember), var(--sun)); }
+
+/* The screen flies in as one piece rather than pane by pane. */
+.monitor .window { animation: none; }
+.io .monitor .window { opacity: 1; translate: 0 0 0; }
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .monitor { animation: approach linear both; animation-timeline: view(); animation-range: entry 0% entry 85%; }
+  }
+}
