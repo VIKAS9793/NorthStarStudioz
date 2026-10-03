@@ -189,14 +189,29 @@ function runGate(gate) {
 
   let scene = null;
   let leaving = false;
+  const lite = root.classList.contains('gate-lite');
 
-  import('./gate-3d.js')
-    .then(({ createGate }) => {
-      if (leaving) return;
-      scene = createGate(canvas);
-      if (!scene) gate.classList.add('gate--no3d');
-    })
-    .catch(() => gate.classList.add('gate--no3d'));
+  // Large screens: the words and the headset still paint instantly; the live 3D
+  // headset loads on the first pointer movement (when head-tracking starts to
+  // matter) and crossfades in once its shaders are compiled. Until then, and for
+  // keyboard-only visitors, the still carries the intro. Phones and small tablets
+  // keep the still and never download the 3D bundle.
+  if (!lite) {
+    const load = () => import('./gate-3d.js')
+      .then(({ createGate }) => {
+        if (leaving) return;
+        scene = createGate(canvas);
+        scene?.ready.then((ok) => { if (ok && !leaving) gate.classList.add('gate--3d'); });
+      })
+      .catch(() => {});
+    const wake = () => {
+      removeEventListener('pointermove', wake);
+      removeEventListener('pointerdown', wake);
+      load();
+    };
+    addEventListener('pointermove', wake, { passive: true });
+    addEventListener('pointerdown', wake, { passive: true });
+  }
 
   const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -217,8 +232,8 @@ function runGate(gate) {
     if (leaving) return;
     leaving = true;
     gate.classList.add('gate--exit');
-    if (scene) await scene.exit();
-    else await wait(1000);
+    if (gate.classList.contains('gate--3d')) await scene.exit();
+    else await wait(1000); // the still's own fly-through (CSS)
     gate.classList.add('gate--flash');
     await wait(260);
     finish();

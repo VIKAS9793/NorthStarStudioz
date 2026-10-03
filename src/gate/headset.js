@@ -254,7 +254,7 @@ export function createGate(canvas) {
     return lookTarget.setFromEuler(lookEuler.set(-pitch, yaw, 0));
   }
 
-  const t0 = performance.now();
+  let t0 = performance.now();
   let last = t0;
   let exit = null; // { start, from, to, resolve }
 
@@ -286,11 +286,26 @@ export function createGate(canvas) {
     }
     renderer.render(scene, camera);
   }
-  renderer.setAnimationLoop(frame);
+  // Compile every shader before the first frame. With KHR_parallel_shader_compile
+  // this happens off the main thread, so the page stays responsive; the headset
+  // starts its entrance only once it can render without a hitch.
+  let started = false;
+  let disposed = false;
+  const ready = (renderer.compileAsync ? renderer.compileAsync(scene, camera) : Promise.resolve())
+    .catch(() => {})
+    .then(() => {
+      if (disposed) return false;
+      t0 = last = performance.now();
+      renderer.setAnimationLoop(frame);
+      started = true;
+      return true;
+    });
 
   return {
     /** Spin the headset to face the viewer, then fly through its lens. */
+    ready,
     exit() {
+      if (!started) return Promise.resolve(); // not on screen yet: nothing to animate
       return new Promise((resolve) => {
         const from = headset.rotation.y;
         const to = Math.ceil((from + Math.PI * 2.5) / (Math.PI * 2)) * Math.PI * 2;
@@ -300,6 +315,7 @@ export function createGate(canvas) {
       });
     },
     dispose() {
+      disposed = true;
       renderer.setAnimationLoop(null);
       ro.disconnect();
       removeEventListener('pointermove', onMove);
