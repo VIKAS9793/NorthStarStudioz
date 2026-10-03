@@ -7,6 +7,7 @@ import {
   MeshPhysicalMaterial, MeshStandardMaterial, CylinderGeometry, SphereGeometry,
   TubeGeometry, CatmullRomCurve3, Vector3, DirectionalLight, PointLight,
   PMREMGenerator, ACESFilmicToneMapping, SRGBColorSpace, CapsuleGeometry,
+  Raycaster, Vector2, Plane, Quaternion, Euler,
 } from 'three';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 
@@ -127,33 +128,64 @@ export function createGate(canvas) {
   ro.observe(canvas);
   resize();
 
-  const pointer = { x: 0, y: 0, tx: 0, ty: 0 };
-  const onMove = (e) => { pointer.tx = (e.clientX / innerWidth - 0.5) * 2; pointer.ty = (e.clientY / innerHeight - 0.5) * 2; };
+  // Gaze tracking: the headset turns to look exactly at the cursor.
+  // The pointer is cast as a ray from the camera onto a plane between the
+  // headset and the viewer; the headset's forward axis is aimed at the hit
+  // point, so on screen its line of sight passes through the cursor.
+  const LOOK_PLANE = new Plane(new Vector3(0, 0, 1), -3.4); // z = 3.4
+  const MAX_YAW = 1.05;   // ~60°, keeps the front of the visor in view
+  const MAX_PITCH = 0.7;  // ~40°
+  const raycaster = new Raycaster();
+  const ndc = new Vector2(0, 0);
+  const hit = new Vector3();
+  const lookEuler = new Euler(0, 0, 0, 'YXZ');
+  const lookTarget = new Quaternion();
+  const facing = new Quaternion(); // identity: looking at the viewer
+  let hasPointer = false;
+
+  const onMove = (e) => {
+    const r = canvas.getBoundingClientRect();
+    ndc.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
+    hasPointer = true;
+  };
+  const onLeave = () => { hasPointer = false; };
   addEventListener('pointermove', onMove, { passive: true });
+  addEventListener('pointerdown', onMove, { passive: true });
+  document.documentElement.addEventListener('pointerleave', onLeave);
+
+  function aim() {
+    if (!hasPointer) return facing;
+    raycaster.setFromCamera(ndc, camera);
+    if (!raycaster.ray.intersectPlane(LOOK_PLANE, hit)) return facing;
+    const dx = hit.x - rig.position.x, dy = hit.y - rig.position.y, dz = hit.z - rig.position.z;
+    const yaw = Math.max(-MAX_YAW, Math.min(MAX_YAW, Math.atan2(dx, dz)));
+    const pitch = Math.max(-MAX_PITCH, Math.min(MAX_PITCH, Math.atan2(dy, Math.hypot(dx, dz))));
+    return lookTarget.setFromEuler(lookEuler.set(-pitch, yaw, 0));
+  }
 
   const t0 = performance.now();
-    let exit = null; // { start, from, to, resolve }
+  let last = t0;
+  let exit = null; // { start, from, to, resolve }
 
   function frame(now) {
     const t = (now - t0) / 1000;
-    pointer.x += (pointer.tx - pointer.x) * 0.06;
-    pointer.y += (pointer.ty - pointer.y) * 0.06;
+    const dt = Math.min((now - last) / 1000, 0.1);
+    last = now;
+    // Frame-rate independent smoothing: responsive, but never jittery.
+    const follow = 1 - Math.exp(-dt * 9);
 
     if (!exit) {
-      // Entrance: spin in two full turns and settle facing the viewer, then sway.
+      // Entrance: spin in two full turns and settle, then track the cursor.
       const k = clamp01((t - 0.2) / 1.6);
       rig.scale.setScalar(Math.max(easeOutBack(clamp01((t - 0.2) / 1.1)), 0.0001));
-      const sway = Math.sin(Math.max(t - 1.8, 0) * 0.55) * 0.62;
-      headset.rotation.y = -Math.PI * 4 * (1 - easeOutCubic(k)) + sway + pointer.x * 0.25;
-      rig.rotation.x = 0.12 + pointer.y * 0.1;
-      rig.rotation.z = -pointer.x * 0.05;
+      headset.rotation.y = -Math.PI * 4 * (1 - easeOutCubic(k));
       rig.position.y = Math.sin(t * 1.3) * 0.05;
+      rig.quaternion.slerp(aim(), follow);
     } else {
       const e = (now - exit.start) / 1000;
       const spin = easeInOutCubic(clamp01(e / 0.9));
       headset.rotation.y = exit.from + (exit.to - exit.from) * spin;
-      rig.rotation.x *= 0.9;
-      rig.rotation.z *= 0.9;
+      rig.quaternion.slerp(facing, follow);
       const dolly = easeInCubic(clamp01((e - 0.65) / 0.65));
       camera.position.z = CAM_Z - dolly * (CAM_Z - 1.15);
       camera.position.y = 0.25 * (1 - dolly);
@@ -180,6 +212,8 @@ export function createGate(canvas) {
       renderer.setAnimationLoop(null);
       ro.disconnect();
       removeEventListener('pointermove', onMove);
+      removeEventListener('pointerdown', onMove);
+      document.documentElement.removeEventListener('pointerleave', onLeave);
       scene.traverse((o) => { if (o.isMesh) { o.geometry.dispose(); o.material.dispose(); } });
       scene.environment?.dispose();
       pmrem.dispose();
