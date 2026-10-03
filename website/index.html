@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-jfKskw97S0Wn2c/o6hx9Q2izr7Y2uMeyXoC8+xqCT5s=' 'sha256-zEsbks1f0qj8FtyZts3g7UNymtXeO9bfhYjqFdzKLrE='; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'self'; manifest-src 'self'; media-src 'none'; frame-src 'none'; worker-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'; require-trusted-types-for 'script'; trusted-types 'none'; upgrade-insecure-requests">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-R+oD6cMt4yQZLOmDVpjUp0QJF+rPy3KrG3aXMd1mYI0=' 'sha256-zEsbks1f0qj8FtyZts3g7UNymtXeO9bfhYjqFdzKLrE='; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'self'; manifest-src 'self'; media-src 'none'; frame-src 'none'; worker-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'; require-trusted-types-for 'script'; trusted-types 'none'; upgrade-insecure-requests">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <title>NorthStar Studioz — Independent Mixed Reality Game Studio</title>
-  <meta name="description" content="NorthStar Studioz is an independent studio in India designing tactile, hands-first mixed reality games for Meta Quest, played on the tables and in the rooms you already have.">
+  <meta name="description" content="NorthStar Studioz makes tactile mixed reality games for Meta Quest. Play with your bare hands, on the furniture you already own. Independent studio, India.">
   <link rel="canonical" href="https://vikas9793.github.io/NorthStarStudioz/">
-  <meta name="theme-color" content="#04060d">
+  <meta name="theme-color" content="#07090f">
   <meta name="color-scheme" content="dark">
 
   <!-- Intro gate: shown once per session, never for reduced-motion users or deep links. Runs before first paint to avoid a flash. -->
@@ -22,13 +22,16 @@
           var l = document.createElement('link');
           l.rel = 'modulepreload'; l.href = 'assets/js/gate-3d.js';
           document.head.appendChild(l);
+          var f = document.createElement('link');
+          f.rel = 'preload'; f.as = 'font'; f.type = 'font/woff2'; f.crossOrigin = ''; f.href = 'assets/fonts/unbounded.woff2';
+          document.head.appendChild(f);
         }
       } catch (e) {}
     })();
   </script>
 
-  <link rel="preload" href="assets/fonts/unbounded.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="assets/fonts/manrope.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/tektur.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/instrument-sans.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="styles.css">
   <script type="module" src="assets/js/site.js"></script>
 
@@ -107,243 +110,199 @@
     <div class="gate__flash" aria-hidden="true"></div>
   </div>
 
-  <!-- ===================== Header ===================== -->
-  <header class="site-header">
-    <div class="wrap site-header__bar">
-      <a class="brand" href="./" aria-label="NorthStar Studioz home">
-        <img src="assets/brand/logo-96.webp" width="36" height="36" alt="">
-        <span>NorthStar <b>Studioz</b></span>
-      </a>
-      <nav class="nav" aria-label="Primary">
-        <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="nav-list">
-          <span class="sr-only">Menu</span><i></i><i></i>
-        </button>
-        <ul class="nav__list" id="nav-list">
-          <li><a href="#focus">Focus</a></li>
-          <li><a href="#players">Players</a></li>
-          <li><a href="#platform">Platform</a></li>
-          <li><a href="#studio">Studio</a></li>
-          <li><a class="btn btn--small" href="#contact">Contact</a></li>
-        </ul>
-      </nav>
+  <!-- ===================== Environment (decorative) ===================== -->
+  <div class="env" aria-hidden="true">
+    <div class="env__layer env__layer--sky"><div class="env__sky"></div></div>
+    <div class="env__layer env__layer--stars"><div class="env__stars"></div><div class="env__polaris"></div></div>
+    <div class="env__layer env__layer--sun"><div class="env__sun"></div></div>
+    <div class="env__layer env__layer--far">
+      <svg class="env__ridge env__ridge--far" viewBox="0 0 1600 240" preserveAspectRatio="none"><path d="M0 240V150l70-24 60 18 90-56 70 30 80-62 60 22 50-30 110 70 70-18 90 40 80-66 70 26 60-30 100 72 80-20 70 34 90-48 70 22 80-30 70 44 80-26v158z"/></svg>
+    </div>
+    <div class="env__layer env__layer--near">
+      <svg class="env__ridge env__ridge--near" viewBox="0 0 1600 240" preserveAspectRatio="none"><path d="M0 240V176l110-30 90 26 120-64 80 40 70-20 130 66 90-36 110 52 90-22 120-58 90 44 100-18 90 32 110-46 200 40v78z"/></svg>
+    </div>
+    <div class="env__floor"><div class="env__grid"></div></div>
+    <div class="env__vignette"></div>
+  </div>
+
+  <!-- HUD frame -->
+  <div class="hud" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+
+  <!-- ===================== Top bar ===================== -->
+  <header class="topbar">
+    <a class="brand" href="./" aria-label="NorthStar Studioz home">
+      <img src="assets/brand/logo-96.webp" width="32" height="32" alt="">
+      <span>NorthStar<b>Studioz</b></span>
+    </a>
+    <div class="status" aria-hidden="true">
+      <span class="status__item"><span class="status__led"></span>Passthrough</span>
+      <span class="status__item status__clock" data-clock>--:--</span>
     </div>
   </header>
 
   <main id="main">
     <!-- ===================== Hero ===================== -->
-    <section class="hero" aria-labelledby="hero-title">
-      <div class="hero__sky" aria-hidden="true"></div>
-      <div class="wrap hero__grid">
-        <div class="hero__copy">
-          <p class="eyebrow"><span class="dot" aria-hidden="true"></span>Independent mixed reality studio · India</p>
-          <h1 id="hero-title" class="display" tabindex="-1">Games that live <span class="grad">in your room.</span></h1>
-          <p class="lede">NorthStar Studioz designs tactile, hands-first mixed reality for Meta Quest. Physics you can reach out and touch, played on the table you already own.</p>
-          <div class="hero__cta">
-            <a class="btn" href="#focus">What we make</a>
-            <a class="btn btn--ghost" href="#contact">Get in touch</a>
-          </div>
+    <section class="hero" id="top" aria-labelledby="hero-title">
+      <div class="hero__copy">
+        <p class="tag"><span class="tag__led"></span>Mixed reality studio · India</p>
+        <h1 id="hero-title" class="hero__title" tabindex="-1">Your room<br>is the level.</h1>
+        <p class="hero__lede">NorthStar Studioz makes tactile mixed reality games for Meta Quest. You play with your bare hands, on the furniture you already own.</p>
+        <div class="hero__cta">
+          <a class="btn" href="#play">Look around</a>
+          <a class="btn btn--ghost" href="#contact">Say hello</a>
         </div>
-
-        <figure class="hero__art" aria-hidden="true">
-          <svg viewBox="0 0 520 460" class="room">
-            <defs>
-              <linearGradient id="g-surface" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0" stop-color="#2f7bff" stop-opacity=".22"/>
-                <stop offset="1" stop-color="#8b6cff" stop-opacity=".06"/>
-              </linearGradient>
-              <linearGradient id="g-arc" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0" stop-color="#3be3ff"/>
-                <stop offset="1" stop-color="#8b6cff"/>
-              </linearGradient>
-              <radialGradient id="g-anchor">
-                <stop offset="0" stop-color="#3be3ff" stop-opacity=".9"/>
-                <stop offset="1" stop-color="#3be3ff" stop-opacity="0"/>
-              </radialGradient>
-            </defs>
-            <!-- room mesh: floor lines -->
-            <g class="room__mesh" stroke="#7da2ff" stroke-opacity=".14" fill="none">
-              <path d="M20 420 L260 300 L500 420"/>
-              <path d="M80 450 L260 330 L440 450"/>
-              <path d="M140 460 L260 360 L380 460"/>
-              <path d="M260 300 V40"/>
-              <path d="M20 420 V120 L260 40"/>
-              <path d="M500 420 V120 L260 40"/>
-            </g>
-            <!-- table surface -->
-            <path class="room__table" d="M110 300 L270 228 L430 290 L270 372 Z" fill="url(#g-surface)" stroke="#3be3ff" stroke-opacity=".55"/>
-            <g stroke="#3be3ff" stroke-opacity=".16">
-              <path d="M150 282 L310 354"/><path d="M190 264 L350 336"/><path d="M230 246 L390 318"/>
-              <path d="M150 318 L310 246"/><path d="M190 336 L350 264"/>
-            </g>
-            <path d="M110 300 V318 L270 390 L430 308 V290" fill="none" stroke="#3be3ff" stroke-opacity=".25"/>
-            <!-- ramp -->
-            <path d="M178 284 L232 192 L250 200 L198 294 Z" fill="#8b6cff" fill-opacity=".22" stroke="#8b6cff" stroke-opacity=".7"/>
-            <!-- kinetic arc -->
-            <path id="arc" class="room__arc" d="M240 196 C 300 120, 370 170, 352 300" fill="none" stroke="url(#g-arc)" stroke-width="2" stroke-dasharray="4 7"/>
-            <circle class="room__ball" r="9" fill="#e9f6ff"/>
-            <!-- anchor -->
-            <circle cx="352" cy="304" r="34" fill="url(#g-anchor)" class="room__pulse"/>
-            <ellipse cx="352" cy="304" rx="22" ry="10" fill="none" stroke="#3be3ff" stroke-width="1.5"/>
-            <ellipse cx="352" cy="304" rx="5" ry="2.4" fill="#3be3ff"/>
-            <!-- HUD labels -->
-            <g class="room__hud" font-size="11" font-family="Manrope, system-ui, sans-serif" letter-spacing=".08em" fill="#b9c8ef">
-              <rect x="300" y="352" width="128" height="26" rx="13" fill="#0a1124" stroke="#3be3ff" stroke-opacity=".35"/>
-              <text x="316" y="369">ANCHOR · TABLE</text>
-              <rect x="60" y="170" width="118" height="26" rx="13" fill="#0a1124" stroke="#8b6cff" stroke-opacity=".4"/>
-              <text x="76" y="187">PINCH · PLACE</text>
-            </g>
-            <!-- north star -->
-            <g class="room__star" transform="translate(408 86)">
-              <path d="M0 -30 L4 -4 L30 0 L4 4 L0 30 L-4 4 L-30 0 L-4 -4 Z" fill="#fff"/>
-              <circle r="10" fill="#9ec5ff" opacity=".45"/>
-            </g>
-          </svg>
-          <figcaption class="sr-only">Illustration: a real table in a room, mapped as a play surface with an anchor point.</figcaption>
-        </figure>
       </div>
 
-      <div class="wrap">
-        <dl class="facts">
-          <div><dt>Platform</dt><dd>Meta Quest 3 · 3S</dd></div>
-          <div><dt>Input</dt><dd>Hand tracking first</dd></div>
-          <div><dt>Format</dt><dd>Mixed reality, stationary play</dd></div>
-          <div><dt>Status</dt><dd><span class="dot" aria-hidden="true"></span>Prototyping our first title</dd></div>
+      <ul class="arc arc--hero" aria-label="Studio at a glance">
+        <li class="arc__slot"><div class="window window--chip"><span class="label">Platform</span><strong>Meta Quest 3 · 3S</strong></div></li>
+        <li class="arc__slot"><div class="window window--chip"><span class="label">Input</span><strong>Bare hands first</strong></div></li>
+        <li class="arc__slot"><div class="window window--chip"><span class="label">Now building</span><strong><span class="tag__led"></span>First title, in prototype</strong></div></li>
+      </ul>
+      <p class="hero__hint" aria-hidden="true"><span></span>Scroll to move</p>
+    </section>
+
+    <!-- ===================== How it plays ===================== -->
+    <section class="zone" id="play" aria-labelledby="play-title">
+      <header class="zone__head">
+        <p class="label">01 · How it plays</p>
+        <h2 id="play-title" class="zone__title">No controllers. No black void.<br>No motion sickness.</h2>
+      </header>
+      <ol class="arc arc--four">
+        <li class="arc__slot">
+          <article class="window prompt">
+            <svg class="prompt__glyph" viewBox="0 0 48 48" aria-hidden="true"><path d="M17 26V12a3 3 0 0 1 6 0v11m0-1V9a3 3 0 0 1 6 0v13m0-1v-8a3 3 0 0 1 6 0v15c0 8-5 13-12 13-5 0-8-2-11-7l-5-8a3 3 0 0 1 5-3l2 3"/></svg>
+            <h3>Reach in.</h3>
+            <p>Your hands are the controller. Pinch, grab, twist and snap things the way you would in real life. Controllers still work; you just won’t need them.</p>
+            <span class="prompt__step">Prompt 01 / 04</span>
+          </article>
+        </li>
+        <li class="arc__slot">
+          <article class="window prompt">
+            <svg class="prompt__glyph" viewBox="0 0 48 48" aria-hidden="true"><path d="M6 30 24 21l18 9-18 9z"/><path d="M6 30v4l18 9 18-9v-4"/><circle cx="24" cy="12" r="4"/><path d="M24 16v9"/></svg>
+            <h3>Use the table.</h3>
+            <p>The game finds your real table, floor and walls and builds on top of them. Your living room stays in view the whole time.</p>
+            <span class="prompt__step">Prompt 02 / 04</span>
+          </article>
+        </li>
+        <li class="arc__slot">
+          <article class="window prompt">
+            <svg class="prompt__glyph" viewBox="0 0 48 48" aria-hidden="true"><path d="M8 20v8m8-14v20m8-26v32m8-26v20m8-14v8"/></svg>
+            <h3>Hear it land.</h3>
+            <p>Wood clicks, brass rings, ceramic clinks. Sounds are built from real materials and placed where they happen in your room.</p>
+            <span class="prompt__step">Prompt 03 / 04</span>
+          </article>
+        </li>
+        <li class="arc__slot">
+          <article class="window prompt">
+            <svg class="prompt__glyph" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="16"/><path d="M24 8v6m0 20v6M8 24h6m20 0h6"/><circle cx="24" cy="24" r="3"/></svg>
+            <h3>Stay put.</h3>
+            <p>Everything happens within arm’s reach. There’s no artificial movement, so it stays comfortable for first-timers and long sessions alike.</p>
+            <span class="prompt__step">Prompt 04 / 04</span>
+          </article>
+        </li>
+      </ol>
+    </section>
+
+    <!-- ===================== Who it's for ===================== -->
+    <section class="zone" id="players" aria-labelledby="players-title">
+      <header class="zone__head">
+        <p class="label">02 · Who it’s for</p>
+        <h2 id="players-title" class="zone__title">Made for three kinds of player.</h2>
+      </header>
+      <div class="slots">
+        <article class="window slot">
+          <span class="slot__id">Slot 01</span>
+          <h3>The wind-down</h3>
+          <p>Twenty minutes after work. Calm puzzles on the coffee table, not adrenaline.</p>
+          <ul class="chips"><li>Short sessions</li><li>Calm</li></ul>
+        </article>
+        <article class="window slot">
+          <span class="slot__id">Slot 02</span>
+          <h3>The first-timer</h3>
+          <p>Someone in a headset for the first time, with friends watching. It has to make sense in seconds.</p>
+          <ul class="chips"><li>No tutorial wall</li><li>Social</li></ul>
+        </article>
+        <article class="window slot">
+          <span class="slot__id">Slot 03</span>
+          <h3>The tinkerer</h3>
+          <p>Can’t leave a contraption alone until it runs perfectly. Will happily lose an evening to it.</p>
+          <ul class="chips"><li>Long sessions</li><li>Experiment</li></ul>
+        </article>
+      </div>
+    </section>
+
+    <!-- ===================== Under the hood ===================== -->
+    <section class="zone" id="tech" aria-labelledby="tech-title">
+      <header class="zone__head">
+        <p class="label">03 · Under the hood</p>
+        <h2 id="tech-title" class="zone__title">Runs on the headset.<br>No PC required.</h2>
+      </header>
+      <div class="window spec">
+        <dl class="spec__sheet">
+          <div><dt>Runtime</dt><dd>Meta Horizon OS</dd></div>
+          <div><dt>Devices</dt><dd>Meta Quest 3, Quest 3S</dd></div>
+          <div><dt>Input</dt><dd>Hand tracking, controllers as fallback</dd></div>
+          <div><dt>Standard</dt><dd>OpenXR + Meta XR SDK</dd></div>
+          <div><dt>Engine</dt><dd>Unity · URP</dd></div>
         </dl>
-      </div>
-    </section>
-
-    <!-- ===================== Focus ===================== -->
-    <section class="section" id="focus" aria-labelledby="focus-title">
-      <div class="wrap">
-        <header class="section__head reveal">
-          <p class="eyebrow">Our focus</p>
-          <h2 id="focus-title" class="h2">Four principles behind everything we build.</h2>
-        </header>
-
-        <ol class="pillars">
-          <li class="pillar reveal">
-            <span class="pillar__num">01</span>
-            <svg class="pillar__icon" viewBox="0 0 48 48" aria-hidden="true"><path d="M17 26V12a3 3 0 0 1 6 0v11m0-1V9a3 3 0 0 1 6 0v13m0-1v-8a3 3 0 0 1 6 0v15c0 8-5 13-12 13-5 0-8-2-11-7l-5-8a3 3 0 0 1 5-3l2 3"/></svg>
-            <h3>Hands first</h3>
-            <p>Your fingers are the controller. Pinch, grab, turn and snap, designed around natural hand tracking. Controllers are a fallback, not the default.</p>
-          </li>
-          <li class="pillar reveal">
-            <span class="pillar__num">02</span>
-            <svg class="pillar__icon" viewBox="0 0 48 48" aria-hidden="true"><path d="M6 30 24 21l18 9-18 9z"/><path d="M6 30v4l18 9 18-9v-4"/><circle cx="24" cy="12" r="4"/><path d="M24 16v9"/></svg>
-            <h3>Your room is the level</h3>
-            <p>Passthrough and scene understanding turn real tables, floors and walls into play surfaces. No black void, no boundary redraw. Just your space, with something new in it.</p>
-          </li>
-          <li class="pillar reveal">
-            <span class="pillar__num">03</span>
-            <svg class="pillar__icon" viewBox="0 0 48 48" aria-hidden="true"><path d="M8 20v8m8-14v20m8-26v32m8-26v20m8-14v8"/></svg>
-            <h3>Sound you can feel</h3>
-            <p>Touch lives in the ears too. We design with sampled real materials such as wood, brass and ceramic, placed in spatial audio so every click and roll lands where it happens.</p>
-          </li>
-          <li class="pillar reveal">
-            <span class="pillar__num">04</span>
-            <svg class="pillar__icon" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 6 39 12v11c0 10-6 16-15 19C15 39 9 33 9 23V12z"/><path d="m17 24 5 5 9-10"/></svg>
-            <h3>Comfort by design</h3>
-            <p>Stationary play with no artificial locomotion. The real room stays visible, so experiences work for first-timers and long sessions alike.</p>
-          </li>
-        </ol>
-      </div>
-    </section>
-
-    <!-- ===================== Players ===================== -->
-    <section class="section section--tint" id="players" aria-labelledby="players-title">
-      <div class="wrap">
-        <header class="section__head reveal">
-          <p class="eyebrow">Who we make games for</p>
-          <h2 id="players-title" class="h2">Designed for people, not just headsets.</h2>
-        </header>
-        <div class="cards">
-          <article class="card reveal">
-            <p class="card__kicker">The wind-down player</p>
-            <p>Fifteen to thirty minutes after work. Calm, satisfying problem-solving in the living room instead of high-speed intensity.</p>
-          </article>
-          <article class="card reveal">
-            <p class="card__kicker">The headset host</p>
-            <p>The person handing a headset to a friend or parent for the first time. It has to make sense in seconds, without a tutorial wall.</p>
-          </article>
-          <article class="card reveal">
-            <p class="card__kicker">The tinkerer</p>
-            <p>Fans of chain reactions and contraptions who will happily spend an hour getting something to work just right.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===================== Platform ===================== -->
-    <section class="section" id="platform" aria-labelledby="platform-title">
-      <div class="wrap platform">
-        <header class="section__head reveal">
-          <p class="eyebrow">Platform</p>
-          <h2 id="platform-title" class="h2">Built for Meta Quest, on open standards.</h2>
-          <p class="muted">Standalone first: everything runs on the headset, with no PC required.</p>
-        </header>
-
-        <ul class="stack reveal">
-          <li><span class="stack__label">Runtime</span><strong>Meta Horizon OS</strong><span>Native standalone builds for Meta Quest 3 and Quest 3S.</span></li>
-          <li><span class="stack__label">Standard</span><strong>OpenXR + Meta XR SDK</strong><span>Open standards at the core, with Meta’s hand, passthrough and scene APIs where they make the experience better.</span></li>
-          <li><span class="stack__label">Engine</span><strong>Unity · URP</strong><span>A mobile-first render pipeline tuned for standalone headset chipsets.</span></li>
-        </ul>
-
-        <div class="bar reveal">
-          <h3 class="bar__title">The bar we hold ourselves to</h3>
-          <ul class="bar__list">
-            <li>Hold the headset’s native refresh rate, every frame.</li>
-            <li>Open straight into passthrough, in your room, within seconds.</li>
-            <li>Respect the system: boundary, tracking loss and the Meta button always behave as players expect.</li>
-          </ul>
+        <div class="spec__rules">
+          <p class="label">House rules</p>
+          <ol>
+            <li>Hold the headset’s native refresh rate.</li>
+            <li>Launch straight into your room.</li>
+            <li>Never fight the system menu, boundary or tracking.</li>
+          </ol>
         </div>
       </div>
     </section>
 
     <!-- ===================== Studio ===================== -->
-    <section class="section section--tint" id="studio" aria-labelledby="studio-title">
-      <div class="wrap studio">
-        <div class="studio__copy reveal">
-          <p class="eyebrow">The studio</p>
-          <h2 id="studio-title" class="h2">Small on purpose. Guided by one north star.</h2>
-          <p>NorthStar Studioz is an independent studio founded in India by Vikas Sahani. We pick one niche, tactile mixed reality, and build for it carefully. We ship when it’s ready.</p>
+    <section class="zone" id="studio" aria-labelledby="studio-title">
+      <header class="zone__head">
+        <p class="label">04 · The studio</p>
+        <h2 id="studio-title" class="zone__title">One developer. One niche.</h2>
+      </header>
+      <div class="window founder">
+        <img src="assets/brand/logo-320.webp" width="120" height="120" alt="" loading="lazy" decoding="async">
+        <div class="founder__copy">
+          <p>NorthStar Studioz is <strong>Vikas Sahani</strong>, building from India. Instead of chasing every genre, the studio sticks to one thing: mixed reality you can touch. The first game ships when it’s ready, not before.</p>
+          <p class="founder__meta"><span>Founder · Developer</span><a href="https://github.com/VIKAS9793" rel="noopener">github.com/VIKAS9793</a></p>
         </div>
-        <aside class="founder reveal" aria-label="Founder">
-          <img src="assets/brand/logo-320.webp" width="88" height="88" alt="" loading="lazy" decoding="async">
-          <div>
-            <p class="founder__name">Vikas Sahani</p>
-            <p class="founder__role">Founder &amp; developer</p>
-            <a href="https://github.com/VIKAS9793" rel="noopener">github.com/VIKAS9793</a>
-          </div>
-        </aside>
       </div>
     </section>
 
     <!-- ===================== Contact ===================== -->
-    <section class="section contact" id="contact" aria-labelledby="contact-title">
-      <div class="wrap contact__inner reveal">
-        <p class="eyebrow">Contact</p>
-        <h2 id="contact-title" class="display display--sm">Players, press, partners: <span class="grad">say hello.</span></h2>
-        <a class="btn btn--big" href="mailto:studioznorthstar@gmail.com">studioznorthstar@gmail.com</a>
-      </div>
+    <section class="zone zone--contact" id="contact" aria-labelledby="contact-title">
+      <p class="label">05 · Contact</p>
+      <h2 id="contact-title" class="contact__title">Inbox open.</h2>
+      <p class="contact__lede">Players, press, partners, or just curious. Write in.</p>
+      <a class="btn btn--big" href="mailto:studioznorthstar@gmail.com">studioznorthstar@gmail.com</a>
     </section>
   </main>
 
-  <footer class="site-footer">
-    <div class="wrap site-footer__grid">
-      <a class="brand" href="./">
-        <img src="assets/brand/logo-96.webp" width="32" height="32" alt="" loading="lazy">
-        <span>NorthStar <b>Studioz</b></span>
-      </a>
-      <nav aria-label="Footer">
-        <ul class="site-footer__links">
-          <li><a href="privacy.html">Privacy</a></li>
-          <li><a href="terms.html">Terms</a></li>
-          <li><a href="https://github.com/VIKAS9793/NorthStarStudioz" rel="noopener">GitHub</a></li>
-          <li><a href="mailto:studioznorthstar@gmail.com">Email</a></li>
-        </ul>
-      </nav>
-      <p class="site-footer__legal">© 2026 NorthStar Studioz. Meta, Meta Quest and Meta Horizon OS are trademarks of Meta Platforms, Inc. NorthStar Studioz is an independent developer and is not affiliated with or endorsed by Meta.</p>
-    </div>
+  <footer class="foot">
+    <nav aria-label="Footer">
+      <ul class="foot__links">
+        <li><a href="privacy.html">Privacy</a></li>
+        <li><a href="terms.html">Terms</a></li>
+        <li><a href="https://github.com/VIKAS9793/NorthStarStudioz" rel="noopener">GitHub</a></li>
+      </ul>
+    </nav>
+    <p class="foot__legal">© 2026 NorthStar Studioz. Meta, Meta Quest and Meta Horizon OS are trademarks of Meta Platforms, Inc. NorthStar Studioz is an independent developer and is not affiliated with or endorsed by Meta.</p>
   </footer>
+
+  <!-- ===================== Dock (primary navigation) ===================== -->
+  <nav class="dock" aria-label="Sections">
+    <ul>
+      <li><a href="#top"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11 12 4l8 7v8a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z"/></svg><span>Home</span></a></li>
+      <li><a href="#play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 13V6a1.5 1.5 0 0 1 3 0v5.5m0-.5V4.5a1.5 1.5 0 0 1 3 0V11m0-.5V7a1.5 1.5 0 0 1 3 0v7.5c0 4-2.5 6.5-6 6.5-2.5 0-4-1-5.5-3.5l-2.5-4a1.5 1.5 0 0 1 2.5-1.5l1 1.5"/></svg><span>Play</span></a></li>
+      <li><a href="#players"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14a6.5 6.5 0 0 1 3.5 6"/></svg><span>Players</span></a></li>
+      <li><a href="#tech"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2"/><path d="M10 10h4v4h-4zM9 2v4m6-4v4M9 18v4m6-4v4M2 9h4m-4 6h4m12-6h4m-4 6h4"/></svg><span>Tech</span></a></li>
+      <li><a href="#studio"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5 14 10l7.5 2-7.5 2-2 7.5-2-7.5-7.5-2L10 10z"/></svg><span>Studio</span></a></li>
+      <li><a href="#contact"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 7 8.5-7"/></svg><span>Contact</span></a></li>
+    </ul>
+  </nav>
+
+  <div class="reticle" aria-hidden="true"></div>
 </body>
 </html>

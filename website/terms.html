@@ -8,10 +8,10 @@
   <title>Terms of Service — NorthStar Studioz</title>
   <meta name="description" content="Terms of Service for games and applications published by NorthStar Studioz, an independent mixed reality studio.">
   <link rel="canonical" href="https://vikas9793.github.io/NorthStarStudioz/terms.html">
-  <meta name="theme-color" content="#04060d">
+  <meta name="theme-color" content="#07090f">
   <meta name="color-scheme" content="dark">
-  <link rel="preload" href="assets/fonts/unbounded.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="assets/fonts/manrope.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/tektur.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/instrument-sans.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="styles.css">
   <script type="module" src="assets/js/site.js"></script>
   <link rel="icon" href="assets/favicon.png" type="image/png">
@@ -24,27 +24,33 @@
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
 
-  <header class="site-header">
-    <div class="wrap site-header__bar">
-      <a class="brand" href="./" aria-label="NorthStar Studioz home">
-        <img src="assets/brand/logo-96.webp" width="36" height="36" alt="">
-        <span>NorthStar <b>Studioz</b></span>
-      </a>
-      <nav class="nav" aria-label="Primary">
-        <ul class="nav__list nav__list--static">
-          <li><a href="./">Studio</a></li>
-          <li><a href="privacy.html">Privacy</a></li>
-          <li><a href="terms.html" aria-current="page">Terms</a></li>
-        </ul>
-      </nav>
-    </div>
+  <div class="env env--static" aria-hidden="true">
+    <div class="env__layer env__layer--sky"><div class="env__sky"></div></div>
+    <div class="env__layer env__layer--stars"><div class="env__stars"></div></div>
+    <div class="env__layer env__layer--sun"><div class="env__sun"></div></div>
+    <div class="env__vignette"></div>
+  </div>
+  <div class="hud" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+
+  <header class="topbar">
+    <a class="brand" href="./" aria-label="NorthStar Studioz home">
+      <img src="assets/brand/logo-96.webp" width="32" height="32" alt="">
+      <span>NorthStar<b>Studioz</b></span>
+    </a>
+    <nav aria-label="Pages">
+      <div class="pagelinks">
+        <a href="./">Home</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="terms.html" aria-current="page">Terms</a>
+      </div>
+    </nav>
   </header>
 
   <main id="main" class="legal">
-    <article class="wrap">
+    <article class="window legal__window">
       <header class="legal__head">
-        <p class="eyebrow">Legal</p>
-        <h1 class="display display--sm">Terms of Service</h1>
+        <p class="label">Legal</p>
+        <h1>Terms of Service</h1>
         <div class="legal__meta">
           <span>NorthStar Studioz</span>
           <span>Applies to our apps</span>
@@ -80,22 +86,8 @@
     </article>
   </main>
 
-  <footer class="site-footer">
-    <div class="wrap site-footer__grid">
-      <a class="brand" href="./">
-        <img src="assets/brand/logo-96.webp" width="32" height="32" alt="" loading="lazy">
-        <span>NorthStar <b>Studioz</b></span>
-      </a>
-      <nav aria-label="Footer">
-        <ul class="site-footer__links">
-          <li><a href="privacy.html">Privacy</a></li>
-          <li><a href="terms.html">Terms</a></li>
-          <li><a href="https://github.com/VIKAS9793/NorthStarStudioz" rel="noopener">GitHub</a></li>
-          <li><a href="mailto:studioznorthstar@gmail.com">Email</a></li>
-        </ul>
-      </nav>
-      <p class="site-footer__legal">© 2026 NorthStar Studioz. Meta, Meta Quest and Meta Horizon OS are trademarks of Meta Platforms, Inc. NorthStar Studioz is an independent developer and is not affiliated with or endorsed by Meta.</p>
-    </div>
+  <footer class="foot foot--page">
+    <p class="foot__legal">© 2026 NorthStar Studioz. Meta, Meta Quest and Meta Horizon OS are trademarks of Meta Platforms, Inc. NorthStar Studioz is an independent developer and is not affiliated with or endorsed by Meta.</p>
   </footer>
 </body>
 </html>
