@@ -48,6 +48,207 @@ if (env && finePointer && !reduceMotion) {
   }, { passive: true });
 }
 
+/* ---------- Terrain: a wireframe mountain range on the horizon ----------
+   A heightfield seen in perspective, drawn once per resize on a 2D canvas
+   (no per-frame work): faceted quads painted far to near so nearer ridges
+   hide farther ones, lit from the setting sun behind them, fading into haze
+   with distance. The skyline gets an ember rim and a few beacons on the
+   highest peaks. Without JS the flat SVG ridge stays as the fallback. */
+const terrainLayer = document.querySelector('.env__layer--near');
+if (terrainLayer && typeof HTMLCanvasElement !== 'undefined') {
+  const canvas = document.createElement('canvas');
+  canvas.className = 'env__terrain';
+  const ctx = canvas.getContext('2d');
+  if (ctx) {
+    terrainLayer.append(canvas);
+    const beacons = document.createElement('div');
+    beacons.className = 'env__beacons';
+    terrainLayer.append(beacons);
+
+    // Deterministic value noise, so the range is the same on every visit.
+    const hash = (x, z) => {
+      const s = Math.sin(x * 127.1 + z * 311.7) * 43758.5453;
+      return s - Math.floor(s);
+    };
+    const smooth = (t) => t * t * (3 - 2 * t);
+    const noise = (x, z) => {
+      const xi = Math.floor(x), zi = Math.floor(z);
+      const xf = smooth(x - xi), zf = smooth(z - zi);
+      const a = hash(xi, zi), b = hash(xi + 1, zi), c = hash(xi, zi + 1), d = hash(xi + 1, zi + 1);
+      return a + (b - a) * xf + (c - a) * zf + (a - b - c + d) * xf * zf;
+    };
+    // Ridged fractal noise: sharp crests, soft valleys.
+    const ridged = (x, z) => {
+      let sum = 0, amp = 0.55, freq = 1, norm = 0;
+      for (let o = 0; o < 4; o++) {
+        const n = 1 - Math.abs(noise(x * freq, z * freq) * 2 - 1);
+        sum += n * n * amp; norm += amp;
+        amp *= 0.5; freq *= 2.03;
+      }
+      return sum / norm;
+    };
+    const step01 = (a, b, v) => smooth(Math.min(1, Math.max(0, (v - a) / (b - a))));
+
+    function draw() {
+      const box = terrainLayer.getBoundingClientRect();
+      const W = Math.round(box.width), H = Math.round(box.height);
+      if (!W || !H) return;
+      const dpr = Math.min(devicePixelRatio || 1, 2);
+      canvas.width = Math.round(W * dpr);
+      canvas.height = Math.round(H * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, W, H);
+
+      // The layer overhangs the viewport by 40px each side (see .env__layer).
+      const viewH = H - 80;
+      const horizon = 40 + viewH * 0.69;
+      const small = W < 720;
+      const cols = small ? 44 : 72;
+      const rows = small ? 13 : 18;
+      const zNear = 6, zFar = 34, camH = 1;
+      // Scale from the shorter of height and (wide) width, so portrait phones
+      // get a wide, low range instead of a few towering spikes.
+      const scale = Math.min(viewH, W * 0.7);
+      const f = scale * 0.3;
+      const xHalf = (W / 2 + 60) * zFar / f;
+      const peak = scale * 0.24 * 20 / f;
+
+      // Project the grid.
+      const pts = [];
+      for (let r = 0; r < rows; r++) {
+        const d = r / (rows - 1);
+        const z = zNear + (zFar - zNear) * d;
+        const row = [];
+        for (let c = 0; c <= cols; c++) {
+          const x = -xHalf + (2 * xHalf * c) / cols;
+          const u = Math.abs((x * f) / z / (W / 2)); // 0 at screen centre, 1 at the edge
+          // Low in the middle so the headline keeps a clear sky behind it.
+          const valley = 0.3 + 0.7 * step01(0.12, 0.8, u);
+          const rise = step01(0.04, 0.55, d) * (1 - 0.25 * d);
+          const y = ridged(x * 0.09 + 3.1, z * 0.16 + 7.4) * peak * valley * rise;
+          row.push({ x: W / 2 + (x * f) / z, y: horizon + ((camH - y) * f) / z, h: y });
+        }
+        pts.push(row);
+      }
+
+      // Paint far to near. Each quad is shaded by how much its face turns
+      // toward the sun (behind the range, at screen centre) and hazed by depth.
+      const sunX = W / 2;
+      ctx.lineJoin = 'round';
+      for (let r = rows - 2; r >= 0; r--) {
+        const d = r / (rows - 1);
+        const near = pts[r], far = pts[r + 1];
+        const haze = d * 0.85;
+        const lineA = 0.08 + 0.32 * (1 - d);
+        for (let c = 0; c < cols; c++) {
+          const a = far[c], b = far[c + 1], p = near[c + 1], q = near[c];
+          if (Math.max(a.x, q.x) < -20 || Math.min(b.x, p.x) > W + 20) continue;
+          // Side slope: positive when the face leans toward the sun.
+          const mid = (a.x + b.x + p.x + q.x) / 4;
+          const side = ((b.h + p.h) - (a.h + q.h)) * Math.sign(sunX - mid);
+          const lit = Math.max(0, Math.min(1, 0.5 + side * 0.6));
+          const tall = Math.min(1, (a.h + b.h) / (2 * peak));
+          // Base colour: night blue, warmed on sun-facing high faces, lifted toward the haze far away.
+          const R = 12 + 22 * haze + 26 * lit * tall;
+          const G = 15 + 22 * haze + 12 * lit * tall;
+          const B = 26 + 34 * haze + 6 * lit * tall;
+          ctx.beginPath();
+          ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.lineTo(p.x, p.y); ctx.lineTo(q.x, q.y);
+          ctx.closePath();
+          ctx.fillStyle = `rgb(${R | 0},${G | 0},${B | 0})`;
+          ctx.fill();
+          // The net: the far edge and left edge of every quad.
+          ctx.beginPath();
+          ctx.moveTo(q.x, q.y); ctx.lineTo(a.x, a.y); ctx.lineTo(b.x, b.y);
+          if (c === cols - 1) ctx.lineTo(p.x, p.y);
+          ctx.strokeStyle = `rgba(150, 188, 255, ${(lineA * (0.75 + 0.5 * lit)).toFixed(3)})`;
+          ctx.lineWidth = 0.6 + 0.6 * (1 - d);
+          ctx.stroke();
+        }
+      }
+
+      // Skyline: the highest point of the range in every few pixels of screen.
+      const bucket = 3;
+      const sky = new Float32Array(Math.ceil(W / bucket) + 1).fill(Infinity);
+      for (const row of pts) {
+        for (let c = 0; c < cols; c++) {
+          const a = row[c], b = row[c + 1];
+          const i0 = Math.max(0, Math.floor(a.x / bucket)), i1 = Math.min(sky.length - 1, Math.ceil(b.x / bucket));
+          for (let i = i0; i <= i1; i++) {
+            const t = Math.min(1, Math.max(0, (i * bucket - a.x) / (b.x - a.x || 1)));
+            const y = a.y + (b.y - a.y) * t;
+            if (y < sky[i]) sky[i] = y;
+          }
+        }
+      }
+      // Ember rim light along the skyline, brightest near the sun.
+      const rim = ctx.createLinearGradient(0, 0, W, 0);
+      rim.addColorStop(0, 'rgba(255, 107, 53, 0.25)');
+      rim.addColorStop(0.25, 'rgba(255, 150, 80, 0.7)');
+      rim.addColorStop(0.5, 'rgba(255, 206, 140, 1)');
+      rim.addColorStop(0.75, 'rgba(255, 150, 80, 0.7)');
+      rim.addColorStop(1, 'rgba(255, 107, 53, 0.25)');
+      const skyline = () => {
+        ctx.beginPath();
+        for (let i = 0; i < sky.length; i++) ctx[i ? 'lineTo' : 'moveTo'](i * bucket, sky[i]);
+      };
+      ctx.strokeStyle = rim;
+      ctx.globalAlpha = 0.16; ctx.lineWidth = 6; skyline(); ctx.stroke();
+      ctx.globalAlpha = 0.9; ctx.lineWidth = 1.2; skyline(); ctx.stroke();
+      ctx.globalAlpha = 1;
+
+      // Sunset spill: warm light pooling on the valley floor below the sun.
+      ctx.save();
+      ctx.globalCompositeOperation = 'lighter';
+      ctx.translate(W / 2, horizon);
+      ctx.scale(1, 0.32);
+      const spill = ctx.createRadialGradient(0, 0, 0, 0, 0, W * 0.5);
+      spill.addColorStop(0, 'rgba(255, 140, 70, 0.22)');
+      spill.addColorStop(0.5, 'rgba(255, 107, 53, 0.08)');
+      spill.addColorStop(1, 'rgba(255, 107, 53, 0)');
+      ctx.fillStyle = spill;
+      ctx.fillRect(-W / 2, -W * 0.5, W, W);
+      ctx.restore();
+
+      // Beacons on the highest peaks, kept apart and off the centre column.
+      const peaks = [];
+      for (let i = 2; i < sky.length - 2; i++) {
+        const x = i * bucket;
+        if (x < W * 0.06 || x > W * 0.94 || Math.abs(x - W / 2) < W * 0.12) continue;
+        if (sky[i] <= sky[i - 1] && sky[i] <= sky[i + 1] && sky[i] <= sky[i - 2] && sky[i] <= sky[i + 2]) peaks.push({ x, y: sky[i] });
+      }
+      peaks.sort((a, b) => a.y - b.y);
+      const picked = [];
+      for (const p of peaks) {
+        if (picked.every((q) => Math.abs(q.x - p.x) > W * 0.16)) picked.push(p);
+        if (picked.length === (small ? 2 : 4)) break;
+      }
+      beacons.replaceChildren(...picked.map((p, i) => {
+        const el = document.createElement('i');
+        el.style.left = `${p.x}px`;
+        el.style.top = `${p.y}px`;
+        el.style.animationDelay = `${(-i * 1.7).toFixed(1)}s`;
+        return el;
+      }));
+      terrainLayer.closest('.env')?.classList.add('env--mesh');
+    }
+
+    let pending = 0, lastW = 0, lastH = 0;
+    const schedule = () => {
+      if (pending) return;
+      pending = requestAnimationFrame(() => {
+        pending = 0;
+        const { width, height } = terrainLayer.getBoundingClientRect();
+        // Ignore the small height jitter of mobile browser toolbars.
+        if (Math.abs(width - lastW) < 1 && Math.abs(height - lastH) < 60) return;
+        lastW = width; lastH = height;
+        draw();
+      });
+    };
+    new ResizeObserver(schedule).observe(terrainLayer);
+  }
+}
+
 /* ---------- Reticle: a soft gaze ring that follows the pointer ---------- */
 const reticle = document.querySelector('.reticle');
 if (reticle && finePointer && !reduceMotion) {

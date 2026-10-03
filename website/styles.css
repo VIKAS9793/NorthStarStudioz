@@ -136,6 +136,27 @@ ul, ol, dl, dd { margin: 0; padding: 0; list-style: none; }
 .env__ridge--far { bottom: 32.5%; height: 15vh; fill: #161b2e; }
 .env__ridge--near { bottom: 31%; height: 11vh; fill: #0c0f19; }
 
+/* Wireframe terrain (drawn by site.js). Replaces the flat near ridge once it
+   has rendered; the near rows dissolve into the floor grid. */
+.env__terrain {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  transform-origin: 50% calc(40px + 69vh);
+  mask-image: linear-gradient(to bottom, #000 calc(40px + 69vh), transparent calc(40px + 78vh));
+}
+.env--mesh .env__ridge--near { display: none; }
+.env--mesh .env__ridge--far { fill: #1a2036; opacity: 0.7; }
+.env__beacons { position: absolute; inset: 0; transform-origin: 50% calc(40px + 69vh); }
+.env__beacons i {
+  position: absolute; width: 5px; height: 5px; margin: -2.5px 0 0 -2.5px; border-radius: 50%;
+  background: #ffe2b8; box-shadow: 0 0 6px 2px rgba(255, 181, 71, 0.75), 0 0 18px 6px rgba(255, 107, 53, 0.25);
+  animation: beacon 5.2s ease-in-out infinite;
+}
+.env__beacons i::before {
+  content: ""; position: absolute; left: 2px; bottom: 5px; width: 1px; height: 9vh;
+  background: linear-gradient(to top, rgba(255, 196, 120, 0.55), transparent);
+}
+@keyframes beacon { 50% { opacity: 0.45; scale: 0.7; } }
+
 .env__floor {
   position: absolute; left: 0; right: 0; top: 69%; bottom: 0;
   perspective: 320px; perspective-origin: 50% 0;
@@ -161,11 +182,13 @@ ul, ol, dl, dd { margin: 0; padding: 0; list-style: none; }
     .env__sun { animation: sunset linear both; animation-timeline: scroll(root); }
     .env__grid { animation: walk linear both; animation-timeline: scroll(root); }
     .env__stars { animation: drift-up linear both; animation-timeline: scroll(root); }
+    .env__terrain, .env__beacons { animation: terrain-near linear both; animation-timeline: scroll(root); }
   }
 }
 @keyframes sunset { to { transform: translateY(14vh); opacity: 0.35; } }
 @keyframes walk { from { transform: rotateX(74deg) translateY(-720px); } to { transform: rotateX(74deg) translateY(0); } }
 @keyframes drift-up { to { transform: translateY(-6vh); } }
+@keyframes terrain-near { to { transform: translateY(3vh) scale(1.06); } }
 
 /* =========================================================
    HUD, top bar, dock, reticle
