@@ -1,66 +1,71 @@
 <p align="center">
-  <img src="website/assets/logo.png" alt="NorthStar Studioz" width="200">
+  <img src="website/assets/logo.png" alt="NorthStar Studioz logo" width="200">
 </p>
 
 <h1 align="center">NorthStar Studioz</h1>
 
 <p align="center">
-  <strong>Independent mixed reality game studio</strong><br>
-  <em>Tactile, hands-first experiences for Meta Quest, designed for the room you already live in.</em>
+  An independent studio making hand-tracked mixed reality games for Meta Quest.
 </p>
 
 <p align="center">
   <a href="https://vikas9793.github.io/NorthStarStudioz/">Website</a> ·
-  <a href="https://vikas9793.github.io/NorthStarStudioz/privacy.html">Privacy</a> ·
-  <a href="https://vikas9793.github.io/NorthStarStudioz/terms.html">Terms</a>
+  <a href="https://vikas9793.github.io/NorthStarStudioz/privacy.html">Privacy Policy</a> ·
+  <a href="https://vikas9793.github.io/NorthStarStudioz/terms.html">Terms of Service</a>
 </p>
 
 ---
 
-## Studio
-* **Founder & developer:** Vikas Sahani ([@VIKAS9793](https://github.com/VIKAS9793))
-* **Location:** India
-* **Contact:** [studioznorthstar@gmail.com](mailto:studioznorthstar@gmail.com)
-* **Status:** prototyping our first title
+## About
 
-## Focus
-* **Hands first:** pinch, grab, turn and snap with natural hand tracking; controllers are a fallback.
-* **Your room is the level:** passthrough and scene understanding turn real tables, floors and walls into play surfaces.
-* **Sound you can feel:** sampled real materials and spatial audio.
-* **Comfort by design:** stationary play with no artificial locomotion.
+NorthStar Studioz is an independent game studio based in India, founded by Vikas Sahani ([@VIKAS9793](https://github.com/VIKAS9793)). The studio is currently prototyping its first title.
 
-**Platform:** Meta Horizon OS (Meta Quest 3, Quest 3S) · OpenXR + Meta XR SDK · Unity URP.
+This repository contains the studio website and its public policies. Game source code, design documents and roadmaps are kept private.
 
----
+## What we build
+
+Our games are designed around four principles:
+
+- **Hands first.** Players pinch, grab, turn and snap objects using hand tracking. Controllers are supported as a fallback.
+- **The room is the level.** Passthrough and scene understanding turn real tables, floors and walls into play surfaces.
+- **Physical sound.** Audio is sampled from real materials and rendered spatially.
+- **Comfortable by default.** Play is stationary, with no artificial locomotion.
+
+**Target platform:** Meta Horizon OS (Meta Quest 3 and Quest 3S), built with Unity URP, OpenXR and the Meta XR SDK.
 
 ## Website
 
-The site in [`website/`](website/) is static HTML and CSS with no framework and no third-party requests. It deploys to GitHub Pages from `main` through [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml).
+The website in [`website/`](website/) is plain HTML and CSS. It uses no framework and makes no third-party requests. Every push to `main` deploys it to GitHub Pages through [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml).
 
-| Path | What it is |
+| Path | Purpose |
 | --- | --- |
-| `website/index.html` | Home page, including the intro gate |
-| `website/styles.css` | All styles (self-hosted fonts, design tokens, animations) |
-| `website/assets/js/site.js` | Header, menu, scroll reveals, intro gate controller |
-| `website/assets/js/gate-3d.js` | **Generated.** The 3D headset bundle; do not edit by hand |
+| `website/index.html` | Home page, including the intro screen |
+| `website/styles.css` | All styles: self-hosted fonts, design tokens and animations |
+| `website/assets/js/site.js` | Header, menu, scroll reveals and intro controller |
+| `website/assets/js/gate-3d.js` | Generated 3D headset bundle. Do not edit by hand. |
 | `src/gate/headset.js` | Source for the 3D headset (three.js) |
-| `scripts/verify.mjs` | Security guardrails run in CI |
+| `scripts/verify.mjs` | Security checks that run in CI |
 
-### Working on it
+### Local development
+
 ```bash
-npm ci                  # build tooling only (esbuild, three)
+npm ci                  # install build tooling (esbuild, three)
 npm run build           # rebuild website/assets/js/gate-3d.js from src/
-npm run verify          # CSP hashes, no third-party loads, no unsafe DOM sinks
-npx serve website       # or any static server, then open http://localhost:3000
+npm run verify          # check CSP hashes, third-party loads and unsafe DOM sinks
+npx serve website       # serve locally, then open http://localhost:3000
 ```
 
-If you change an inline `<script>` in a page, run `npm run verify -- --fix-hashes` so the page's Content Security Policy allows it. CI fails if the committed bundle doesn't match a fresh build, or if any guardrail fails.
+After editing an inline `<script>` in any page, run `npm run verify -- --fix-hashes` to update that page's Content Security Policy. CI fails if the committed bundle differs from a fresh build or if any security check fails.
 
----
+## Contact
 
-## Governance
-* [LICENSE.md](LICENSE.md): proprietary licence
-* [SECURITY.md](SECURITY.md): vulnerability disclosure and the website security model
-* [SUPPORT.md](SUPPORT.md) · [CONTRIBUTING.md](CONTRIBUTING.md) · [CODEOWNERS](.github/CODEOWNERS)
+Email [studioznorthstar@gmail.com](mailto:studioznorthstar@gmail.com) for questions, partnerships or press. See [SUPPORT.md](SUPPORT.md) for other ways to reach us.
+
+## Policies
+
+- [LICENSE.md](LICENSE.md): proprietary license
+- [SECURITY.md](SECURITY.md): vulnerability disclosure and the website security model
+- [CONTRIBUTING.md](CONTRIBUTING.md): how to report issues and suggest changes
+- [CODEOWNERS](.github/CODEOWNERS)
 
 <sub>Meta, Meta Quest and Meta Horizon OS are trademarks of Meta Platforms, Inc. NorthStar Studioz is an independent developer and is not affiliated with or endorsed by Meta.</sub>
