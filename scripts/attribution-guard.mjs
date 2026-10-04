@@ -28,8 +28,9 @@ const FORBIDDEN = [
   [/noreply@anthropic\.com/i, "Anthropic noreply address"],
   [/generated (with|by)\W*\[?\s*claude/i, '"Generated with Claude" line'],
   [/claude[- ]session\s*:/i, "Claude-Session trailer"],
-  [/claude\.ai\/code/i, "Claude session link"],
-  [/claude\.com\/claude-code/i, "Claude Code link"],
+  // Links are matched as plain text: they may appear anywhere in a message.
+  ["claude.ai/code", "Claude session link"],
+  ["claude.com/claude-code", "Claude Code link"],
   [/\u{1F916}/u, "robot emoji attribution"],
 ];
 
@@ -44,7 +45,10 @@ const isOwnerName = (name) =>
   name.trim().replace(/\s+/g, " ").toLowerCase() === OWNER_NAME.toLowerCase();
 
 function textProblems(text, where) {
-  return FORBIDDEN.filter(([re]) => re.test(text)).map(([, why]) => `${where}: ${why}`);
+  const lower = text.toLowerCase();
+  return FORBIDDEN.filter(([m]) => (typeof m === "string" ? lower.includes(m) : m.test(text))).map(
+    ([, why]) => `${where}: ${why}`,
+  );
 }
 
 function git(args) {
