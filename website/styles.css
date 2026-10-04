@@ -428,6 +428,16 @@ main { position: relative; z-index: 1; padding-bottom: 120px; }
 .founder__meta a { color: var(--sun); }
 @media (max-width: 560px) { .founder { grid-template-columns: 1fr; justify-items: center; text-align: center; } .founder__meta { justify-content: center; } }
 
+/* Studio film: 10 seconds, no sound. Loaded and played by site.js only when it scrolls into view. */
+.reel { margin: clamp(20px, 3vw, 32px) 0 0; display: grid; gap: 10px; }
+.reel__stage { position: relative; aspect-ratio: 16 / 9; border-radius: var(--r-window); overflow: hidden; background: #050813; box-shadow: 0 0 0 1px var(--edge), 0 30px 80px -40px rgba(127, 178, 255, 0.35); }
+.reel__poster, .reel__video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.reel__video { opacity: 0; transition: opacity 0.7s var(--ease-out); }
+.reel.is-live .reel__video { opacity: 1; }
+.reel__btn { position: absolute; right: 14px; bottom: 14px; z-index: 2; min-width: 44px; min-height: 44px; padding: 0 18px; border: 0; border-radius: 999px; background: rgba(7, 9, 15, 0.66); backdrop-filter: blur(8px); color: var(--bone); font: 500 0.78rem/1 var(--font-mono); letter-spacing: 0.1em; text-transform: uppercase; box-shadow: inset 0 0 0 1px var(--edge-strong); cursor: pointer; transition: background 0.2s; }
+.reel__btn:hover { background: rgba(23, 27, 41, 0.86); }
+.reel__cap { color: var(--faint); font: 500 0.78rem/1.5 var(--font-mono); letter-spacing: 0.03em; max-width: 72ch; }
+
 /* Contact */
 .zone--contact { display: grid; justify-items: center; gap: 18px; text-align: center; padding-bottom: 40px; }
 .contact__title { font: 800 clamp(3rem, 1rem + 8vw, 7.5rem)/0.9 var(--font-display); text-transform: uppercase; text-shadow: 0 0 24px rgba(255, 181, 71, 0.16); }
@@ -445,13 +455,13 @@ main { position: relative; z-index: 1; padding-bottom: 120px; }
    ========================================================= */
 @media (prefers-reduced-motion: no-preference) {
   @supports (animation-timeline: view()) {
-    .window, .zone__head, .zone--contact > * {
+    .window, .zone__head, .reel, .zone--contact > * {
       animation: approach linear both;
       animation-timeline: view();
       animation-range: entry 0% entry 85%;
     }
   }
-  .io .window, .io .zone__head, .io .zone--contact > * {
+  .io .window, .io .zone__head, .io .reel, .io .zone--contact > * {
     opacity: 0; translate: 0 40px -220px;
     transition: opacity 0.9s var(--ease-out), translate 0.9s var(--ease-out);
   }

@@ -372,7 +372,61 @@ if (!reduceMotion && !CSS.supports('animation-timeline: view()')) {
       if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); }
     }
   }, { rootMargin: '0px 0px -8% 0px' });
-  document.querySelectorAll('.window, .zone__head, .zone--contact > *').forEach((el) => io.observe(el));
+  document.querySelectorAll('.window, .zone__head, .reel, .zone--contact > *').forEach((el) => io.observe(el));
+}
+
+/* ---------- Studio film: loads and plays once when it scrolls into view ----------
+   A 10-second brand film with no sound. Nothing downloads until the visitor is
+   near it, it never autoplays for reduced-motion or data-saver visitors, and
+   the button always pauses, plays or replays it. */
+const reel = document.querySelector('[data-reel]');
+if (reel) afterGate(() => initReel(reel));
+
+function initReel(reel) {
+  const video = reel.querySelector('video');
+  const button = reel.querySelector('.reel__btn');
+  if (!video || !button || !video.canPlayType('video/mp4')) return;
+
+  const conn = navigator.connection || {};
+  const frugal = reduceMotion || conn.saveData || /(^|-)2g$/.test(conn.effectiveType || '');
+  // Phones get the 480p file; sharp (retina) desktops get 1080p; everyone else 720p.
+  const file = innerWidth <= 700 ? 'film-854' : innerWidth >= 1000 && devicePixelRatio >= 1.5 ? 'film-1920' : 'film-1280';
+  const label = (text) => { button.textContent = text; };
+  let loaded = false;
+  let started = false;
+  let autoPaused = false;
+
+  const load = () => { if (!loaded) { loaded = true; video.src = `assets/media/${file}.mp4`; } };
+  const play = () => { load(); return video.play().catch(() => label('Play film')); };
+
+  video.addEventListener('playing', () => { reel.classList.add('is-live'); label('Pause film'); });
+  video.addEventListener('pause', () => { if (!video.ended) label('Play film'); });
+  video.addEventListener('ended', () => label('Replay film'));
+  video.addEventListener('error', () => { button.hidden = true; });
+
+  button.hidden = false;
+  button.addEventListener('click', () => {
+    autoPaused = false;
+    started = true;
+    if (video.ended) { video.currentTime = 0; play(); }
+    else if (video.paused) play();
+    else video.pause();
+  });
+
+  if (frugal) return; // the visitor starts it with the button
+  new IntersectionObserver((entries, observer) => {
+    if (entries.some((e) => e.isIntersecting)) { load(); observer.disconnect(); }
+  }, { rootMargin: '600px 0px' }).observe(reel);
+  new IntersectionObserver((entries) => {
+    const e = entries[entries.length - 1];
+    if (e.intersectionRatio >= 0.6) {
+      if (!started) { started = true; play(); }
+      else if (autoPaused) { autoPaused = false; video.play().catch(() => {}); }
+    } else if (!e.isIntersecting && started && !video.paused && !video.ended) {
+      autoPaused = true;
+      video.pause();
+    }
+  }, { threshold: [0, 0.6] }).observe(reel);
 }
 
 /* ---------- Ambient building blocks and rocket (decorative, loaded last) ---------- */
