@@ -48,9 +48,37 @@ jobs:
       - name: Check CSP hashes, external resources and unsafe DOM APIs
         run: npm run verify
 
+  ownership:
+    name: Owner-only authorship
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Every new commit is the owner's, with no AI attribution
+        env:
+          EVENT: ${{ github.event_name }}
+          BASE_REF: ${{ github.base_ref }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          BEFORE: ${{ github.event.before }}
+        run: |
+          if [ "$EVENT" = "pull_request" ]; then
+            RANGE="origin/$BASE_REF..$HEAD_SHA"
+          elif [ -n "$BEFORE" ] && [ "$BEFORE" != "0000000000000000000000000000000000000000" ]; then
+            RANGE="$BEFORE..$HEAD_SHA"
+          else
+            RANGE="$HEAD_SHA~1..$HEAD_SHA"
+          fi
+          node scripts/attribution-guard.mjs --range "$RANGE"
+
   deploy:
     name: Deploy to GitHub Pages
-    needs: verify
+    needs: [verify, ownership]
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:

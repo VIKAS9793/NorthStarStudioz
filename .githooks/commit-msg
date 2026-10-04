@@ -1,0 +1,3 @@
+#!/bin/sh
+# Owner-only attribution for every commit (see scripts/attribution-guard.mjs).
+exec node "$(git rev-parse --show-toplevel)/scripts/attribution-guard.mjs" --commit-msg "$1"

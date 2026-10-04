@@ -45,6 +45,7 @@ The website in [`website/`](website/) is plain HTML and CSS. It uses no framewor
 | `website/assets/js/gate-3d.js` | Generated 3D headset bundle. Do not edit by hand. |
 | `src/gate/headset.js` | Source for the 3D headset (three.js) |
 | `scripts/verify.mjs` | Security checks that run in CI |
+| `scripts/attribution-guard.mjs` | Owner-only authorship: rejects commits by anyone else or carrying AI attribution |
 
 ### Local development
 
@@ -56,6 +57,12 @@ npx serve website       # serve locally, then open http://localhost:3000
 ```
 
 After editing an inline `<script>` in any page, run `npm run verify -- --fix-hashes` to update that page's Content Security Policy. CI fails if the committed bundle differs from a fresh build or if any security check fails.
+
+Every commit must be authored by the owner, with no AI co-author trailers, "Generated with" lines or session links. Dependabot is the only exception, and only for dependency and workflow files. CI checks every new commit and will not deploy otherwise. To catch problems before pushing, enable the local hooks once per clone:
+
+```bash
+git config core.hooksPath .githooks   # commit-msg and pre-push ownership checks
+```
 
 ## Contact
 
