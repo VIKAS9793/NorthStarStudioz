@@ -391,17 +391,18 @@ function initReel(reel) {
   const frugal = reduceMotion || conn.saveData || /(^|-)2g$/.test(conn.effectiveType || '');
   // Phones get the 480p file; sharp (retina) desktops get 1080p; everyone else 720p.
   const file = innerWidth <= 700 ? 'film-854' : innerWidth >= 1000 && devicePixelRatio >= 1.5 ? 'film-1920' : 'film-1280';
-  const label = (text) => { button.textContent = text; };
+  const states = { paused: 'Play film', playing: 'Pause film', ended: 'Replay film' };
+  const label = (state) => { button.dataset.state = state; button.querySelector('.reel__label').textContent = states[state]; };
   let loaded = false;
   let started = false;
   let autoPaused = false;
 
   const load = () => { if (!loaded) { loaded = true; video.src = `assets/media/${file}.mp4`; } };
-  const play = () => { load(); return video.play().catch(() => label('Play film')); };
+  const play = () => { load(); return video.play().catch(() => label('paused')); };
 
-  video.addEventListener('playing', () => { reel.classList.add('is-live'); label('Pause film'); });
-  video.addEventListener('pause', () => { if (!video.ended) label('Play film'); });
-  video.addEventListener('ended', () => label('Replay film'));
+  video.addEventListener('playing', () => { reel.classList.add('is-live'); label('playing'); });
+  video.addEventListener('pause', () => { if (!video.ended) label('paused'); });
+  video.addEventListener('ended', () => label('ended'));
   video.addEventListener('error', () => { button.hidden = true; });
 
   button.hidden = false;
