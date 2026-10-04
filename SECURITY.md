@@ -39,9 +39,9 @@ The studio website is a static site with **no backend, no accounts, no forms and
 | Referrer leakage | `strict-origin-when-cross-origin` on every page | `<meta name="referrer">` |
 | Reporting | RFC 9116 `security.txt` | `website/.well-known/security.txt` |
 
-**Known limits of GitHub Pages:** it can't send custom HTTP headers, so clickjacking protection (`frame-ancestors`, `X-Frame-Options`), `X-Content-Type-Options` and `Permissions-Policy` aren't active today. They're ready in `website/_headers`, and take effect if the site moves to a host that reads that file (Cloudflare Pages, Netlify) or sits behind a proxy that sets headers.
+**HTTP headers:** Cloudflare Pages serves the site and applies `website/_headers`: clickjacking protection (`frame-ancestors`, `X-Frame-Options`), `X-Content-Type-Options`, `Permissions-Policy`, `Cross-Origin-Opener-Policy` and HSTS (two years, including subdomains). The per-page `<meta>` Content Security Policy remains the source of truth for everything else.
 
-**Repository settings to turn on** (they can't be set from code): branch protection on `main` requiring the *Verify build & security guardrails* check, secret scanning with push protection, CodeQL default setup, and "Enforce HTTPS" for Pages.
+**Repository settings to turn on** (they can't be set from code): branch protection on `main` requiring the *Verify build & security guardrails* check, secret scanning with push protection, CodeQL default setup, "Enforce HTTPS" for GitHub Pages, and "Always Use HTTPS" in Cloudflare.
 
 ### When the site starts handling users
 

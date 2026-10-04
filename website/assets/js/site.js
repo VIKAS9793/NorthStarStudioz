@@ -443,7 +443,7 @@ function showConsent() {
   const text = document.createElement('p');
   text.append('Help improve this site with anonymous analytics (Google Analytics)? ');
   const more = document.createElement('a');
-  more.href = 'privacy.html#analytics';
+  more.href = 'privacy#analytics';
   more.textContent = 'Details';
   text.append(more);
   const actions = document.createElement('div');
