@@ -57,7 +57,7 @@ jobs:
         run: node scripts/sitemap.mjs --check
 
   lighthouse:
-    name: Lighthouse budget (mobile)
+    name: Lighthouse budget (mobile + desktop)
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -76,7 +76,8 @@ jobs:
       - name: Install locked dependencies (no install scripts)
         run: npm ci --ignore-scripts
 
-      # Mobile preset, median of three runs per page, on the runner's Chrome.
+      # Locks the scores: accessibility, best practices, SEO and agentic browsing
+      # at 100, performance >= 95, Core Web Vitals in "good" (mobile + desktop).
       - name: Check every page against the performance budget
         run: npm run lighthouse
 
