@@ -1,4 +1,4 @@
-# HTTP response headers for Cloudflare Pages (GitHub Pages ignores this file).
+# HTTP response headers, applied by Cloudflare Pages.
 # The <meta> Content-Security-Policy in each page stays the source of truth;
 # frame-ancestors can only be set here.
 /*

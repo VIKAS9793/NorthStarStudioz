@@ -33,15 +33,15 @@ The studio website is a static site with **no backend, no accounts, no forms and
 | Script injection (XSS) | Strict Content Security Policy on every page: `default-src 'self'`, no `unsafe-inline`/`unsafe-eval`, inline scripts allowed only by SHA-256 hash, `object-src 'none'`, `base-uri 'self'`, `form-action 'none'` | `<meta http-equiv="Content-Security-Policy">` in each page |
 | DOM injection | Trusted Types enforced (`require-trusted-types-for 'script'`, `trusted-types 'none'`): any `innerHTML`-style sink throws. Our own code is also checked for string-to-code sinks in CI | CSP + `scripts/verify.mjs` |
 | Third-party compromise / tracking | Zero third-party requests: fonts, scripts and images are self-hosted. CI fails if a page loads anything cross-origin | `scripts/verify.mjs` |
-| Tampered build output | CI rebuilds `gate-3d.js` from `src/` and fails if it differs from the committed file. Editing an inline script without updating its CSP hash also fails | `.github/workflows/deploy.yml` |
+| Tampered build output | CI rebuilds `gate-3d.js` from `src/` and fails if it differs from the committed file. Editing an inline script without updating its CSP hash also fails | `.github/workflows/ci.yml` |
 | Supply chain (npm) | Lockfile-only installs with `npm ci --ignore-scripts`; `npm audit` gate; Dependabot updates | workflow + `.github/dependabot.yml` |
-| Supply chain (CI) | All GitHub Actions pinned to full commit SHAs; `permissions: {}` by default with per-job least privilege; checkout without persisted credentials; deploy runs only from `main` after verification | `.github/workflows/deploy.yml` |
+| Supply chain (CI) | All GitHub Actions pinned to full commit SHAs; `permissions: {}` by default with per-job least privilege; checkout without persisted credentials. CI deploys nothing and holds no deploy credentials; Cloudflare Pages deploys `main` through its GitHub app | `.github/workflows/ci.yml` |
 | Referrer leakage | `strict-origin-when-cross-origin` on every page | `<meta name="referrer">` |
 | Reporting | RFC 9116 `security.txt` | `website/.well-known/security.txt` |
 
 **HTTP headers:** Cloudflare Pages serves the site and applies `website/_headers`: clickjacking protection (`frame-ancestors`, `X-Frame-Options`), `X-Content-Type-Options`, `Permissions-Policy`, `Cross-Origin-Opener-Policy` and HSTS (two years, including subdomains). The per-page `<meta>` Content Security Policy remains the source of truth for everything else.
 
-**Repository settings to turn on** (they can't be set from code): branch protection on `main` requiring the *Verify build & security guardrails* check, secret scanning with push protection, CodeQL default setup, "Enforce HTTPS" for GitHub Pages, and "Always Use HTTPS" in Cloudflare.
+**Repository settings to turn on** (they can't be set from code): branch protection on `main` requiring the *Verify build & security guardrails* and *Owner-only authorship* checks (Cloudflare Pages deploys whatever reaches `main`, so these required checks are the deploy gate), secret scanning with push protection, CodeQL default setup, and "Always Use HTTPS" in Cloudflare.
 
 ### When the site starts handling users
 

@@ -35,7 +35,7 @@ Our games are designed around four principles:
 
 ## Website
 
-The website in [`website/`](website/) is plain HTML and CSS. It uses no framework and makes no third-party requests. It is served by Cloudflare Pages at [northstarstudioz.space](https://northstarstudioz.space/), which deploys `website/` from `main` on every push. The old GitHub Pages address now only redirects to the new domain (`scripts/gh-pages-redirects.mjs`).
+The website in [`website/`](website/) is plain HTML and CSS. It uses no framework and makes no third-party requests. It is served by Cloudflare Pages at [northstarstudioz.space](https://northstarstudioz.space/), which deploys `website/` from `main` on every push and builds a preview for every pull request. GitHub Actions ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)) only verifies; it deploys nothing.
 
 | Path | Purpose |
 | --- | --- |
@@ -46,7 +46,6 @@ The website in [`website/`](website/) is plain HTML and CSS. It uses no framewor
 | `src/gate/headset.js` | Source for the 3D headset (three.js) |
 | `website/_headers` | HTTP security and caching headers (Cloudflare Pages) |
 | `scripts/verify.mjs` | Security checks that run in CI |
-| `scripts/gh-pages-redirects.mjs` | Builds the GitHub Pages redirect pages |
 | `scripts/attribution-guard.mjs` | Owner-only authorship: rejects commits by anyone else or carrying AI attribution |
 
 ### Local development
