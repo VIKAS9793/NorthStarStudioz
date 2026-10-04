@@ -388,9 +388,9 @@ if (blocksCanvas && !reduceMotion) {
 }
 
 /* ---------- Analytics: Google Analytics 4, opt-in only ---------- */
-// Paste the GA4 Measurement ID (looks like "G-XXXXXXXXXX") to turn analytics on.
-// Empty = off: no prompt, no request to Google, no cookies.
-const GA4_ID = '';
+// GA4 Measurement ID. Empty = off: no prompt, no request to Google, no cookies.
+// Even when set, nothing loads until the visitor chooses "Allow".
+const GA4_ID = 'G-W8XZTCT2EJ';
 const CONSENT_KEY = 'ns-analytics';
 if (GA4_ID) initAnalytics();
 
@@ -427,10 +427,16 @@ function loadGA4() {
 
 function revokeGA4() {
   window.gtag?.('consent', 'update', { analytics_storage: 'denied' });
-  // Remove GA's first-party cookies for this site.
+  // Remove GA's first-party cookies. GA sets them on the widest domain it can
+  // (".northstarstudioz.space"), and a cookie only clears with a matching
+  // domain, so clear it host-only and on every parent domain.
+  const parts = location.hostname.split('.');
+  const domains = [''];
+  for (let i = 0; i < parts.length - 1; i++) domains.push(`; domain=${parts.slice(i).join('.')}`);
   for (const c of document.cookie.split(';')) {
     const name = c.split('=')[0].trim();
-    if (/^_ga/.test(name)) document.cookie = `${name}=; Max-Age=0; path=/; SameSite=Lax`;
+    if (!/^_ga/.test(name)) continue;
+    for (const d of domains) document.cookie = `${name}=; Max-Age=0; path=/${d}; SameSite=Lax`;
   }
 }
 
@@ -443,7 +449,7 @@ function showConsent() {
   const text = document.createElement('p');
   text.append('Help improve this site with anonymous analytics (Google Analytics)? ');
   const more = document.createElement('a');
-  more.href = 'privacy.html#analytics';
+  more.href = 'privacy#analytics';
   more.textContent = 'Details';
   text.append(more);
   const actions = document.createElement('div');

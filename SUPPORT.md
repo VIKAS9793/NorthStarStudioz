@@ -14,5 +14,5 @@ If you encounter a technical bug or want to submit feedback on our documentation
 * Open an issue at [https://github.com/VIKAS9793/NorthStarStudioz/issues](https://github.com/VIKAS9793/NorthStarStudioz/issues).
 
 ### 3. Legal & Privacy
-* Privacy Policy: [https://vikas9793.github.io/NorthStarStudioz/privacy.html](https://vikas9793.github.io/NorthStarStudioz/privacy.html)
-* Terms of Service: [https://vikas9793.github.io/NorthStarStudioz/terms.html](https://vikas9793.github.io/NorthStarStudioz/terms.html)
+* Privacy Policy: [https://northstarstudioz.space/privacy](https://northstarstudioz.space/privacy)
+* Terms of Service: [https://northstarstudioz.space/terms](https://northstarstudioz.space/terms)

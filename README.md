@@ -9,9 +9,9 @@
 </p>
 
 <p align="center">
-  <a href="https://vikas9793.github.io/NorthStarStudioz/">Website</a> ·
-  <a href="https://vikas9793.github.io/NorthStarStudioz/privacy.html">Privacy Policy</a> ·
-  <a href="https://vikas9793.github.io/NorthStarStudioz/terms.html">Terms of Service</a>
+  <a href="https://northstarstudioz.space/">Website</a> ·
+  <a href="https://northstarstudioz.space/privacy">Privacy Policy</a> ·
+  <a href="https://northstarstudioz.space/terms">Terms of Service</a>
 </p>
 
 ---
@@ -35,7 +35,7 @@ Our games are designed around four principles:
 
 ## Website
 
-The website in [`website/`](website/) is plain HTML and CSS. It uses no framework and makes no third-party requests. Every push to `main` deploys it to GitHub Pages through [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml).
+The website in [`website/`](website/) is plain HTML and CSS. It uses no framework and makes no third-party requests. It is served by Cloudflare Pages at [northstarstudioz.space](https://northstarstudioz.space/), which deploys `website/` from `main` on every push and builds a preview for every pull request. GitHub Actions ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)) only verifies; it deploys nothing.
 
 | Path | Purpose |
 | --- | --- |
@@ -44,6 +44,7 @@ The website in [`website/`](website/) is plain HTML and CSS. It uses no framewor
 | `website/assets/js/site.js` | Header, menu, scroll reveals and intro controller |
 | `website/assets/js/gate-3d.js` | Generated 3D headset bundle. Do not edit by hand. |
 | `src/gate/headset.js` | Source for the 3D headset (three.js) |
+| `website/_headers` | HTTP security and caching headers (Cloudflare Pages) |
 | `scripts/verify.mjs` | Security checks that run in CI |
 | `scripts/attribution-guard.mjs` | Owner-only authorship: rejects commits by anyone else or carrying AI attribution |
 

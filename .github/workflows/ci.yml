@@ -1,4 +1,6 @@
-name: Verify & deploy website
+# The site is served by Cloudflare Pages, which deploys website/ from main on
+# its own. This workflow only verifies; it deploys nothing.
+name: CI
 
 on:
   push:
@@ -10,8 +12,10 @@ on:
 permissions: {}
 
 concurrency:
-  group: pages-${{ github.ref }}
-  cancel-in-progress: false
+  group: ci-${{ github.ref }}
+  # Superseded PR runs may stop early; runs on main always finish, so every
+  # pushed commit gets its ownership check.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   verify:
@@ -75,34 +79,3 @@ jobs:
             RANGE="$HEAD_SHA~1..$HEAD_SHA"
           fi
           node scripts/attribution-guard.mjs --range "$RANGE"
-
-  deploy:
-    name: Deploy to GitHub Pages
-    needs: [verify, ownership]
-    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-
-      - name: Setup GitHub Pages
-        uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
-
-      - name: Upload website artifact
-        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
-        with:
-          path: website
-          include-hidden-files: true # ships .well-known/security.txt
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
