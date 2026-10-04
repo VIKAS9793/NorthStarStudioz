@@ -10,6 +10,13 @@
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), xr-spatial-tracking=()
   Cross-Origin-Opener-Policy: same-origin
 
+# The *.pages.dev copies (production and preview deployments) must never be
+# indexed: the site's only address is https://northstarstudioz.space.
+https://:project.pages.dev/*
+  X-Robots-Tag: noindex
+https://:version.:project.pages.dev/*
+  X-Robots-Tag: noindex
+
 # Caching. File names are not content-hashed, so only files that never change
 # under the same name are cached "forever"; scripts and styles revalidate.
 /assets/fonts/*
