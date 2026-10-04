@@ -392,6 +392,7 @@ if (blocksCanvas && !reduceMotion) {
 // Even when set, nothing loads until the visitor chooses "Allow".
 const GA4_ID = 'G-W8XZTCT2EJ';
 const CONSENT_KEY = 'ns-analytics';
+const GOOGLE_TAG_ORIGIN = 'https://www.googletagmanager.com';
 if (GA4_ID) initAnalytics();
 
 function initAnalytics() {
@@ -419,6 +420,17 @@ function loadGA4() {
   const policy = window.trustedTypes?.createPolicy('ns-ga', {
     createScriptURL: (u) => { if (u === url) return u; throw new TypeError('Script URL not allowed'); },
   });
+  // gtag.js loads its own follow-up scripts by assigning plain strings, which
+  // Trusted Types would block. The default policy lets those through only from
+  // the Google tag host; any other URL, and all HTML or script strings, stay blocked.
+  if (window.trustedTypes && !window.trustedTypes.defaultPolicy) {
+    window.trustedTypes.createPolicy('default', {
+      createScriptURL: (u) => {
+        try { if (new URL(u, location.href).origin === GOOGLE_TAG_ORIGIN) return u; } catch {}
+        return null;
+      },
+    });
+  }
   const script = document.createElement('script');
   script.async = true;
   script.src = policy ? policy.createScriptURL(url) : url;
