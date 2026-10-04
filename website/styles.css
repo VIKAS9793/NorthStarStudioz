@@ -15,15 +15,15 @@
   /* Night & surfaces */
   --night: #07090f;
   --night-2: #0b0e17;
-  --window: rgba(14, 17, 27, 0.82);
-  --window-hi: rgba(22, 26, 40, 0.9);
-  --edge: rgba(243, 239, 231, 0.09);
-  --edge-strong: rgba(243, 239, 231, 0.2);
+  --window: rgba(13, 16, 25, 0.95);
+  --window-hi: rgba(23, 27, 41, 0.97);
+  --edge: rgba(243, 239, 231, 0.15);
+  --edge-strong: rgba(243, 239, 231, 0.28);
 
   /* Text */
   --bone: #f3efe7;
-  --dim: #a8a297;
-  --faint: #6f6b64;
+  --dim: #bcb6aa;
+  --faint: #8f8a81;   /* 5.9:1 on --night (WCAG AA) */
 
   /* Light */
   --ember: #ff6b35;   /* primary: dawn on the horizon */
@@ -70,6 +70,8 @@ ul, ol, dl, dd { margin: 0; padding: 0; list-style: none; }
 ::selection { background: rgba(255, 107, 53, 0.4); color: #fff; }
 :focus-visible { outline: 2px solid var(--sun); outline-offset: 3px; border-radius: 10px; }
 [tabindex="-1"]:focus { outline: none; }
+/* Components set display (e.g. .btn is inline-flex); keep the hidden attribute authoritative. */
+[hidden] { display: none !important; }
 
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 .skip-link {
@@ -216,7 +218,7 @@ body::after { bottom: 0; height: 120px; background: linear-gradient(transparent,
   font: 700 0.95rem/1 var(--font-display); letter-spacing: 0.06em; text-transform: uppercase;
 }
 .brand img { border-radius: 50%; box-shadow: 0 0 0 1px rgba(255, 181, 71, 0.4), 0 0 18px rgba(255, 107, 53, 0.25); }
-.brand b { font-weight: 400; color: var(--dim); margin-left: 0.35em; }
+.brand b { font-weight: 400; color: var(--dim); }
 .brand:hover { color: var(--bone); }
 .status { display: flex; gap: 8px; }
 .status__item {
@@ -292,7 +294,7 @@ body::after { bottom: 0; height: 120px; background: linear-gradient(transparent,
   background: linear-gradient(180deg, var(--window-hi), var(--window));
   border: 1px solid var(--edge);
   border-radius: var(--r-window);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 40px 80px -40px rgba(0, 0, 0, 0.9);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 24px 48px -24px rgba(0, 0, 0, 0.85);
 }
 .window::after {
   content: ""; position: absolute; left: 50%; bottom: -16px; width: 56px; height: 5px; translate: -50% 0;
@@ -303,7 +305,7 @@ body::after { bottom: 0; height: 120px; background: linear-gradient(transparent,
 
 /* Panels arranged on a gentle curve, like a wrap-around VR display. */
 .arc { display: grid; gap: clamp(14px, 1.6vw, 24px); perspective: 1600px; }
-.arc__slot { transform-style: preserve-3d; transition: transform 0.6s var(--ease-out); }
+.arc__slot { transition: transform 0.6s var(--ease-out); }
 
 /* =========================================================
    Layout
@@ -325,8 +327,25 @@ main { position: relative; z-index: 1; padding-bottom: 120px; }
 .hero__title {
   font: 800 clamp(3rem, 1rem + 9vw, 8.6rem)/0.9 var(--font-display);
   letter-spacing: -0.01em; text-transform: uppercase; text-wrap: balance;
-  color: var(--bone);
-  text-shadow: 0 0 60px rgba(255, 181, 71, 0.18), 0 2px 0 rgba(0, 0, 0, 0.35);
+  /* Light-saber edge: a white-hot core, a thin red blade line and a red bloom. */
+  color: #fff4f2;
+  -webkit-text-stroke: 1.5px #ff3d3d;
+  paint-order: stroke fill;
+  text-shadow:
+    0 0 1px #fff,
+    0 0 4px rgba(255, 70, 70, 0.95),
+    0 0 10px rgba(255, 32, 32, 0.75),
+    0 0 24px rgba(255, 20, 20, 0.45);
+}
+@keyframes saber-ignite {
+  from { -webkit-text-stroke-color: rgba(255, 61, 61, 0); text-shadow: 0 0 0 transparent, 0 0 0 transparent, 0 0 0 transparent, 0 0 0 transparent, 0 0 0 transparent; color: var(--bone); }
+}
+@keyframes saber-hum {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.97; }
+  91% { opacity: 1; }
+  92% { opacity: 0.86; }
+  93% { opacity: 1; }
 }
 .hero__lede { max-width: 36ch; color: #d6d0c4; font-size: clamp(1.08rem, 1rem + 0.4vw, 1.3rem); text-wrap: pretty; }
 .hero__cta { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 4px; }
@@ -342,10 +361,6 @@ main { position: relative; z-index: 1; padding-bottom: 120px; }
 .hero__hint span { width: 1px; height: 34px; background: linear-gradient(transparent, var(--bone)); animation: hint 2.2s var(--ease-out) infinite; transform-origin: top; }
 @keyframes hint { 0% { transform: scaleY(0); opacity: 1; } 70% { transform: scaleY(1); opacity: 1; } 100% { transform: scaleY(1); opacity: 0; } }
 
-@media (min-width: 900px) {
-  .arc--hero .arc__slot:first-child { transform: rotateY(16deg) translateZ(-10px); transform-origin: right center; }
-  .arc--hero .arc__slot:last-child { transform: rotateY(-16deg) translateZ(-10px); transform-origin: left center; }
-}
 
 /* Zones */
 .zone { padding: clamp(90px, 14vh, 150px) 0 0; }
@@ -414,7 +429,7 @@ main { position: relative; z-index: 1; padding-bottom: 120px; }
 
 /* Contact */
 .zone--contact { display: grid; justify-items: center; gap: 18px; text-align: center; padding-bottom: 40px; }
-.contact__title { font: 800 clamp(3rem, 1rem + 8vw, 7.5rem)/0.9 var(--font-display); text-transform: uppercase; text-shadow: 0 0 60px rgba(255, 181, 71, 0.2); }
+.contact__title { font: 800 clamp(3rem, 1rem + 8vw, 7.5rem)/0.9 var(--font-display); text-transform: uppercase; text-shadow: 0 0 24px rgba(255, 181, 71, 0.16); }
 .contact__lede { color: var(--dim); font-size: 1.15rem; margin-bottom: 10px; }
 
 /* Footer */
@@ -439,19 +454,21 @@ main { position: relative; z-index: 1; padding-bottom: 120px; }
     opacity: 0; translate: 0 40px -220px;
     transition: opacity 0.9s var(--ease-out), translate 0.9s var(--ease-out);
   }
-  .io .is-in { opacity: 1; translate: 0 0 0; }
+  .io .is-in { opacity: 1; translate: none; }
   .hero__copy > * { animation: rise-in 1s var(--ease-out) both; }
   .hero__copy > :nth-child(2) { animation-delay: 0.08s; }
+  /* The headline rises in, ignites like a blade, then hums with a rare flicker. */
+  .hero__copy > .hero__title { animation: rise-in 1s var(--ease-out) 0.08s both, saber-ignite 1.1s var(--ease-out) 0.35s both, saber-hum 7s ease-in-out 1.6s infinite; }
   .hero__copy > :nth-child(3) { animation-delay: 0.16s; }
   .hero__copy > :nth-child(4) { animation-delay: 0.24s; }
   .arc--hero .window { animation: approach-in 1.2s var(--ease-out) 0.3s both; }
   .arc--hero .arc__slot:nth-child(2) .window { animation-delay: 0.4s; }
   .arc--hero .arc__slot:nth-child(3) .window { animation-delay: 0.5s; }
 }
-/* Uses the individual translate/rotate properties so hover transforms still compose. */
+/* Uses the individual translate property so hover transforms still compose. */
 @keyframes approach {
-  from { opacity: 0; translate: 0 60px -260px; rotate: x 8deg; }
-  to { opacity: 1; translate: 0 0 0; rotate: x 0deg; }
+  from { opacity: 0; translate: 0 60px -260px; }
+  to { opacity: 1; translate: none; } /* flat at rest: a leftover 3D transform blurs text */
 }
 @keyframes approach-in { from { opacity: 0; translate: 0 30px -300px; } }
 @keyframes rise-in { from { opacity: 0; transform: translateY(24px); filter: blur(8px); } }
@@ -637,7 +654,7 @@ main { position: relative; z-index: 1; padding-bottom: 120px; }
 @keyframes halo { from { opacity: 0.9; transform: scale(1); } to { opacity: 0; transform: scale(1.18); } }
 @keyframes rise { from { opacity: 0; transform: translateY(16px); } }
 
-.gate__hint { display: none; margin-top: -4px; color: #6f7a99; font-size: 0.75rem; letter-spacing: 0.04em; }
+.gate__hint { display: none; margin-top: -4px; color: #8f9abb; font-size: 0.75rem; letter-spacing: 0.04em; }
 .gate-lite .gate__hint { display: block; }
 .gate__skip {
   position: absolute; z-index: 4; top: max(16px, env(safe-area-inset-top)); right: 16px;
@@ -777,7 +794,7 @@ main { position: relative; z-index: 1; padding-bottom: 120px; }
 
 /* The screen flies in as one piece rather than pane by pane. */
 .monitor .window { animation: none; }
-.io .monitor .window { opacity: 1; translate: 0 0 0; }
+.io .monitor .window { opacity: 1; translate: none; }
 @media (prefers-reduced-motion: no-preference) {
   @supports (animation-timeline: view()) {
     .monitor { animation: approach linear both; animation-timeline: view(); animation-range: entry 0% entry 85%; }
@@ -797,3 +814,35 @@ main { position: relative; z-index: 1; padding-bottom: 120px; }
 .consent a { color: var(--sun); }
 .consent__actions { display: flex; gap: 8px; }
 .consent__btn { min-height: 38px; padding: 0 16px; font-size: 0.88rem; }
+
+/* =========================================================
+   Ambient life in the environment: building blocks and a rocket.
+   Both sit behind all content, are decorative only, stay low-contrast,
+   and are switched off for prefers-reduced-motion.
+   ========================================================= */
+.env__layer--rocket { --depth: 12; }
+.env__layer--blocks { --depth: 30; }
+.env__blocks { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+.env__rocket { position: absolute; left: var(--x, 21%); top: 66%; width: 16px; height: 32px; opacity: 0; filter: drop-shadow(0 0 6px rgba(255, 181, 71, 0.45)); }
+.env__rocket svg { width: 100%; height: 100%; overflow: visible; }
+.env__rocket-body { fill: rgba(243, 239, 231, 0.85); fill-rule: evenodd; }
+.env__rocket-flame { fill: var(--sun); transform-box: fill-box; transform-origin: 50% 0; }
+.env__rocket::after {
+  content: ""; position: absolute; left: 50%; top: 92%; width: 2px; height: 70px; translate: -50% 0;
+  border-radius: 2px; background: linear-gradient(rgba(255, 181, 71, 0.55), rgba(255, 107, 53, 0.15) 40%, transparent);
+}
+/* Each flight is started by ambient.js with a random spot, drift and height,
+   at random intervals, so no two launches look alike. */
+@media (prefers-reduced-motion: no-preference) {
+  .env__rocket.is-flying { animation: rocket-fly var(--dur, 5.6s) both; }
+  .env__rocket.is-flying .env__rocket-flame { animation: flame 0.12s steps(2) infinite alternate; }
+}
+@keyframes rocket-fly {
+  0% { opacity: 0; transform: translate(0, 0) rotate(calc(var(--tilt, 24deg) * 0.25)) scale(1); animation-timing-function: cubic-bezier(0.5, 0, 0.9, 0.6); }
+  8% { opacity: 0.9; }
+  88% { opacity: 0.8; transform: translate(calc(var(--dx, 9vw) * 0.9), calc(var(--dy, -46vh) * 0.92)) rotate(var(--tilt, 24deg)) scale(0.5); }
+  100% { opacity: 0; transform: translate(var(--dx, 9vw), var(--dy, -46vh)) rotate(var(--tilt, 24deg)) scale(0.45); }
+}
+@keyframes flame { from { transform: scaleY(0.75); } to { transform: scaleY(1.15); } }
+@media (prefers-reduced-motion: reduce) { .env__rocket, .env__blocks { display: none; } }

@@ -77,7 +77,7 @@ for (const page of pages) {
 }
 
 // Our own scripts must not turn strings into code or HTML.
-const ownScripts = [join(SITE, 'assets/js/site.js'), 'src/gate/headset.js'];
+const ownScripts = [join(SITE, 'assets/js/site.js'), join(SITE, 'assets/js/ambient.js'), 'src/gate/headset.js'];
 const sinks = /\binnerHTML\b|\bouterHTML\b|insertAdjacentHTML|document\.write|\beval\s*\(|new Function\s*\(|setTimeout\s*\(\s*['"`]|setInterval\s*\(\s*['"`]/;
 for (const file of ownScripts) {
   readFileSync(file, 'utf8').split('\n').forEach((line, i) => {
