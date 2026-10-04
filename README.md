@@ -5,7 +5,7 @@
 <h1 align="center">NorthStar Studioz</h1>
 
 <p align="center">
-  An independent studio making hand-tracked mixed reality games for Meta Quest.
+  An independent studio building hand-tracked mixed reality games for Meta Quest.
 </p>
 
 <p align="center">
