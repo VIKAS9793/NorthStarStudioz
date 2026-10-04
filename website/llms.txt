@@ -1,0 +1,26 @@
+# NorthStar Studioz
+
+> NorthStar Studioz is an independent mixed reality game studio and Meta Quest developer based in Mumbai, India, founded in October 2026 by Vikas Sahani. It makes hand-tracked games for Meta Quest 3 and Quest 3S that are played on the real furniture in the player's room. Its first game is in development; the name, details and release date are confidential until it is announced.
+
+Key facts:
+
+- Based in: Mumbai, India
+- Founded: October 2026
+- Founder: Vikas Sahani, a finance professional with a passion for games and new technology, who built side projects and published Android apps before founding the studio
+- Team: one developer
+- Platform: Meta Quest 3 and 3S (Meta Horizon OS), standalone, no PC required
+- Focus: mixed reality games played with bare hands, with no artificial movement
+- Contact: studioznorthstar@gmail.com
+
+NorthStar Studioz is an independent developer and is not affiliated with or endorsed by Meta.
+
+## Pages
+
+- [About](https://northstarstudioz.space/about): who the studio is, the founder, what it makes and where things stand
+- [Press kit](https://northstarstudioz.space/press): fact sheet, studio and founder descriptions, logos and images
+- [Home](https://northstarstudioz.space/): how the games play, who they are for, the technology, and a short FAQ
+
+## Policies
+
+- [Privacy Policy](https://northstarstudioz.space/privacy)
+- [Terms of Service](https://northstarstudioz.space/terms)

@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-EcHmrf6U525uPR07hQ+ZnS2SMNOCq/3lg8GQDUNsf3s=' 'sha256-ZOxZVaaZFTcsslkeh6VZRwAP5ccj/t6eJ80qbRZrZLU=' https://www.googletagmanager.com; style-src 'self'; img-src 'self' https://*.google-analytics.com https://*.googletagmanager.com; font-src 'self'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; manifest-src 'self'; media-src 'none'; frame-src 'none'; worker-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'; require-trusted-types-for 'script'; trusted-types ns-ga; upgrade-insecure-requests">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-EcHmrf6U525uPR07hQ+ZnS2SMNOCq/3lg8GQDUNsf3s=' 'sha256-e50oOlRQR34MGm8ZGrekYhifv+w+FpC36SKkKYIyeOM=' https://www.googletagmanager.com; style-src 'self'; img-src 'self' https://*.google-analytics.com https://*.googletagmanager.com; font-src 'self'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; manifest-src 'self'; media-src 'none'; frame-src 'none'; worker-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'; require-trusted-types-for 'script'; trusted-types ns-ga; upgrade-insecure-requests">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <title>NorthStar Studioz — Independent Mixed Reality Game Studio</title>
-  <meta name="description" content="NorthStar Studioz makes tactile mixed reality games for Meta Quest. Play with your bare hands, on the furniture you already own. Independent studio, India.">
+  <meta name="description" content="NorthStar Studioz makes tactile mixed reality games for Meta Quest. Play with your bare hands, on the furniture you already own. Independent studio in Mumbai, India.">
   <link rel="canonical" href="https://northstarstudioz.space/">
   <meta name="theme-color" content="#07090f">
   <meta name="color-scheme" content="dark">
@@ -80,8 +80,12 @@
         },
         "address": {
           "@type": "PostalAddress",
+          "addressLocality": "Mumbai",
+          "addressRegion": "Maharashtra",
           "addressCountry": "IN"
         },
+        "foundingDate": "2026-10",
+        "numberOfEmployees": { "@type": "QuantitativeValue", "value": 1 },
         "knowsAbout": [
           "Mixed reality",
           "Hand tracking",
@@ -100,7 +104,7 @@
         ],
         "foundingLocation": {
           "@type": "Place",
-          "name": "India"
+          "name": "Mumbai, India"
         }
       },
       {
@@ -108,12 +112,47 @@
         "@id": "https://northstarstudioz.space/#founder",
         "name": "Vikas Sahani",
         "jobTitle": "Founder & Developer",
+        "description": "Finance professional with a passion for games and new technology. Built side projects and published Android apps before founding NorthStar Studioz in October 2026 to make mixed reality games for Meta Horizon OS.",
+        "homeLocation": { "@type": "Place", "name": "Mumbai, India" },
         "worksFor": {
           "@id": "https://northstarstudioz.space/#studio"
         },
         "url": "https://github.com/VIKAS9793",
         "sameAs": [
           "https://github.com/VIKAS9793"
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://northstarstudioz.space/#faq",
+        "url": "https://northstarstudioz.space/#faq",
+        "isPartOf": { "@id": "https://northstarstudioz.space/#website" },
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Who is NorthStar Studioz?",
+            "acceptedAnswer": { "@type": "Answer", "text": "An independent mixed reality game studio based in Mumbai, India, founded in October 2026 by Vikas Sahani. More on the About page." }
+          },
+          {
+            "@type": "Question",
+            "name": "What kind of games does it make?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Mixed reality games for Meta Quest that you play with your bare hands, built on the real table, floor and walls of your room. No artificial movement, and no PC required." }
+          },
+          {
+            "@type": "Question",
+            "name": "Which headsets are supported?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Meta Quest 3 and Meta Quest 3S. The games run on the headset itself." }
+          },
+          {
+            "@type": "Question",
+            "name": "When is the first game coming out?",
+            "acceptedAnswer": { "@type": "Answer", "text": "It is in development. Its name, details and release date are confidential until it is announced, and the announcement will appear on this site first." }
+          },
+          {
+            "@type": "Question",
+            "name": "How can press or partners get in touch?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Email studioznorthstar@gmail.com. The press kit has a fact sheet, logos and images." }
+          }
         ]
       },
       {
@@ -131,7 +170,7 @@
   </script>
 
   <script type="speculationrules">
-    { "prerender": [{ "where": { "href_matches": ["/privacy", "/terms"] }, "eagerness": "moderate" }] }
+    { "prerender": [{ "where": { "href_matches": ["/about", "/press", "/privacy", "/terms"] }, "eagerness": "moderate" }] }
   </script>
 </head>
 <body>
@@ -219,7 +258,7 @@
     <!-- ===================== Hero ===================== -->
     <section class="hero" id="top" aria-labelledby="hero-title">
       <div class="hero__copy">
-        <p class="tag"><span class="tag__led"></span>Mixed reality studio · India</p>
+        <p class="tag"><span class="tag__led"></span>Mixed reality studio · Mumbai, India</p>
         <h1 id="hero-title" class="hero__title" tabindex="-1">Your room<br>is the level.</h1>
         <p class="hero__lede">NorthStar Studioz makes tactile mixed reality games for Meta Quest. You play with your bare hands, on the furniture you already own.</p>
         <div class="hero__cta">
@@ -365,15 +404,45 @@
       <div class="window founder">
         <img src="assets/brand/logo-320.webp" width="120" height="120" alt="" loading="lazy" decoding="async">
         <div class="founder__copy">
-          <p>NorthStar Studioz is <strong>Vikas Sahani</strong>, building from India. Instead of chasing every genre, the studio sticks to one thing: mixed reality you can touch. The first game ships when it’s ready, not before.</p>
-          <p class="founder__meta"><span>Founder · Developer</span><a href="https://github.com/VIKAS9793" rel="noopener">github.com/VIKAS9793</a></p>
+          <p>NorthStar Studioz is <strong>Vikas Sahani</strong>, building from Mumbai, India. He works in finance by day and has always been into games and new tech. After building side projects and publishing Android apps, he founded the studio in October 2026 to focus on one thing: mixed reality you can touch. The first game ships when it’s ready, not before.</p>
+          <p class="founder__meta"><span>Founder · Developer</span><span>Founded October 2026</span><a href="about">About the studio</a><a href="press">Press kit</a></p>
         </div>
+      </div>
+    </section>
+
+    <!-- ===================== FAQ ===================== -->
+    <section class="zone" id="faq" aria-labelledby="faq-title">
+      <header class="zone__head">
+        <p class="label">05 · Questions</p>
+        <h2 id="faq-title" class="zone__title">Quick answers.</h2>
+      </header>
+      <div class="faq">
+        <article class="window faq__item">
+          <h3>Who is NorthStar Studioz?</h3>
+          <p>An independent mixed reality game studio based in Mumbai, India, founded in October 2026 by Vikas Sahani. More on the <a href="about">About page</a>.</p>
+        </article>
+        <article class="window faq__item">
+          <h3>What kind of games does it make?</h3>
+          <p>Mixed reality games for Meta Quest that you play with your bare hands, built on the real table, floor and walls of your room. No artificial movement, and no PC required.</p>
+        </article>
+        <article class="window faq__item">
+          <h3>Which headsets are supported?</h3>
+          <p>Meta Quest 3 and Meta Quest 3S. The games run on the headset itself.</p>
+        </article>
+        <article class="window faq__item">
+          <h3>When is the first game coming out?</h3>
+          <p>It is in development. Its name, details and release date are confidential until it is announced, and the announcement will appear on this site first.</p>
+        </article>
+        <article class="window faq__item">
+          <h3>How can press or partners get in touch?</h3>
+          <p>Email <a href="mailto:studioznorthstar@gmail.com">studioznorthstar@gmail.com</a>. The <a href="press">press kit</a> has a fact sheet, logos and images.</p>
+        </article>
       </div>
     </section>
 
     <!-- ===================== Contact ===================== -->
     <section class="zone zone--contact" id="contact" aria-labelledby="contact-title">
-      <p class="label">05 · Contact</p>
+      <p class="label">06 · Contact</p>
       <h2 id="contact-title" class="contact__title">Inbox open.</h2>
       <p class="contact__lede">Players, press, partners, or just curious. Write in.</p>
       <a class="btn btn--big" href="mailto:studioznorthstar@gmail.com">studioznorthstar@gmail.com</a>
@@ -383,6 +452,8 @@
   <footer class="foot">
     <nav aria-label="Footer">
       <ul class="foot__links">
+        <li><a href="about">About</a></li>
+        <li><a href="press">Press kit</a></li>
         <li><a href="privacy">Privacy</a></li>
         <li><a href="terms">Terms</a></li>
         <li><a href="https://github.com/VIKAS9793/NorthStarStudioz" rel="noopener">GitHub</a></li>
