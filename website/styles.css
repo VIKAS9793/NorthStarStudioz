@@ -327,18 +327,19 @@ main { position: relative; z-index: 1; padding-bottom: 120px; }
 .hero__title {
   font: 800 clamp(3rem, 1rem + 9vw, 8.6rem)/0.9 var(--font-display);
   letter-spacing: -0.01em; text-transform: uppercase; text-wrap: balance;
-  /* Light-saber edge: a white-hot core, a thin red blade line and a red bloom. */
-  color: #fff4f2;
-  -webkit-text-stroke: 1.5px #ff3d3d;
+  /* Light-saber edge in the site's dawn colours: a white-hot core, a thin ember
+     blade line and a bloom that matches the horizon glow and the main button. */
+  color: #fff6ec;
+  -webkit-text-stroke: 1.5px var(--ember);
   paint-order: stroke fill;
   text-shadow:
     0 0 1px #fff,
-    0 0 4px rgba(255, 70, 70, 0.95),
-    0 0 10px rgba(255, 32, 32, 0.75),
-    0 0 24px rgba(255, 20, 20, 0.45);
+    0 0 4px rgba(255, 170, 90, 0.95),
+    0 0 10px rgba(255, 107, 53, 0.8),
+    0 0 24px rgba(255, 90, 40, 0.45);
 }
 @keyframes saber-ignite {
-  from { -webkit-text-stroke-color: rgba(255, 61, 61, 0); text-shadow: 0 0 0 transparent, 0 0 0 transparent, 0 0 0 transparent, 0 0 0 transparent, 0 0 0 transparent; color: var(--bone); }
+  from { -webkit-text-stroke-color: rgba(255, 107, 53, 0); text-shadow: 0 0 0 transparent, 0 0 0 transparent, 0 0 0 transparent, 0 0 0 transparent, 0 0 0 transparent; color: var(--bone); }
 }
 @keyframes saber-hum {
   0%, 100% { opacity: 1; }
