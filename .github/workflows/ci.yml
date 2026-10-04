@@ -52,6 +52,30 @@ jobs:
       - name: Check CSP hashes, external resources and unsafe DOM APIs
         run: npm run verify
 
+  lighthouse:
+    name: Lighthouse budget (mobile)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install locked dependencies (no install scripts)
+        run: npm ci --ignore-scripts
+
+      # Mobile preset, median of three runs per page, on the runner's Chrome.
+      - name: Check every page against the performance budget
+        run: npm run lighthouse
+
   ownership:
     name: Owner-only authorship
     runs-on: ubuntu-latest
