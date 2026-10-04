@@ -18,24 +18,24 @@
 
 ## About
 
-NorthStar Studioz is an independent game studio based in India, founded by Vikas Sahani ([@VIKAS9793](https://github.com/VIKAS9793)). The studio is currently prototyping its first title.
+NorthStar Studioz is an independent game studio based in India, founded by Vikas Sahani ([@VIKAS9793](https://github.com/VIKAS9793)). Its first title is in development.
 
 This repository contains the studio website and its public policies. Game source code, design documents and roadmaps are kept private.
 
 ## What we build
 
-Our games are designed around four principles:
+The first game is being designed around four principles:
 
-- **Hands first.** Players pinch, grab, turn and snap objects using hand tracking. Controllers are supported as a fallback.
-- **The room is the level.** Passthrough and scene understanding turn real tables, floors and walls into play surfaces.
-- **Physical sound.** Audio is sampled from real materials and rendered spatially.
-- **Comfortable by default.** Play is stationary, with no artificial locomotion.
+- **Hands first.** Playable end to end with hand tracking: pinch, grab, turn and place. Controllers are optional.
+- **The table is the level.** Passthrough and scene understanding put play on the real table in front of you.
+- **Physical sound.** Sound designed around real materials and placed where it happens in the room.
+- **Seated and comfortable.** Played from your seat, within arm's reach, with no artificial movement.
 
 **Target platform:** Meta Horizon OS (Meta Quest 3 and Quest 3S), built with Unity URP, OpenXR and the Meta XR SDK.
 
 ## Website
 
-The website in [`website/`](website/) is plain HTML and CSS. It uses no framework and makes no third-party requests. It is served by Cloudflare Pages at [northstarstudioz.space](https://northstarstudioz.space/), which deploys `website/` from `main` on every push and builds a preview for every pull request. GitHub Actions ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)) only verifies; it deploys nothing.
+The website in [`website/`](website/) is plain HTML and CSS. It uses no framework and makes no third-party requests unless a visitor opts in to analytics (Google Analytics 4). It is served by Cloudflare Pages at [northstarstudioz.space](https://northstarstudioz.space/), which deploys `website/` from `main` on every push and builds a preview for every pull request. GitHub Actions ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)) only verifies; it deploys nothing.
 
 | Path | Purpose |
 | --- | --- |
