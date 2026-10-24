@@ -718,7 +718,7 @@ function initModelViewer() {
       canvas.className = 'viewer__canvas';
       canvas.tabIndex = 0;
       canvas.setAttribute('role', 'img');
-      canvas.setAttribute('aria-label', 'Interactive 3D model of a virtual reality headset. Drag, or use the arrow keys, to turn it.');
+      canvas.setAttribute('aria-label', 'Interactive AI-generated 3D model of a virtual reality headset. Drag, or use the arrow keys, to turn it.');
       const { createViewer } = await import('./viewer-3d.js');
       stage.append(canvas);
       viewer = await createViewer(canvas, { reducedMotion: reduceMotion });

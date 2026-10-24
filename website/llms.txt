@@ -14,6 +14,8 @@ Key facts:
 
 NorthStar Studioz is an independent developer and is not affiliated with or endorsed by Meta.
 
+Imagery: some background pictures, the social banner background and the interactive 3D headset model on the site are AI-generated.
+
 ## Pages
 
 - [About](https://northstarstudioz.space/about): who the studio is, the founder, what it is building and where things stand
