@@ -688,3 +688,66 @@ function loadStarField() {
 for (const type of ['pointerdown', 'keydown', 'scroll', 'touchstart']) {
   window.addEventListener(type, loadStarField, { once: true, passive: true });
 }
+
+/* ---------- Interactive headset model ----------
+   The headset photo-still is the page. The "Explore in 3D" button (added here, so without
+   JavaScript there is no dead button) loads the 3D viewer and model only when tapped. Auto-turning
+   starts only for visitors who have not asked for reduced motion, can be paused, and stops the
+   moment the visitor takes hold of the model. Vertical swipes on touch screens still scroll the page. */
+function initModelViewer() {
+  const root = document.querySelector('[data-viewer]');
+  if (!root) return;
+  const stage = root.querySelector('.viewer__stage');
+  const poster = root.querySelector('.viewer__poster');
+  const controls = document.createElement('div');
+  controls.className = 'viewer__controls';
+  const start = document.createElement('button');
+  start.type = 'button';
+  start.className = 'btn';
+  start.textContent = 'Explore in 3D';
+  controls.append(start);
+  stage.after(controls);
+
+  let viewer = null;
+  start.addEventListener('click', async () => {
+    if (viewer || start.disabled) return;
+    start.disabled = true;
+    start.textContent = 'Loading model…';
+    try {
+      const canvas = document.createElement('canvas');
+      canvas.className = 'viewer__canvas';
+      canvas.tabIndex = 0;
+      canvas.setAttribute('role', 'img');
+      canvas.setAttribute('aria-label', 'Interactive 3D model of a virtual reality headset. Drag, or use the arrow keys, to turn it.');
+      const { createViewer } = await import('./viewer-3d.js');
+      stage.append(canvas);
+      viewer = await createViewer(canvas, { reducedMotion: reduceMotion });
+      poster.hidden = true;
+      controls.replaceChildren();
+      if (!reduceMotion) {
+        const toggle = document.createElement('button');
+        toggle.type = 'button';
+        toggle.className = 'btn btn--ghost';
+        toggle.setAttribute('aria-pressed', 'false');
+        toggle.textContent = 'Pause turning';
+        let turning = true;
+        toggle.addEventListener('click', () => {
+          turning = !turning;
+          viewer.setAutoRotate(turning);
+          toggle.textContent = turning ? 'Pause turning' : 'Resume turning';
+          toggle.setAttribute('aria-pressed', String(!turning));
+        });
+        controls.append(toggle);
+      }
+      const hint = root.querySelector('.viewer__hint');
+      if (hint) hint.textContent = 'Drag to turn · scroll or pinch to zoom · arrow keys work too.';
+      canvas.focus({ preventScroll: true });
+    } catch {
+      stage.querySelector('.viewer__canvas')?.remove();
+      start.disabled = false;
+      start.textContent = '3D unavailable here';
+      start.setAttribute('aria-disabled', 'true');
+    }
+  });
+}
+initModelViewer();
