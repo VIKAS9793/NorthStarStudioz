@@ -53,14 +53,14 @@ The website in [`website/`](website/) is plain HTML and CSS. It uses no framewor
 
 ### AI-generated assets
 
-Some of the site's imagery is generated with AI. It is labelled on the site (About, the press kit and the viewer caption) and listed here:
+Some of the site's imagery is generated with AI: the background pictures with ChatGPT and the 3D headset model with Manus AI. It is labelled on the site (About, the press kit and the viewer caption) and listed here:
 
 | Asset | Where it is used |
 | --- | --- |
-| `website/assets/img/stars.avif`, `stars.webp` | Star-field picture over the CSS night sky |
-| `website/assets/img/tabletop-768.*`, `tabletop-1280.*` | Dim tabletop picture behind the player cards |
-| `website/assets/og_image.jpg` | Social banner and press-kit download (the background art is AI-generated) |
-| `website/assets/models/*`, `website/assets/img/headset-poster.*` | Interactive 3D headset model and its still image; an illustration, not a Meta product |
+| `website/assets/img/stars.avif`, `stars.webp` | Star-field picture over the CSS night sky (ChatGPT) |
+| `website/assets/img/tabletop-768.*`, `tabletop-1280.*` | Dim tabletop picture behind the player cards (ChatGPT) |
+| `website/assets/og_image.jpg` | Social banner and press-kit download (the background art is from ChatGPT) |
+| `website/assets/models/*`, `website/assets/img/headset-poster.*` | Interactive 3D headset model (Manus AI) and its still image; an illustration, not a Meta product |
 
 The intro-screen headset (`src/gate/headset.js`) and the dusk horizon scene are drawn in code, not generated. The site is built with AI-assisted development; the owner reviews and is responsible for every change.
 
