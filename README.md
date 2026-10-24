@@ -44,23 +44,19 @@ The website in [`website/`](website/) is plain HTML and CSS. It uses no framewor
 | `website/assets/js/site.js` | Header, menu, scroll reveals and intro controller |
 | `website/assets/js/gate-3d.js` | Generated 3D headset bundle. Do not edit by hand. |
 | `src/gate/headset.js` | Source for the 3D headset (three.js) |
-| `website/assets/js/viewer-3d.js` | Generated bundle for the interactive headset viewer. Do not edit by hand. |
-| `src/viewer/headset-viewer.js` | Source for the interactive viewer (three.js), loaded only when a visitor taps "Explore in 3D" |
-| `website/assets/models/` | The AI-generated headset model: glTF, its binary and three 1024 px JPEG textures |
 | `website/_headers` | HTTP security and caching headers (Cloudflare Pages) |
 | `scripts/verify.mjs` | Security checks that run in CI |
 | `scripts/attribution-guard.mjs` | Owner-only authorship: rejects commits by anyone else or carrying AI attribution |
 
 ### AI-generated assets
 
-Some of the site's imagery is generated with AI: the background pictures with ChatGPT and the 3D headset model with Manus AI. It is labelled on the site (About, the press kit and the viewer caption) and listed here:
+Some of the site's background imagery is generated with ChatGPT. It is labelled on the site (About and the press kit) and listed here:
 
 | Asset | Where it is used |
 | --- | --- |
 | `website/assets/img/stars.avif`, `stars.webp` | Star-field picture over the CSS night sky (ChatGPT) |
 | `website/assets/img/tabletop-768.*`, `tabletop-1280.*` | Dim tabletop picture behind the player cards (ChatGPT) |
 | `website/assets/og_image.jpg` | Social banner and press-kit download (the background art is from ChatGPT) |
-| `website/assets/models/*`, `website/assets/img/headset-poster.*` | Interactive 3D headset model (Manus AI) and its still image; an illustration, not a Meta product |
 
 The intro-screen headset (`src/gate/headset.js`) and the dusk horizon scene are drawn in code, not generated. The site is built with AI-assisted development; the owner reviews and is responsible for every change.
 
@@ -68,7 +64,7 @@ The intro-screen headset (`src/gate/headset.js`) and the dusk horizon scene are 
 
 ```bash
 npm ci                  # install build tooling (esbuild, three)
-npm run build           # rebuild gate-3d.js and viewer-3d.js in website/assets/js/ from src/
+npm run build           # rebuild website/assets/js/gate-3d.js from src/
 npm run verify          # check CSP hashes, third-party loads and unsafe DOM sinks
 npx serve website       # serve locally, then open http://localhost:3000
 ```

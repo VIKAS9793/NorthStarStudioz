@@ -42,7 +42,6 @@ jobs:
           config: |
             paths-ignore:
               - website/assets/js/gate-3d.js   # generated three.js bundle
-              - website/assets/js/viewer-3d.js # generated three.js bundle
               - node_modules
 
       - name: Perform CodeQL Analysis
