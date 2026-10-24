@@ -248,9 +248,9 @@
       <img src="assets/brand/logo-96.webp" width="32" height="32" alt="">
       <span>NorthStar <b>Studioz</b></span>
     </a>
-    <div class="status" aria-hidden="true">
-      <span class="status__item"><span class="status__led"></span>Passthrough</span>
-      <span class="status__item status__clock" data-clock>--:--</span>
+    <div class="status">
+      <button class="status__item status__toggle" type="button" aria-pressed="false" data-passthrough><span class="status__led"></span>Passthrough</button>
+      <span class="status__item status__clock" data-clock aria-hidden="true">--:--</span>
     </div>
   </header>
 
@@ -289,7 +289,7 @@
               <svg class="prompt__glyph" viewBox="0 0 48 48" aria-hidden="true"><path d="M17 26V12a3 3 0 0 1 6 0v11m0-1V9a3 3 0 0 1 6 0v13m0-1v-8a3 3 0 0 1 6 0v15c0 8-5 13-12 13-5 0-8-2-11-7l-5-8a3 3 0 0 1 5-3l2 3"/></svg>
               <h3>Reach in.</h3>
               <p>Your hands are the controller. We design every interaction around pinching, grabbing and twisting, the way you would in real life, so the whole game can be played with hands alone. Controllers are optional.</p>
-              <span class="prompt__step">Prompt 01 / 06</span>
+              <span class="prompt__step">Principle 01 / 06</span>
             </article>
           </li>
           <li class="monitor__pane">
@@ -297,15 +297,15 @@
               <svg class="prompt__glyph" viewBox="0 0 48 48" aria-hidden="true"><path d="M6 30 24 21l18 9-18 9z"/><path d="M6 30v4l18 9 18-9v-4"/><circle cx="24" cy="12" r="4"/><path d="M24 16v9"/></svg>
               <h3>Use the table.</h3>
               <p>We design play around the real table in front of you, so your living room stays in view the whole time.</p>
-              <span class="prompt__step">Prompt 02 / 06</span>
+              <span class="prompt__step">Principle 02 / 06</span>
             </article>
           </li>
           <li class="monitor__pane">
-            <article class="window prompt">
+            <article class="window prompt" data-materials>
               <svg class="prompt__glyph" viewBox="0 0 48 48" aria-hidden="true"><path d="M8 20v8m8-14v20m8-26v32m8-26v20m8-14v8"/></svg>
               <h3>Hear it land.</h3>
               <p>Wood should click, brass should ring, ceramic should clink. We design sound around real materials, placed where it happens in your room.</p>
-              <span class="prompt__step">Prompt 03 / 06</span>
+              <span class="prompt__step">Principle 03 / 06</span>
             </article>
           </li>
           <li class="monitor__pane">
@@ -313,7 +313,7 @@
               <svg class="prompt__glyph" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="16"/><path d="M24 8v6m0 20v6M8 24h6m20 0h6"/><circle cx="24" cy="24" r="3"/></svg>
               <h3>Stay put.</h3>
               <p>We keep play seated and within arm’s reach, with no artificial movement, so it stays comfortable for first-timers and long sessions alike.</p>
-              <span class="prompt__step">Prompt 04 / 06</span>
+              <span class="prompt__step">Principle 04 / 06</span>
             </article>
           </li>
           <li class="monitor__pane">
@@ -321,7 +321,7 @@
               <svg class="prompt__glyph" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 6c-6 0-11 5-11 11 0 8 11 19 11 19s11-11 11-19c0-6-5-11-11-11z"/><circle cx="24" cy="17" r="4"/><path d="M10 40h28"/></svg>
               <h3>Leave it there.</h3>
               <p>Anything you set up should stay where you left it, ready for the next time you put the headset on. Meta’s spatial anchors are built for exactly this.</p>
-              <span class="prompt__step">Prompt 05 / 06</span>
+              <span class="prompt__step">Principle 05 / 06</span>
             </article>
           </li>
           <li class="monitor__pane">
@@ -329,7 +329,7 @@
               <svg class="prompt__glyph" viewBox="0 0 48 48" aria-hidden="true"><circle cx="10" cy="34" r="4"/><path d="M14 34h8l8-14h8"/><circle cx="38" cy="14" r="4"/><path d="m26 8 4 4-4 4"/></svg>
               <h3>Let it react.</h3>
               <p>Every piece you place should set off something you can see and hear. We build on cause and effect, not menus.</p>
-              <span class="prompt__step">Prompt 06 / 06</span>
+              <span class="prompt__step">Principle 06 / 06</span>
             </article>
           </li>
           </ol>
@@ -351,18 +351,21 @@
       </header>
       <div class="slots">
         <article class="window slot">
+          <svg class="slot__sch sch--breath" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="5"/><circle cx="32" cy="32" r="13"/><circle cx="32" cy="32" r="21"/></svg>
           <span class="slot__id">Slot 01</span>
           <h3>The wind-down</h3>
           <p>Twenty minutes after work. Calm, short play on the coffee table, not adrenaline.</p>
           <ul class="chips"><li>Short sessions</li><li>Calm</li></ul>
         </article>
         <article class="window slot">
+          <svg class="slot__sch sch--reach" viewBox="0 0 64 64" aria-hidden="true"><circle class="sch__hand" cx="32" cy="54" r="2.6"/><g class="sch__arcs"><path d="M21.3 45A14 14 0 0 1 42.7 45"/><path d="M13.6 38.6A24 24 0 0 1 50.4 38.6"/><path d="M6 32.1A34 34 0 0 1 58 32.1"/></g></svg>
           <span class="slot__id">Slot 02</span>
           <h3>The first-timer</h3>
           <p>Someone in a headset for the first time, with friends watching. It has to make sense in seconds.</p>
           <ul class="chips"><li>No tutorial wall</li><li>Social</li></ul>
         </article>
         <article class="window slot">
+          <svg class="slot__sch sch--gears" viewBox="0 0 64 64" aria-hidden="true"><path class="gear gear--a" d="M26.7 33.8 L30.7 31.0 L32.7 33.3 L29.3 36.8 L30.2 39.3 L35.2 39.4 L35.4 42.5 L30.5 43.3 L29.9 45.8 L33.8 48.8 L32.2 51.4 L27.8 49.2 L25.7 50.9 L27.2 55.6 L24.3 56.8 L22.1 52.4 L19.4 52.6 L17.8 57.2 L14.8 56.5 L15.6 51.6 L13.3 50.2 L9.3 53.0 L7.3 50.7 L10.7 47.2 L9.8 44.7 L4.8 44.6 L4.6 41.5 L9.5 40.7 L10.1 38.2 L6.2 35.2 L7.8 32.6 L12.2 34.8 L14.3 33.1 L12.8 28.4 L15.7 27.2 L17.9 31.6 L20.6 31.4 L22.2 26.8 L25.2 27.5 L24.4 32.4Z"/><circle class="gear gear--a" cx="20" cy="42" r="3"/><path class="gear gear--b" d="M31.1 31.1 L26.3 32.2 L25.5 29.0 L30.2 27.7 L30.7 25.3 L26.9 22.2 L28.9 19.6 L32.9 22.5 L35.0 21.4 L35.0 16.5 L38.3 16.4 L38.6 21.3 L40.7 22.3 L44.6 19.2 L46.7 21.7 L43.0 25.0 L43.6 27.3 L48.4 28.4 L47.8 31.7 L42.9 30.8 L41.5 32.7 L43.6 37.2 L40.7 38.7 L38.3 34.4 L35.9 34.4 L33.7 38.8 L30.7 37.5 L32.6 32.9Z"/><circle class="gear gear--b" cx="36.9" cy="27.8" r="2.4"/></svg>
           <span class="slot__id">Slot 03</span>
           <h3>The tinkerer</h3>
           <p>Can’t leave a contraption alone until it runs perfectly. Will happily lose an evening to it.</p>
@@ -392,20 +395,20 @@
             <li>Launch straight into your room.</li>
             <li>Never fight the system menu, boundary or tracking.</li>
           </ol>
+          <div class="budget">
+            <p class="label">Target frame budget</p>
+            <dl class="budget__rows">
+              <div><dt>90 Hz</dt><dd>11.1 ms</dd><span class="budget__bar budget__bar--90" aria-hidden="true"></span></div>
+              <div><dt>120 Hz</dt><dd>8.3 ms</dd><span class="budget__bar budget__bar--120" aria-hidden="true"></span></div>
+            </dl>
+            <ul class="budget__badges">
+              <li>Zero PC tether</li>
+              <li>Standalone ARM64 target</li>
+            </ul>
+            <p class="budget__note">Design targets, not measurements.</p>
+          </div>
         </div>
       </div>
-      <figure class="window viewer" data-viewer>
-        <div class="viewer__stage">
-          <picture>
-            <source type="image/avif" srcset="assets/img/headset-poster.avif">
-            <img class="viewer__poster" src="assets/img/headset-poster.webp" width="1280" height="720" alt="An AI-generated 3D model of a virtual reality headset in light grey and slate blue, seen from the front at a three-quarter angle." loading="lazy" decoding="async">
-          </picture>
-        </div>
-        <figcaption class="viewer__caption">
-          <span class="label">AI-generated model (Manus AI) · not a Meta product</span>
-          <span class="viewer__hint">Our games are built for Meta Quest 3 and 3S.</span>
-        </figcaption>
-      </figure>
     </section>
 
     <!-- ===================== Studio ===================== -->
@@ -495,6 +498,6 @@
     </ul>
   </nav>
 
-  <div class="reticle" aria-hidden="true"></div>
+  <div class="reticle" aria-hidden="true"><span class="reticle__label">Pinch</span></div>
 </body>
 </html>

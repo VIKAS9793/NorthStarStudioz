@@ -262,7 +262,7 @@ if (reticle && finePointer && !reduceMotion) {
   addEventListener('pointermove', (e) => {
     tx = e.clientX; ty = e.clientY;
     reticle.classList.add('is-on');
-    reticle.classList.toggle('is-hot', !!e.target.closest('a, button'));
+    reticle.classList.toggle('is-hot', !!e.target.closest('a, button, summary, [role="button"]'));
     if (!raf) raf = requestAnimationFrame(step);
   }, { passive: true });
   document.addEventListener('pointerleave', () => reticle.classList.remove('is-on'));
@@ -689,65 +689,148 @@ for (const type of ['pointerdown', 'keydown', 'scroll', 'touchstart']) {
   window.addEventListener(type, loadStarField, { once: true, passive: true });
 }
 
-/* ---------- Interactive headset model ----------
-   The headset photo-still is the page. The "Explore in 3D" button (added here, so without
-   JavaScript there is no dead button) loads the 3D viewer and model only when tapped. Auto-turning
-   starts only for visitors who have not asked for reduced motion, can be paused, and stops the
-   moment the visitor takes hold of the model. Vertical swipes on touch screens still scroll the page. */
-function initModelViewer() {
-  const root = document.querySelector('[data-viewer]');
-  if (!root) return;
-  const stage = root.querySelector('.viewer__stage');
-  const poster = root.querySelector('.viewer__poster');
-  const controls = document.createElement('div');
-  controls.className = 'viewer__controls';
-  const start = document.createElement('button');
-  start.type = 'button';
-  start.className = 'btn';
-  start.textContent = 'Explore in 3D';
-  controls.append(start);
-  stage.after(controls);
-
-  let viewer = null;
-  start.addEventListener('click', async () => {
-    if (viewer || start.disabled) return;
-    start.disabled = true;
-    start.textContent = 'Loading model…';
-    try {
-      const canvas = document.createElement('canvas');
-      canvas.className = 'viewer__canvas';
-      canvas.tabIndex = 0;
-      canvas.setAttribute('role', 'img');
-      canvas.setAttribute('aria-label', 'Interactive AI-generated 3D model of a virtual reality headset. Drag, or use the arrow keys, to turn it.');
-      const { createViewer } = await import('./viewer-3d.js');
-      stage.append(canvas);
-      viewer = await createViewer(canvas, { reducedMotion: reduceMotion });
-      poster.hidden = true;
-      controls.replaceChildren();
-      if (!reduceMotion) {
-        const toggle = document.createElement('button');
-        toggle.type = 'button';
-        toggle.className = 'btn btn--ghost';
-        toggle.setAttribute('aria-pressed', 'false');
-        toggle.textContent = 'Pause turning';
-        let turning = true;
-        toggle.addEventListener('click', () => {
-          turning = !turning;
-          viewer.setAutoRotate(turning);
-          toggle.textContent = turning ? 'Pause turning' : 'Resume turning';
-          toggle.setAttribute('aria-pressed', String(!turning));
-        });
-        controls.append(toggle);
-      }
-      const hint = root.querySelector('.viewer__hint');
-      if (hint) hint.textContent = 'Drag to turn · scroll or pinch to zoom · arrow keys work too.';
-      canvas.focus({ preventScroll: true });
-    } catch {
-      stage.querySelector('.viewer__canvas')?.remove();
-      start.disabled = false;
-      start.textContent = '3D unavailable here';
-      start.setAttribute('aria-disabled', 'true');
-    }
-  });
+/* ---------- Passthrough: reveal the room behind the void ----------
+   The pill in the top bar is a switch. Switching it on adds the room picture (once) and wipes it in from
+   the pill in a circle; "Look around" switches it on too. The choice lasts for the visit. */
+const passToggle = document.querySelector('[data-passthrough]');
+const passEnv = document.querySelector('.env');
+let passLayer = null;
+function setPassthrough(on, { instant = false } = {}) {
+  if (!passToggle || !passEnv) return;
+  if (on && !passLayer) {
+    passLayer = document.createElement('div');
+    passLayer.className = 'env__passthrough';
+    const picture = document.createElement('picture');
+    const avif = document.createElement('source');
+    avif.type = 'image/avif';
+    avif.srcset = 'assets/img/tabletop-1280.avif';
+    const webp = document.createElement('source');
+    webp.type = 'image/webp';
+    webp.srcset = 'assets/img/tabletop-1280.webp';
+    const img = document.createElement('img');
+    img.src = 'assets/img/tabletop-1280.webp';
+    img.alt = '';
+    img.width = 1280;
+    img.height = 853;
+    img.decoding = 'async';
+    picture.append(avif, webp, img);
+    passLayer.append(picture);
+    passEnv.insertBefore(passLayer, passEnv.querySelector('.env__vignette'));
+    void passLayer.offsetWidth; // start from the closed circle so the first reveal animates
+  }
+  const box = passToggle.getBoundingClientRect();
+  passEnv.style.setProperty('--px', `${Math.round(box.left + box.width / 2)}px`);
+  passEnv.style.setProperty('--py', `${Math.round(box.top + box.height / 2)}px`);
+  if (instant && passLayer) passLayer.style.transition = 'none';
+  passEnv.classList.toggle('is-passthrough', on);
+  if (instant && passLayer) { void passLayer.offsetWidth; passLayer.style.transition = ''; }
+  passToggle.setAttribute('aria-pressed', String(on));
+  try { sessionStorage.setItem('ns-passthrough', on ? '1' : '0'); } catch {}
 }
-initModelViewer();
+if (passToggle && passEnv) {
+  passToggle.addEventListener('click', () => setPassthrough(passToggle.getAttribute('aria-pressed') !== 'true'));
+  document.querySelector('.hero__cta a[href="#play"]')?.addEventListener('click', () => setPassthrough(true));
+  let remembered = false;
+  try { remembered = sessionStorage.getItem('ns-passthrough') === '1'; } catch {}
+  if (remembered) afterGate(() => setPassthrough(true, { instant: true }));
+}
+
+/* ---------- Spatial cards: the border and a soft glow follow the pointer ---------- */
+if (finePointer && !reduceMotion) {
+  let card = null, cx = 0, cy = 0, frame = 0;
+  const paint = () => {
+    frame = 0;
+    if (!card) return;
+    const r = card.getBoundingClientRect();
+    card.style.setProperty('--mx', `${Math.round(cx - r.left)}px`);
+    card.style.setProperty('--my', `${Math.round(cy - r.top)}px`);
+  };
+  addEventListener('pointermove', (e) => {
+    const next = e.target.closest?.('.prompt, .slot, .spec') ?? null;
+    if (next !== card) {
+      card?.style.removeProperty('--mx');
+      card?.style.removeProperty('--my');
+      card = next;
+    }
+    if (!card) return;
+    cx = e.clientX; cy = e.clientY;
+    if (!frame) frame = requestAnimationFrame(paint);
+  }, { passive: true });
+}
+
+/* ---------- Hear it land: a short synthesized sound for each material ----------
+   Nothing plays until a button is pressed, and the audio engine is only created then. Wood is a dry
+   knock, brass a ringing tone with overtones, ceramic a bright, quick clink. */
+function initMaterials() {
+  const card = document.querySelector('[data-materials]');
+  if (!card) return;
+  const glyph = card.querySelector('.prompt__glyph');
+  const row = document.createElement('div');
+  row.className = 'materials';
+  row.setAttribute('role', 'group');
+  row.setAttribute('aria-label', 'Hear each material');
+  let audio = null;
+  const voices = {
+    wood: (ctx, t) => {
+      tone(ctx, t, 190, 0.07, 0.5, 'sine');
+      tone(ctx, t, 520, 0.035, 0.25, 'triangle');
+      noise(ctx, t, 0.04, 1400, 0.35);
+    },
+    brass: (ctx, t) => {
+      for (const [mult, gain] of [[1, 0.3], [2.01, 0.18], [3.02, 0.1], [4.2, 0.05]]) tone(ctx, t, 392 * mult, 1.4, gain, 'sine');
+    },
+    ceramic: (ctx, t) => {
+      for (const [freq, gain] of [[2400, 0.2], [3650, 0.14], [5100, 0.08]]) tone(ctx, t, freq, 0.28, gain, 'sine');
+      noise(ctx, t, 0.012, 6000, 0.2);
+    },
+  };
+  function tone(ctx, t, freq, length, gain, type) {
+    const osc = ctx.createOscillator();
+    const amp = ctx.createGain();
+    osc.type = type;
+    osc.frequency.value = freq;
+    amp.gain.setValueAtTime(0.0001, t);
+    amp.gain.exponentialRampToValueAtTime(gain, t + 0.004);
+    amp.gain.exponentialRampToValueAtTime(0.0001, t + length);
+    osc.connect(amp).connect(ctx.destination);
+    osc.start(t);
+    osc.stop(t + length + 0.05);
+  }
+  function noise(ctx, t, length, freq, gain) {
+    const frames = Math.max(1, Math.floor(ctx.sampleRate * length));
+    const buffer = ctx.createBuffer(1, frames, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < frames; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / frames);
+    const src = ctx.createBufferSource();
+    const filter = ctx.createBiquadFilter();
+    const amp = ctx.createGain();
+    src.buffer = buffer;
+    filter.type = 'bandpass';
+    filter.frequency.value = freq;
+    amp.gain.value = gain;
+    src.connect(filter).connect(amp).connect(ctx.destination);
+    src.start(t);
+  }
+  for (const [id, label, hint] of [['wood', 'Wood', 'Play the sound of wood'], ['brass', 'Brass', 'Play the sound of brass'], ['ceramic', 'Ceramic', 'Play the sound of ceramic']]) {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'material';
+    button.textContent = label;
+    button.setAttribute('aria-label', hint);
+    button.addEventListener('click', () => {
+      const Ctx = window.AudioContext || window.webkitAudioContext;
+      if (!Ctx) return;
+      audio ??= new Ctx();
+      audio.resume?.();
+      voices[id](audio, audio.currentTime + 0.01);
+      if (glyph) {
+        glyph.classList.remove('is-ping');
+        void glyph.getBoundingClientRect();
+        glyph.classList.add('is-ping');
+      }
+    });
+    row.append(button);
+  }
+  card.querySelector('.prompt__step')?.before(row);
+}
+initMaterials();

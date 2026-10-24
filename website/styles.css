@@ -204,7 +204,7 @@ ul, ol, dl, dd { margin: 0; padding: 0; list-style: none; }
 .hud { position: fixed; inset: 12px; z-index: 30; pointer-events: none; }
 /* Soft fades so scrolling content dissolves under the top bar and dock instead of colliding. */
 body::before, body::after { content: ""; position: fixed; left: 0; right: 0; z-index: 35; pointer-events: none; }
-body::before { top: 0; height: 96px; background: linear-gradient(var(--night) 15%, rgba(7, 9, 15, 0.7) 55%, transparent); }
+body::before { top: 0; height: 84px; background: linear-gradient(rgba(7, 9, 15, 0.94) 8%, rgba(7, 9, 15, 0.5) 52%, transparent); }
 body::after { bottom: 0; height: 120px; background: linear-gradient(transparent, rgba(7, 9, 15, 0.75) 55%, var(--night)); }
 .hud i { position: absolute; width: 22px; height: 22px; border: 0 solid rgba(243, 239, 231, 0.32); }
 .hud i:nth-child(1) { top: 0; left: 0; border-top-width: 1.5px; border-left-width: 1.5px; border-top-left-radius: 10px; }
@@ -238,6 +238,12 @@ body::after { bottom: 0; height: 120px; background: linear-gradient(transparent,
 }
 @keyframes led { 50% { opacity: 0.45; } }
 .status__clock { color: var(--bone); font-variant-numeric: tabular-nums; }
+/* The Passthrough pill is a switch: off shows the night-sky void, on reveals the room behind it. */
+.status__toggle { appearance: none; cursor: pointer; transition: color 0.25s, border-color 0.25s, background-color 0.25s, transform 0.2s var(--spring); }
+.status__toggle:hover { color: var(--bone); border-color: var(--edge-strong); }
+.status__toggle:active { transform: scale(0.95); }
+.status__toggle[aria-pressed="true"] { color: var(--bone); border-color: rgba(255, 181, 71, 0.55); background: rgba(255, 107, 53, 0.16); }
+.status__toggle[aria-pressed="true"] .status__led { background: var(--sun); box-shadow: 0 0 8px var(--sun); }
 
 .dock {
   position: fixed; left: 50%; bottom: max(14px, env(safe-area-inset-bottom)); z-index: 40;
@@ -266,15 +272,21 @@ body::after { bottom: 0; height: 120px; background: linear-gradient(transparent,
 }
 
 .reticle {
-  position: fixed; left: 0; top: 0; z-index: 110; width: 30px; height: 30px; margin: -15px 0 0 -15px; /* above the intro gate */
+  position: fixed; left: 0; top: 0; z-index: 110; width: 28px; height: 28px; margin: -14px 0 0 -14px; /* above the intro gate */
   border-radius: 50%; border: 1.5px solid rgba(243, 239, 231, 0.55);
   pointer-events: none; opacity: 0;
   transition: width 0.25s var(--spring), height 0.25s var(--spring), margin 0.25s var(--spring), border-color 0.2s, opacity 0.3s, background-color 0.2s;
 }
 .reticle::after { content: ""; position: absolute; left: 50%; top: 50%; width: 3px; height: 3px; translate: -50% -50%; border-radius: 50%; background: var(--bone); }
 .reticle.is-on { opacity: 1; }
-.reticle.is-hot { width: 46px; height: 46px; margin: -23px 0 0 -23px; border-color: var(--sun); background: rgba(255, 181, 71, 0.08); }
-.reticle.is-pinch { width: 18px; height: 18px; margin: -9px 0 0 -9px; }
+.reticle.is-hot { width: 18px; height: 18px; margin: -9px 0 0 -9px; border-color: #ff7a33; background: rgba(255, 122, 51, 0.12); }
+.reticle.is-hot::after { background: #ff7a33; }
+.reticle.is-pinch { width: 12px; height: 12px; margin: -6px 0 0 -6px; }
+.reticle__label {
+  position: absolute; left: calc(100% + 10px); top: 50%; translate: 0 -50%; opacity: 0; transition: opacity 0.2s;
+  font: 600 0.6rem/1 var(--font-mono); letter-spacing: 0.2em; text-transform: uppercase; color: #ff7a33;
+}
+.reticle.is-hot .reticle__label { opacity: 1; }
 
 /* =========================================================
    Buttons & windows
@@ -309,22 +321,6 @@ body::after { bottom: 0; height: 120px; background: linear-gradient(transparent,
 }
 .window:hover::after { background: rgba(243, 239, 231, 0.5); width: 72px; }
 
-/* Interactive headset model (Under the hood). The still image is the page; the 3D canvas is added
-   only after the visitor taps "Explore in 3D", so the model costs nothing until it is asked for. */
-.viewer { margin-top: clamp(16px, 2vw, 24px); overflow: hidden; background:
-  radial-gradient(ellipse 55% 60% at 50% 62%, rgba(255, 107, 53, 0.16), transparent 70%),
-  linear-gradient(180deg, var(--window-hi), var(--window)); }
-.viewer__stage { position: relative; aspect-ratio: 16 / 9; max-height: 72vh; width: 100%; }
-.viewer__poster, .viewer__canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
-.viewer__poster { object-fit: contain; }
-.viewer__canvas { display: block; cursor: grab; outline-offset: -4px; touch-action: pan-y; }
-.viewer__canvas:active { cursor: grabbing; }
-.viewer__controls { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; padding: 4px 12px 18px; }
-.viewer__controls .btn { min-height: 48px; padding: 0 22px; font-size: 0.8rem; }
-.viewer__caption { display: flex; justify-content: space-between; align-items: baseline; gap: 6px 24px; flex-wrap: wrap; padding: 14px 24px 18px; border-top: 1px solid var(--edge); }
-.viewer__hint { color: var(--dim); font-size: 0.9rem; }
-@media (max-width: 640px) { .viewer__stage { aspect-ratio: 4 / 3; } .viewer__caption { padding-inline: 18px; } }
-
 /* Panels arranged on a gentle curve, like a wrap-around VR display. */
 .arc { display: grid; gap: clamp(14px, 1.6vw, 24px); perspective: 1600px; }
 .arc__slot { transition: transform 0.6s var(--ease-out); }
@@ -349,19 +345,18 @@ main { position: relative; z-index: 1; padding-bottom: 120px; }
 .hero__title {
   font: 800 clamp(3rem, 1rem + 9vw, 8.6rem)/0.9 var(--font-display);
   letter-spacing: -0.01em; text-transform: uppercase; text-wrap: balance;
-  /* Light-saber edge in the site's dawn colours: a white-hot core, a thin ember
-     blade line and a bloom that matches the horizon glow and the main button. */
+  /* Warm metal: a bright rim at the top, a hard horizon band, then dawn orange, with a thin ember edge
+     and one crisp drop shadow instead of a blurry glow. */
   color: #fff6ec;
-  -webkit-text-stroke: 1.5px var(--ember);
+  background: linear-gradient(180deg, #fffaf3 0%, #ffe9d0 30%, #ffc48a 47%, #fff0dd 51%, #ff9a52 70%, #ff7a33 100%);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 107, 53, 0.9);
   paint-order: stroke fill;
-  text-shadow:
-    0 0 1px #fff,
-    0 0 4px rgba(255, 170, 90, 0.95),
-    0 0 10px rgba(255, 107, 53, 0.8),
-    0 0 24px rgba(255, 90, 40, 0.45);
+  filter: drop-shadow(0 8px 32px rgba(255, 115, 45, 0.28));
 }
 @keyframes saber-ignite {
-  from { -webkit-text-stroke-color: rgba(255, 107, 53, 0); text-shadow: 0 0 0 transparent, 0 0 0 transparent, 0 0 0 transparent, 0 0 0 transparent, 0 0 0 transparent; color: var(--bone); }
+  from { -webkit-text-stroke-color: rgba(255, 107, 53, 0); }
 }
 @keyframes saber-hum {
   0%, 100% { opacity: 1; }
@@ -397,8 +392,8 @@ main { position: relative; z-index: 1; padding-bottom: 120px; }
 }
 
 /* How it plays */
-.prompt { display: grid; align-content: start; gap: 14px; height: 100%; padding: 28px 24px 24px; transition: transform 0.45s var(--spring), border-color 0.3s, box-shadow 0.4s; }
-.prompt:hover { transform: translateZ(40px) translateY(-6px); border-color: rgba(255, 181, 71, 0.45); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 50px 90px -40px rgba(255, 107, 53, 0.45); }
+.prompt { display: grid; align-content: start; gap: 14px; height: 100%; padding: 28px 24px 24px; transition: transform 0.45s var(--spring), --spot 0.35s var(--ease-out), box-shadow 0.4s; }
+.prompt:hover { transform: translateZ(40px) translateY(-6px); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 50px 90px -40px rgba(255, 107, 53, 0.45); }
 .prompt__glyph {
   width: 56px; height: 56px; padding: 12px; border-radius: 18px;
   background: rgba(255, 181, 71, 0.1); border: 1px solid rgba(255, 181, 71, 0.25);
@@ -435,8 +430,8 @@ main { position: relative; z-index: 1; padding-bottom: 120px; }
 .spec__sheet dd { font-weight: 600; }
 .spec__rules { display: grid; align-content: start; gap: 18px; padding: 28px; background: rgba(255, 107, 53, 0.06); border-left: 1px solid var(--edge); }
 .spec__rules ol { display: grid; gap: 14px; counter-reset: rule; }
-.spec__rules li { counter-increment: rule; display: grid; grid-template-columns: 2.2rem 1fr; gap: 8px; color: #d6d0c4; }
-.spec__rules li::before { content: counter(rule, decimal-leading-zero); font: 700 1rem/1.5 var(--font-display); color: var(--ember); }
+.spec__rules ol li { counter-increment: rule; display: grid; grid-template-columns: 2.2rem 1fr; gap: 8px; color: #d6d0c4; }
+.spec__rules ol li::before { content: counter(rule, decimal-leading-zero); font: 700 1rem/1.5 var(--font-display); color: var(--ember); }
 @media (max-width: 860px) {
   .spec { grid-template-columns: 1fr; }
   .spec__rules { border-left: 0; border-top: 1px solid var(--edge); }
@@ -526,7 +521,9 @@ main { position: relative; z-index: 1; padding-bottom: 120px; }
   .hud { inset: 8px; }
   .hud i { width: 16px; height: 16px; }
   .topbar { padding-top: 14px; }
-  .status__item:first-child { display: none; }
+  .status__clock { display: none; }
+  .status__toggle { padding: 0 10px; gap: 6px; letter-spacing: 0.06em; }
+  .brand img { width: 28px; height: 28px; }
   .brand span { font-size: 0.82rem; }
   .arc--hero { grid-template-columns: 1fr; gap: 10px; }
   .window--chip { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; border-radius: 18px; }
@@ -914,3 +911,126 @@ main { position: relative; z-index: 1; padding-bottom: 120px; }
 .faq__item a { color: var(--sun); }
 @media (max-width: 860px) { .faq { grid-template-columns: 1fr; } }
 #players { position: relative; }
+
+/* =========================================================
+   Passthrough: the room behind the void
+   The pill in the top bar reveals a dim living room through a circular wipe that grows from the pill.
+   The picture is added only the first time it is switched on, so it costs nothing until then.
+   ========================================================= */
+.env__passthrough {
+  position: absolute; inset: 0; background: var(--night);
+  clip-path: circle(0 at var(--px, 92%) var(--py, 4%));
+  transition: clip-path 0.7s cubic-bezier(0.65, 0, 0.35, 1);
+}
+.env__passthrough picture, .env__passthrough img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.env__passthrough::before {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(7, 9, 15, 0.62), rgba(52, 28, 16, 0.28) 42%, rgba(7, 9, 15, 0.8));
+}
+/* A faint amber mesh over the lower half, like the room scan a headset builds before it lets you play. */
+.env__passthrough::after {
+  content: ""; position: absolute; inset: 40% 0 0;
+  background-image:
+    linear-gradient(rgba(255, 181, 71, 0.14) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 181, 71, 0.14) 1px, transparent 1px);
+  background-size: 96px 96px;
+  mask-image: linear-gradient(transparent, #000 70%);
+}
+.env.is-passthrough .env__passthrough { clip-path: circle(150vmax at var(--px, 92%) var(--py, 4%)); }
+
+/* =========================================================
+   Spatial cards: specular border, curved wall, hover schematics
+   ========================================================= */
+@property --spot { syntax: "<number>"; inherits: false; initial-value: 0; }
+/* The border and a soft inner glow follow the pointer (--mx, --my are set by site.js). */
+.prompt, .slot, .spec {
+  --mx: -400px; --my: -400px;
+  border-color: transparent;
+  background:
+    radial-gradient(380px circle at var(--mx) var(--my), rgb(255 181 71 / var(--spot)), transparent 70%) padding-box,
+    linear-gradient(180deg, var(--window-hi), var(--window)) padding-box,
+    radial-gradient(220px circle at var(--mx) var(--my), rgb(255 181 71 / calc(0.2 + var(--spot) * 6)), var(--edge) 80%) border-box;
+}
+.slot, .spec { transition: --spot 0.35s var(--ease-out), transform 0.5s var(--spring); }
+@media (hover: hover) and (pointer: fine) {
+  .prompt:hover, .slot:hover, .spec:hover { --spot: 0.1; }
+}
+
+/* The three player cards sit on a gentle curve, like a wall wrapping around you, and flatten on hover. */
+@media (min-width: 861px) {
+  .slots { perspective: 1400px; }
+  .slot:nth-child(1) { transform: rotateY(4deg); transform-origin: right center; }
+  .slot:nth-child(3) { transform: rotateY(-4deg); transform-origin: left center; }
+  .slot:hover { transform: rotateY(0) translateY(-6px); }
+}
+
+/* Small drawings in each card's corner. They idle quietly and play on hover. */
+.slot__sch {
+  position: absolute; top: 20px; right: 20px; width: 56px; height: 56px; pointer-events: none;
+  fill: none; stroke: var(--sun); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
+  opacity: 0.7; transition: opacity 0.3s;
+}
+.slot:hover .slot__sch { opacity: 1; }
+.slot h3 { padding-right: 64px; }
+.sch__hand { fill: var(--sun); stroke: none; }
+.sch--gears .gear { stroke-width: 1.3; }
+.gear--a { transform-origin: 20px 42px; }
+.gear--b { transform-origin: 36.9px 27.8px; }
+.sch__arcs { transform-origin: 32px 54px; }
+@keyframes breathe { 0%, 100% { transform: scale(0.82); opacity: 0.45; } 50% { transform: scale(1); opacity: 1; } }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes wave { from { transform: rotate(-14deg); } to { transform: rotate(14deg); } }
+@keyframes reach { from { stroke-dashoffset: 70; } to { stroke-dashoffset: 0; } }
+@media (prefers-reduced-motion: no-preference) {
+  .sch--breath circle { transform-origin: 32px 32px; animation: breathe 5.2s ease-in-out infinite; }
+  .sch--breath circle:nth-child(2) { animation-delay: 0.5s; }
+  .sch--breath circle:nth-child(3) { animation-delay: 1s; }
+  .sch--reach .sch__arcs { animation: wave 1.6s ease-in-out infinite alternate paused; }
+  .sch--reach path { stroke-dasharray: 70; animation: reach 1.4s ease-out infinite paused; }
+  .sch--reach path:nth-child(2) { animation-delay: 0.15s; }
+  .sch--reach path:nth-child(3) { animation-delay: 0.3s; }
+  .gear--a { animation: spin 9s linear infinite paused; }
+  .gear--b { animation: spin 6.3s linear infinite reverse paused; }
+  .slot:hover .sch--reach .sch__arcs, .slot:hover .sch--reach path, .slot:hover .gear--a, .slot:hover .gear--b { animation-play-state: running; }
+}
+
+/* Hear it land: three material buttons that play a short synthesized sound when pressed. */
+.materials { display: flex; flex-wrap: wrap; gap: 8px; }
+.material {
+  appearance: none; cursor: pointer; min-height: 36px; padding: 0 14px; border-radius: 999px;
+  border: 1px solid var(--edge-strong); background: rgba(255, 181, 71, 0.08); color: var(--bone);
+  font: 600 0.72rem/1 var(--font-mono); letter-spacing: 0.12em; text-transform: uppercase;
+  transition: border-color 0.2s, background-color 0.2s, transform 0.2s var(--spring);
+}
+.material:hover { border-color: rgba(255, 181, 71, 0.6); background: rgba(255, 181, 71, 0.16); }
+.material:active { transform: scale(0.94); }
+@media (pointer: coarse) { .material { min-height: 44px; } }
+@keyframes ping { from { box-shadow: 0 0 0 0 rgba(255, 181, 71, 0.55); } to { box-shadow: 0 0 0 18px rgba(255, 181, 71, 0); } }
+@media (prefers-reduced-motion: no-preference) { .prompt__glyph.is-ping { animation: ping 0.7s ease-out; } }
+
+/* Under the hood: frame-budget targets under the release rules. */
+.spec__rules { grid-template-rows: auto auto 1fr; }
+.budget { align-self: end; display: grid; gap: 12px; padding-top: 18px; border-top: 1px dashed var(--edge-strong); }
+.budget__rows { display: grid; gap: 12px; }
+.budget__rows > div { display: grid; grid-template-columns: 1fr auto; align-items: baseline; gap: 6px 12px; }
+.budget__rows dt { font: 600 0.72rem/1 var(--font-mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim); }
+.budget__rows dd { font: 700 1.05rem/1 var(--font-display); color: var(--bone); font-variant-numeric: tabular-nums; }
+.budget__bar { grid-column: 1 / -1; position: relative; height: 6px; border-radius: 999px; background: rgba(243, 239, 231, 0.08); overflow: hidden; }
+.budget__bar::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 100%; border-radius: inherit; background: linear-gradient(90deg, #5fd48c, var(--sun)); transform-origin: left; }
+.budget__bar--120::before { width: 75%; }
+.budget__badges { display: flex; flex-wrap: wrap; gap: 6px; }
+.budget__badges li { padding: 6px 10px; border-radius: 8px; border: 1px solid rgba(255, 181, 71, 0.4); font: 500 0.66rem/1 var(--font-mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--sun); }
+.budget__note { font: 500 0.66rem/1.4 var(--font-mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--faint); }
+@keyframes fill { from { transform: scaleX(0); } }
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .budget__bar::before { animation: fill linear both; animation-timeline: view(); animation-range: entry 30% cover 40%; }
+  }
+}
+
+/* Very narrow phones: keep the brand name and the Passthrough pill from touching. */
+@media (max-width: 400px) {
+  .brand { gap: 8px; }
+  .brand span { font-size: 0.7rem; letter-spacing: 0.02em; }
+  .status__toggle { padding: 0 8px; font-size: 0.66rem; }
+}
