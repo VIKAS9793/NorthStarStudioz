@@ -662,3 +662,29 @@ function runGate(gate) {
     }
   });
 }
+
+/* ---------- Star field photo ----------
+   A photographic star field and faint Milky Way layered over the CSS sky. It is loaded on the first
+   touch, scroll or key press, never during the first paint, so it cannot slow the page down. The CSS
+   scene looks complete without it, and it is skipped when the visitor has asked to save data. */
+function loadStarField() {
+  const host = document.querySelector('.env__layer--stars');
+  if (!host || host.querySelector('.env__photo') || navigator.connection?.saveData) return;
+  const picture = document.createElement('picture');
+  picture.className = 'env__photo env__photo--stars';
+  const source = document.createElement('source');
+  source.type = 'image/avif';
+  source.srcset = 'assets/img/stars.avif';
+  const img = document.createElement('img');
+  img.src = 'assets/img/stars.webp';
+  img.alt = '';
+  img.width = 1600;
+  img.height = 900;
+  img.decoding = 'async';
+  img.setAttribute('fetchpriority', 'low');
+  picture.append(source, img);
+  host.insertBefore(picture, host.querySelector('.env__polaris'));
+}
+for (const type of ['pointerdown', 'keydown', 'scroll', 'touchstart']) {
+  window.addEventListener(type, loadStarField, { once: true, passive: true });
+}
