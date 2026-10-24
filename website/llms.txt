@@ -14,6 +14,8 @@ Key facts:
 
 NorthStar Studioz is an independent developer and is not affiliated with or endorsed by Meta.
 
+Imagery: the background pictures and the social banner background on the site were generated with ChatGPT, and the interactive 3D headset model was made with Manus AI.
+
 ## Pages
 
 - [About](https://northstarstudioz.space/about): who the studio is, the founder, what it is building and where things stand
