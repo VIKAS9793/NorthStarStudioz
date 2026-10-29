@@ -119,8 +119,11 @@ export function startBlocks(canvas) {
   new ResizeObserver(resize).observe(canvas);
   const run = () => { if (!raf) { last = performance.now(); raf = requestAnimationFrame(frame); } };
   const stop = () => { cancelAnimationFrame(raf); raf = 0; };
-  document.addEventListener('visibilitychange', () => (document.hidden ? stop() : run()));
-  run();
+  const calm = () => document.documentElement.dataset.calm === 'true';
+  const sync = () => (document.hidden || calm() ? stop() : run());
+  document.addEventListener('visibilitychange', sync);
+  addEventListener('ns-calm-change', sync);
+  if (!calm()) run();
 }
 
 // A small rocket launches from behind the far ridge at random intervals, from a

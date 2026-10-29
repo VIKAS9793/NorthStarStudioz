@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-EcHmrf6U525uPR07hQ+ZnS2SMNOCq/3lg8GQDUNsf3s=' 'sha256-e50oOlRQR34MGm8ZGrekYhifv+w+FpC36SKkKYIyeOM=' https://www.googletagmanager.com; style-src 'self'; img-src 'self' https://*.google-analytics.com https://*.googletagmanager.com; font-src 'self'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://www.google.com; manifest-src 'self'; media-src 'self'; frame-src 'none'; worker-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'; require-trusted-types-for 'script'; trusted-types ns-ga default; upgrade-insecure-requests">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-a956IF2JD4n3mfB3ojFUvlqZbI/PwLRgukc7UHLeFns=' 'sha256-e50oOlRQR34MGm8ZGrekYhifv+w+FpC36SKkKYIyeOM=' https://www.googletagmanager.com; style-src 'self'; img-src 'self' https://*.google-analytics.com https://*.googletagmanager.com; font-src 'self'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://www.google.com; manifest-src 'self'; media-src 'self'; frame-src 'none'; worker-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'; require-trusted-types-for 'script'; trusted-types ns-ga default; upgrade-insecure-requests">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <title>NorthStar Studioz — Independent Mixed Reality Game Studio</title>
   <meta name="description" content="NorthStar Studioz is an independent studio in Mumbai, India, building tactile mixed reality games for Meta Quest, designed to be played with your bare hands in your own room.">
@@ -18,11 +18,14 @@
       var d = document.documentElement;
       d.classList.add('js');
       try {
+        // A saved Quiet choice, like the system's reduced-motion setting, keeps the page still and skips the intro.
+        var quiet = localStorage.getItem('ns-quiet-motion') === '1';
+        if (quiet || matchMedia('(prefers-reduced-motion: reduce)').matches) d.dataset.calm = 'true';
         // Visitors arriving from a search or AI engine land straight on the content
         // (no full-screen overlay between a search result and the page).
         var fromSearch = /(^|\.)(google|bing|duckduckgo|yahoo|yandex|baidu|ecosia|brave|startpage|qwant|perplexity|chatgpt|openai|claude|copilot|gemini|you)\.[a-z.]+$/i
           .test((document.referrer.match(/^https?:\/\/([^/]+)/) || [])[1] || '');
-        if (!fromSearch && !matchMedia('(prefers-reduced-motion: reduce)').matches && !sessionStorage.getItem('ns-gate') && !location.hash) {
+        if (!fromSearch && !quiet && !matchMedia('(prefers-reduced-motion: reduce)').matches && !sessionStorage.getItem('ns-gate') && !location.hash) {
           d.classList.add('gate-on');
           var lite = matchMedia('(max-width: 820px), (hover: none) and (pointer: coarse) and (max-width: 1180px)').matches;
           if (lite) d.classList.add('gate-lite');
@@ -250,6 +253,7 @@
     </a>
     <div class="status">
       <button class="status__item status__toggle" type="button" aria-pressed="false" data-passthrough><span class="status__led"></span>Passthrough</button>
+      <button class="status__item status__toggle status__quiet" type="button" aria-pressed="false" data-quiet>Quiet</button>
       <span class="status__item status__clock" data-clock aria-hidden="true">--:--</span>
     </div>
   </header>
@@ -259,7 +263,7 @@
     <section class="hero" id="top" aria-labelledby="hero-title">
       <div class="hero__copy">
         <p class="tag"><span class="tag__led"></span>Mixed reality studio · Mumbai, India</p>
-        <h1 id="hero-title" class="hero__title" tabindex="-1">Your table<br>is the level.</h1>
+        <h1 id="hero-title" class="hero__title" tabindex="-1">Your table<br>is <span class="land" data-land>the level.</span></h1>
         <p class="hero__lede">NorthStar Studioz is building tactile mixed reality games for Meta Quest, designed to be played with your bare hands on the furniture you already own.</p>
         <div class="hero__cta">
           <a class="btn" href="#play">Look around</a>
@@ -279,7 +283,7 @@
     <section class="zone" id="play" aria-labelledby="play-title">
       <header class="zone__head">
         <p class="label">01 · Design principles</p>
-        <h2 id="play-title" class="zone__title">No controllers. No black void.<br>Played from your seat.</h2>
+        <h2 id="play-title" class="zone__title">No controllers. No black void.<br><span class="land" data-land>Played from your seat.</span></h2>
       </header>
       <div class="monitor">
         <div class="monitor__screen" tabindex="0" role="region" aria-roledescription="carousel" aria-label="Design principles: scroll sideways for more">
@@ -347,7 +351,7 @@
       <picture class="zone__mood"><source type="image/avif" srcset="assets/img/tabletop-768.avif 768w, assets/img/tabletop-1280.avif 1280w" sizes="min(100vw, 1280px)"><source type="image/webp" srcset="assets/img/tabletop-768.webp 768w, assets/img/tabletop-1280.webp 1280w" sizes="min(100vw, 1280px)"><img src="assets/img/tabletop-1280.webp" alt="" width="1280" height="853" loading="lazy" decoding="async"></picture>
       <header class="zone__head">
         <p class="label">02 · Who it’s for</p>
-        <h2 id="players-title" class="zone__title">Designing for three kinds of player.</h2>
+        <h2 id="players-title" class="zone__title">Designing for <span class="land" data-land>three kinds of player.</span></h2>
       </header>
       <div class="slots">
         <article class="window slot">
@@ -378,7 +382,7 @@
     <section class="zone" id="tech" aria-labelledby="tech-title">
       <header class="zone__head">
         <p class="label">03 · Under the hood</p>
-        <h2 id="tech-title" class="zone__title">Built for the headset.<br>No PC in the loop.</h2>
+        <h2 id="tech-title" class="zone__title">Built for the headset.<br><span class="land" data-land>No PC in the loop.</span></h2>
       </header>
       <div class="window spec">
         <dl class="spec__sheet">
@@ -415,7 +419,7 @@
     <section class="zone" id="studio" aria-labelledby="studio-title">
       <header class="zone__head">
         <p class="label">04 · The studio</p>
-        <h2 id="studio-title" class="zone__title">One developer. One niche.</h2>
+        <h2 id="studio-title" class="zone__title">One developer. <span class="land" data-land>One niche.</span></h2>
       </header>
       <div class="window founder">
         <img src="assets/brand/logo-320.webp" width="120" height="120" alt="" loading="lazy" decoding="async">
@@ -467,7 +471,7 @@
     <!-- ===================== Contact ===================== -->
     <section class="zone zone--contact" id="contact" aria-labelledby="contact-title">
       <p class="label">06 · Contact</p>
-      <h2 id="contact-title" class="contact__title">Inbox open.</h2>
+      <h2 id="contact-title" class="contact__title"><span class="land" data-land>Inbox open.</span></h2>
       <p class="contact__lede">Players, press, partners, or just curious. Write in.</p>
       <a class="btn btn--big" href="mailto:studioznorthstar@gmail.com">studioznorthstar@gmail.com</a>
     </section>
@@ -481,6 +485,7 @@
         <li><a href="privacy">Privacy</a></li>
         <li><a href="terms">Terms</a></li>
         <li><a href="https://github.com/VIKAS9793/NorthStarStudioz" rel="noopener">GitHub</a></li>
+        <li><button class="foot__quiet" type="button" aria-pressed="false" data-quiet>Quiet motion</button></li>
       </ul>
     </nav>
     <p class="foot__legal">© 2026 NorthStar Studioz. Meta, Meta Quest and Meta Horizon OS are trademarks of Meta Platforms, Inc. NorthStar Studioz is an independent developer and is not affiliated with or endorsed by Meta.</p>

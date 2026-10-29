@@ -5,6 +5,22 @@ const root = document.documentElement;
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const finePointer = matchMedia('(hover: hover) and (pointer: fine)').matches;
 
+/* ---------- Quiet motion: one switch that calms everything, remembered on this device ---------- */
+const QUIET_KEY = 'ns-quiet-motion';
+let quiet = false;
+try { quiet = localStorage.getItem(QUIET_KEY) === '1'; } catch { /* storage blocked: the switch still works for this visit */ }
+/** True when movement should stay off: the visitor chose Quiet, or the system asks for reduced motion. */
+const calm = () => reduceMotion || quiet;
+function setQuiet(on, save) {
+  quiet = on;
+  root.dataset.calm = String(calm());
+  document.querySelectorAll('[data-quiet]').forEach((button) => button.setAttribute('aria-pressed', String(on)));
+  if (save) { try { localStorage.setItem(QUIET_KEY, on ? '1' : '0'); } catch { /* see above */ } }
+  dispatchEvent(new Event('ns-calm-change'));
+}
+setQuiet(quiet, false);
+document.querySelectorAll('[data-quiet]').forEach((button) => button.addEventListener('click', () => setQuiet(!quiet, true)));
+
 /* ---------- HUD clock (local time, like a headset's system bar) ---------- */
 const clock = document.querySelector('[data-clock]');
 if (clock) {
@@ -42,6 +58,7 @@ if (env && finePointer && !reduceMotion) {
     raf = Math.abs(tx - x) + Math.abs(ty - y) > 0.002 ? requestAnimationFrame(step) : 0;
   };
   addEventListener('pointermove', (e) => {
+    if (calm()) return;
     tx = (e.clientX / innerWidth - 0.5) * 2;
     ty = (e.clientY / innerHeight - 0.5) * 2;
     if (!raf) raf = requestAnimationFrame(step);
@@ -260,6 +277,7 @@ if (reticle && finePointer && !reduceMotion) {
     raf = Math.abs(tx - x) + Math.abs(ty - y) > 0.3 ? requestAnimationFrame(step) : 0;
   };
   addEventListener('pointermove', (e) => {
+    if (calm()) { reticle.classList.remove('is-on'); return; }
     tx = e.clientX; ty = e.clientY;
     reticle.classList.add('is-on');
     reticle.classList.toggle('is-hot', !!e.target.closest('a, button, summary, [role="button"]'));
@@ -365,7 +383,7 @@ function initMonitor(monitor) {
 }
 
 /* ---------- Reveal fallback (browsers without scroll-driven animations) ---------- */
-if (!reduceMotion && !CSS.supports('animation-timeline: view()')) {
+if (!calm() && !CSS.supports('animation-timeline: view()')) {
   root.classList.add('io');
   const io = new IntersectionObserver((entries) => {
     for (const e of entries) {
@@ -432,7 +450,7 @@ function initReel(reel) {
 
 /* ---------- Ambient building blocks and rocket (decorative, loaded last) ---------- */
 const blocksCanvas = document.querySelector('.env__blocks');
-if (blocksCanvas && !reduceMotion) {
+if (blocksCanvas && !calm()) {
   const idle = window.requestIdleCallback || ((cb) => setTimeout(cb, 1200));
   const rocket = document.querySelector('.env__rocket');
   const go = () => idle(() => import('./ambient.js').then((m) => {
@@ -746,6 +764,7 @@ if (finePointer && !reduceMotion) {
     card.style.setProperty('--my', `${Math.round(cy - r.top)}px`);
   };
   addEventListener('pointermove', (e) => {
+    if (calm()) return;
     const next = e.target.closest?.('.prompt, .slot, .spec') ?? null;
     if (next !== card) {
       card?.style.removeProperty('--mx');
@@ -834,3 +853,11 @@ function initMaterials() {
   card.querySelector('.prompt__step')?.before(row);
 }
 initMaterials();
+
+/* ---------- Pieces landing: accent phrases in the headlines set themselves down like wooden pieces ----------
+   Loaded on idle and only when motion is welcome; the module is tiny and runs on the compositor. */
+if (document.querySelector('[data-land]') && !calm() && 'animate' in Element.prototype && 'IntersectionObserver' in window) {
+  const later = window.requestIdleCallback || ((fn) => setTimeout(fn, 400));
+  const go = () => later(() => import('./land.js').then((m) => m.initLand(afterGate, calm)).catch(() => {}), { timeout: 3000 });
+  if (document.readyState === 'complete') go(); else addEventListener('load', go, { once: true });
+}
