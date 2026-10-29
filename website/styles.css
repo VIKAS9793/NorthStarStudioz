@@ -350,8 +350,7 @@ main { position: relative; z-index: 1; padding-bottom: 120px; }
   /* Warm metal: a bright rim at the top, a hard horizon band, then dawn orange, with a thin ember edge
      and one crisp drop shadow instead of a blurry glow. */
   color: #fff6ec;
-  --metal: linear-gradient(180deg, #fffaf3 0%, #ffe9d0 30%, #ffc48a 47%, #fff0dd 51%, #ff9a52 70%, #ff7a33 100%);
-  background: var(--metal);
+  background: linear-gradient(180deg, #fffaf3 0%, #ffe9d0 30%, #ffc48a 47%, #fff0dd 51%, #ff9a52 70%, #ff7a33 100%);
   -webkit-background-clip: text; background-clip: text;
   -webkit-text-fill-color: transparent;
   -webkit-text-stroke: 1px rgba(255, 107, 53, 0.9);
@@ -507,7 +506,7 @@ main { position: relative; z-index: 1; padding-bottom: 120px; }
   .hero__copy > * { animation: rise-in 1s var(--ease-out) both; }
   .hero__copy > :nth-child(2) { animation-delay: 0.08s; }
   /* The headline rises in, ignites like a blade, then hums with a rare flicker. */
-  .hero__copy > .hero__title { animation: rise-in 1s var(--ease-out) 0.08s both, saber-ignite 1.1s var(--ease-out) 0.35s both, saber-hum 7s ease-in-out 1.6s infinite; }
+  .hero__copy > .hero__title { transform-origin: 50% 100%; animation: set-down 0.95s linear 0.08s both, saber-ignite 1.1s var(--ease-out) 0.35s both, saber-hum 7s ease-in-out 1.6s infinite; }
   .hero__copy > :nth-child(3) { animation-delay: 0.16s; }
   .hero__copy > :nth-child(4) { animation-delay: 0.24s; }
   .arc--hero .window { animation: approach-in 1.2s var(--ease-out) 0.3s both; }
@@ -521,6 +520,16 @@ main { position: relative; z-index: 1; padding-bottom: 120px; }
 }
 @keyframes approach-in { from { opacity: 0; translate: 0 30px -300px; } }
 @keyframes rise-in { from { opacity: 0; transform: translateY(24px); filter: blur(8px); } }
+/* The headline is set down like a game tile on a table: it drops in as one block, squashes a little as it
+   touches down, bounces once and settles. One element and one transform, so the gradient fill and the outline
+   always move together. */
+@keyframes set-down {
+  0% { opacity: 0; transform: translateY(-1.6rem) scaleY(1.05); animation-timing-function: cubic-bezier(0.5, 0, 0.9, 0.5); }
+  14% { opacity: 1; }
+  52% { transform: translateY(0) scale(1.012, 0.955); animation-timing-function: ease-out; }
+  74% { transform: translateY(-0.3rem) scale(1, 1.01); animation-timing-function: cubic-bezier(0.5, 0, 0.9, 0.5); }
+  100% { opacity: 1; transform: none; }
+}
 
 /* Page transitions between home and legal pages */
 @media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }
@@ -1025,25 +1034,6 @@ main { position: relative; z-index: 1; padding-bottom: 120px; }
 }
 
 /* =========================================================
-   Pieces landing (land.js): accent phrases in the headlines are made of letters that
-   are set down like wooden pieces on a table. Without scripting the phrase is plain text.
-   ========================================================= */
-.land__word { display: inline-block; white-space: nowrap; }
-.land__ch { display: inline-block; transform-origin: 50% 100%; }
-/* A letter that is animated is painted on its own layer, and the headline's gradient fill does not reach into it:
-   the letter would be left as an empty outline. So each letter carries its own copy of the gradient, offset by
-   its position in the headline (land.js sets --top and --title-h) so the colour runs on unbroken across lines. */
-.hero__title .land__ch {
-  background-image: var(--metal);
-  background-repeat: no-repeat;
-  background-size: 100% var(--title-h, 100%);
-  background-position: 0 calc(var(--top, 0px) * -1);
-  -webkit-background-clip: text; background-clip: text;
-}
-/* A phrase further down the page waits, unseen, until it is mostly in view and drops in. */
-.land[data-land-state="held"] .land__ch { opacity: 0; }
-
-/* =========================================================
    Quiet motion: the visitor's own switch (and the system's reduced-motion setting, which
    sets the same marker). Nothing moves, everything stays readable.
    ========================================================= */
@@ -1053,7 +1043,6 @@ main { position: relative; z-index: 1; padding-bottom: 120px; }
 :root[data-calm="true"] .reticle,
 :root[data-calm="true"] .env__rocket,
 :root[data-calm="true"] .env__blocks { display: none; }
-:root[data-calm="true"] .land[data-land-state="held"] .land__ch { opacity: 1; }
 :root[data-calm="true"] .io .window,
 :root[data-calm="true"] .io .zone__head,
 :root[data-calm="true"] .io .reel,
