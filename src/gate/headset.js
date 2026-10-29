@@ -274,15 +274,15 @@ export function createGate(canvas) {
       rig.quaternion.slerp(aim(), follow);
     } else {
       const e = (now - exit.start) / 1000;
-      const spin = easeInOutCubic(clamp01(e / 0.9));
+      const spin = easeInOutCubic(clamp01(e / 0.5));
       headset.rotation.y = exit.from + (exit.to - exit.from) * spin;
       rig.quaternion.slerp(facing, follow);
-      const dolly = easeInCubic(clamp01((e - 0.65) / 0.65));
+      const dolly = easeInCubic(clamp01((e - 0.3) / 0.4));
       camera.position.z = CAM_Z - dolly * (CAM_Z - 1.15);
       camera.position.y = 0.25 * (1 - dolly);
       camera.lookAt(0, 0, 0);
       glass.emissiveIntensity = dolly * 3.2;
-      if (e >= 1.3 && exit.resolve) { exit.resolve(); exit.resolve = null; }
+      if (e >= 0.7 && exit.resolve) { exit.resolve(); exit.resolve = null; }
     }
     renderer.render(scene, camera);
   }
@@ -311,7 +311,7 @@ export function createGate(canvas) {
         const to = Math.ceil((from + Math.PI * 2.5) / (Math.PI * 2)) * Math.PI * 2;
         exit = { start: performance.now(), from, to, resolve };
         // Resolve even if frames stall (background tab, slow GPU).
-        setTimeout(() => { if (exit.resolve) { exit.resolve(); exit.resolve = null; } }, 1600);
+        setTimeout(() => { if (exit.resolve) { exit.resolve(); exit.resolve = null; } }, 900);
       });
     },
     dispose() {

@@ -559,7 +559,7 @@ main { position: relative; z-index: 1; padding-bottom: 120px; }
     radial-gradient(60% 50% at 50% 40%, #0b1430, transparent 70%),
     var(--ink);
   overflow: hidden;
-  transition: opacity 0.5s ease, visibility 0s 0.5s;
+  transition: opacity 0.25s ease, visibility 0s 0.25s;
 }
 .gate__sky {
   position: absolute; inset: 0; pointer-events: none;
@@ -720,16 +720,16 @@ main { position: relative; z-index: 1; padding-bottom: 120px; }
 }
 
 /* Exit choreography: words leave toward the opposite side they arrived from. */
-.gate--exit .gate__word--north { animation: to-right 0.8s cubic-bezier(0.45, 0, 0.75, 0.3) both; }
-.gate--exit .gate__word--studio { animation: to-left 0.8s cubic-bezier(0.45, 0, 0.75, 0.3) 0.04s both; }
-.gate--exit .gate__hud, .gate--exit .gate__trail { opacity: 0; transition: opacity 0.3s; }
+.gate--exit .gate__word--north { animation: to-right 0.42s cubic-bezier(0.45, 0, 0.75, 0.3) both; }
+.gate--exit .gate__word--studio { animation: to-left 0.42s cubic-bezier(0.45, 0, 0.75, 0.3) 0.03s both; }
+.gate--exit .gate__hud, .gate--exit .gate__trail { opacity: 0; transition: opacity 0.2s; }
 .gate--exit .gate__foot, .gate--exit .gate__skip { opacity: 0; transform: translateY(10px); transition: opacity 0.3s, transform 0.3s; pointer-events: none; }
-.gate--exit .gate__still { animation: still-out 1.1s var(--ease-in) both; }
+.gate--exit .gate__still { animation: still-out 0.56s var(--ease-in) both; }
 @keyframes to-right { to { transform: translateX(120vw); opacity: 0; filter: blur(16px); } }
 @keyframes to-left { to { transform: translateX(-120vw); opacity: 0; filter: blur(16px); } }
 /* No 3D: the still turns to face you and you fly through the visor. */
 @keyframes still-out { 45% { transform: perspective(800px) rotateY(360deg) scale(1.05); } to { transform: perspective(800px) rotateY(360deg) scale(9); opacity: 0; } }
-.gate--flash .gate__flash { animation: flash 0.7s ease-out both; }
+.gate--flash .gate__flash { animation: flash 0.4s ease-out both; }
 @keyframes flash { 0% { opacity: 0; transform: scale(0.4); } 35% { opacity: 1; transform: scale(1.6); } 100% { opacity: 0; transform: scale(2.2); } }
 .gate--done { opacity: 0; visibility: hidden; }
 
