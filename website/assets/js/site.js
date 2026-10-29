@@ -650,7 +650,7 @@ function runGate(gate) {
       gate.remove();
       root.classList.remove('gate-on', 'gate-leaving');
       document.getElementById('hero-title')?.focus?.({ preventScroll: true });
-    }, 520);
+    }, 260);
   }
 
   async function enter() {
@@ -658,9 +658,9 @@ function runGate(gate) {
     leaving = true;
     gate.classList.add('gate--exit');
     if (gate.classList.contains('gate--3d')) await scene.exit();
-    else await wait(1000); // the still's own fly-through (CSS)
+    else await wait(520); // the still's own fly-through (CSS)
     gate.classList.add('gate--flash');
-    await wait(260);
+    await wait(120);
     finish();
   }
 

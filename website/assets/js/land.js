@@ -6,8 +6,8 @@
 // heading carries one label with the full sentence, and every turn is a Web Animation that runs on
 // the compositor. Loaded on idle, after the page, and never in Quiet mode or with reduced motion.
 
-const STAGGER = 42;   // ms between neighbouring letters
-const DURATION = 780; // ms for one letter
+const STAGGER = 30;   // ms between neighbouring letters
+const DURATION = 560; // ms for one letter
 
 /** The heading's full sentence, with line breaks read as spaces, so assistive technology reads it whole. */
 function sentence(heading) {
@@ -75,27 +75,34 @@ function play(pieces, { drop, onDone }) {
     const rest = 'translateY(0) rotate(0deg) scale(1, 1)';
     const frames = drop
       ? [
-          { offset: 0, opacity: 0, transform: `translateY(-1.15em) rotate(${tilt}deg)`, easing: 'cubic-bezier(0.5, 0, 0.9, 0.5)' },
-          { offset: 0.12, opacity: 1, easing: 'linear' },
+          { offset: 0, opacity: 0, transform: `translateY(-0.2em) rotate(${tilt * 0.5}deg)`, easing: 'cubic-bezier(0.5, 0, 0.9, 0.5)' },
+          { offset: 0.35, opacity: 1, easing: 'linear' },
           { offset: 0.52, opacity: 1, transform: `translateY(0) rotate(${tilt * 0.18}deg)`, easing: 'ease-out' },
           { offset: 0.6, opacity: 1, transform: 'translateY(0) rotate(0deg) scale(1.07, 0.88)', easing: 'ease-out' },
-          { offset: 0.78, opacity: 1, transform: `translateY(-0.1em) rotate(${-tilt * 0.06}deg) scale(1, 1)`, easing: 'cubic-bezier(0.5, 0, 0.9, 0.5)' },
+          { offset: 0.78, opacity: 1, transform: `translateY(-0.025em) rotate(${-tilt * 0.06}deg) scale(1, 1)`, easing: 'cubic-bezier(0.5, 0, 0.9, 0.5)' },
           { offset: 0.92, opacity: 1, transform: 'translateY(0) rotate(0deg) scale(1.03, 0.96)', easing: 'ease-out' },
           { offset: 1, opacity: 1, transform: rest },
         ]
       : [
           { offset: 0, opacity: 1, transform: rest, easing: 'ease-out' },
-          { offset: 0.3, opacity: 1, transform: `translateY(-0.42em) rotate(${tilt * 0.7}deg)`, easing: 'cubic-bezier(0.5, 0, 0.9, 0.5)' },
+          { offset: 0.3, opacity: 1, transform: `translateY(-0.1em) rotate(${tilt * 0.4}deg)`, easing: 'cubic-bezier(0.5, 0, 0.9, 0.5)' },
           { offset: 0.6, opacity: 1, transform: `translateY(0) rotate(${tilt * 0.12}deg)`, easing: 'ease-out' },
           { offset: 0.68, opacity: 1, transform: 'translateY(0) rotate(0deg) scale(1.07, 0.88)', easing: 'ease-out' },
-          { offset: 0.84, opacity: 1, transform: `translateY(-0.09em) scale(1, 1)`, easing: 'cubic-bezier(0.5, 0, 0.9, 0.5)' },
+          { offset: 0.84, opacity: 1, transform: `translateY(-0.02em) scale(1, 1)`, easing: 'cubic-bezier(0.5, 0, 0.9, 0.5)' },
           { offset: 1, opacity: 1, transform: rest },
         ];
-    return piece.animate(frames, { duration: DURATION, delay: i * STAGGER, fill: 'backwards' });
+    // A dropping letter keeps its landed state when it ends, so it stays visible while the rest of the phrase
+    // is still falling; the waiting style is only lifted once the last letter is down.
+    return piece.animate(frames, { duration: DURATION, delay: i * STAGGER, fill: drop ? 'both' : 'backwards' });
   });
   const last = animations[animations.length - 1];
-  if (last) last.finished.then(onDone, onDone);
-  else onDone();
+  const finish = () => {
+    onDone();
+    // The held style is gone, so the held animations can go too: the letters rest as plain text again.
+    if (drop) for (const animation of animations) animation.cancel();
+  };
+  if (last) last.finished.then(finish, finish);
+  else finish();
 }
 
 const idle = window.requestIdleCallback || ((fn) => setTimeout(fn, 200));
@@ -136,7 +143,7 @@ export function initLand(afterGate, calm) {
     if (el.closest('.hero')) {
       afterGate(() => {
         if (calm()) return;
-        setTimeout(() => play([...el.querySelectorAll('.land__ch')], { drop: false, onDone() {} }), 250);
+        play([...el.querySelectorAll('.land__ch')], { drop: false, onDone() {} });
       });
     } else if (!inView(el) && el.getBoundingClientRect().top > 0) {
       el.setAttribute('data-land-state', 'held');
