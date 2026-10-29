@@ -350,7 +350,8 @@ main { position: relative; z-index: 1; padding-bottom: 120px; }
   /* Warm metal: a bright rim at the top, a hard horizon band, then dawn orange, with a thin ember edge
      and one crisp drop shadow instead of a blurry glow. */
   color: #fff6ec;
-  background: linear-gradient(180deg, #fffaf3 0%, #ffe9d0 30%, #ffc48a 47%, #fff0dd 51%, #ff9a52 70%, #ff7a33 100%);
+  --metal: linear-gradient(180deg, #fffaf3 0%, #ffe9d0 30%, #ffc48a 47%, #fff0dd 51%, #ff9a52 70%, #ff7a33 100%);
+  background: var(--metal);
   -webkit-background-clip: text; background-clip: text;
   -webkit-text-fill-color: transparent;
   -webkit-text-stroke: 1px rgba(255, 107, 53, 0.9);
@@ -1028,7 +1029,17 @@ main { position: relative; z-index: 1; padding-bottom: 120px; }
    are set down like wooden pieces on a table. Without scripting the phrase is plain text.
    ========================================================= */
 .land__word { display: inline-block; white-space: nowrap; }
-.land__ch { display: inline-block; transform-origin: 50% 100%; will-change: transform; }
+.land__ch { display: inline-block; transform-origin: 50% 100%; }
+/* A letter that is animated is painted on its own layer, and the headline's gradient fill does not reach into it:
+   the letter would be left as an empty outline. So each letter carries its own copy of the gradient, offset by
+   its position in the headline (land.js sets --top and --title-h) so the colour runs on unbroken across lines. */
+.hero__title .land__ch {
+  background-image: var(--metal);
+  background-repeat: no-repeat;
+  background-size: 100% var(--title-h, 100%);
+  background-position: 0 calc(var(--top, 0px) * -1);
+  -webkit-background-clip: text; background-clip: text;
+}
 /* A phrase further down the page waits, unseen, until it is mostly in view and drops in. */
 .land[data-land-state="held"] .land__ch { opacity: 0; }
 
