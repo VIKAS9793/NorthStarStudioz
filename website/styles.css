@@ -64,7 +64,7 @@ body {
 }
 img, svg { display: block; max-width: 100%; }
 a { color: inherit; text-decoration-color: rgba(255, 181, 71, 0.55); text-underline-offset: 3px; }
-a:hover { color: var(--sun); }
+@media (hover: hover) and (pointer: fine) { a:hover { color: var(--sun); } }
 h1, h2, h3, p { margin: 0; }
 ul, ol, dl, dd { margin: 0; padding: 0; list-style: none; }
 ::selection { background: rgba(255, 107, 53, 0.4); color: #fff; }
@@ -225,7 +225,7 @@ body::after { bottom: 0; height: 120px; background: linear-gradient(transparent,
 }
 .brand img { border-radius: 50%; box-shadow: 0 0 0 1px rgba(255, 181, 71, 0.4), 0 0 18px rgba(255, 107, 53, 0.25); }
 .brand b { font-weight: 400; color: var(--dim); }
-.brand:hover { color: var(--bone); }
+@media (hover: hover) and (pointer: fine) { .brand:hover { color: var(--bone); } }
 .status { display: flex; gap: 8px; }
 .status__item {
   display: inline-flex; align-items: center; gap: 8px; height: 30px; padding: 0 12px; border-radius: 999px;
@@ -240,8 +240,10 @@ body::after { bottom: 0; height: 120px; background: linear-gradient(transparent,
 .status__clock { color: var(--bone); font-variant-numeric: tabular-nums; }
 /* The Passthrough pill is a switch: off shows the night-sky void, on reveals the room behind it. */
 .status__toggle { appearance: none; cursor: pointer; transition: color 0.25s, border-color 0.25s, background-color 0.25s, transform 0.2s var(--spring); }
-.status__toggle:hover { color: var(--bone); border-color: var(--edge-strong); }
+@media (hover: hover) and (pointer: fine) { .status__toggle:hover { color: var(--bone); border-color: var(--edge-strong); } }
 .status__toggle:active { transform: scale(0.95); }
+/* The Quiet switch sits beside Passthrough on wide screens; on phones it lives in the footer so the header never crowds. */
+@media (max-width: 860px) { .status__quiet { display: none; } }
 .status__toggle[aria-pressed="true"] { color: var(--bone); border-color: rgba(255, 181, 71, 0.55); background: rgba(255, 107, 53, 0.16); }
 .status__toggle[aria-pressed="true"] .status__led { background: var(--sun); box-shadow: 0 0 8px var(--sun); }
 
@@ -264,7 +266,7 @@ body::after { bottom: 0; height: 120px; background: linear-gradient(transparent,
   transition: color 0.2s, background-color 0.2s, transform 0.25s var(--spring);
 }
 .dock svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
-.dock a:hover { color: var(--bone); background: rgba(255, 255, 255, 0.06); transform: translateY(-2px); }
+@media (hover: hover) and (pointer: fine) { .dock a:hover { color: var(--bone); background: rgba(255, 255, 255, 0.06); transform: translateY(-2px); } }
 .dock a[aria-current] { color: var(--night); background: var(--bone); }
 .dock a[aria-current]::after {
   content: ""; position: absolute; bottom: -9px; width: 4px; height: 4px; border-radius: 50%; background: var(--sun);
@@ -300,10 +302,10 @@ body::after { bottom: 0; height: 120px; background: linear-gradient(transparent,
   box-shadow: 0 1px 0 rgba(255, 255, 255, 0.35) inset, 0 -3px 0 rgba(120, 30, 0, 0.35) inset, 0 14px 30px -12px rgba(255, 107, 53, 0.8);
   transition: transform 0.3s var(--spring), box-shadow 0.3s var(--ease-out), filter 0.2s;
 }
-.btn:hover { color: #1a0d06; transform: translateY(-3px) scale(1.02); filter: brightness(1.06); }
+@media (hover: hover) and (pointer: fine) { .btn:hover { color: #1a0d06; transform: translateY(-3px) scale(1.02); filter: brightness(1.06); } }
 .btn:active { transform: translateY(1px) scale(0.98); box-shadow: 0 1px 0 rgba(255, 255, 255, 0.25) inset, 0 4px 12px -6px rgba(255, 107, 53, 0.8); }
 .btn--ghost { background: rgba(243, 239, 231, 0.06); color: var(--bone); box-shadow: inset 0 0 0 1px var(--edge-strong); }
-.btn--ghost:hover { color: var(--bone); background: rgba(243, 239, 231, 0.12); }
+@media (hover: hover) and (pointer: fine) { .btn--ghost:hover { color: var(--bone); background: rgba(243, 239, 231, 0.12); } }
 .btn--big { min-height: 64px; padding: 0 34px; font-size: clamp(0.95rem, 0.8rem + 0.8vw, 1.25rem); overflow-wrap: anywhere; }
 
 /* A floating window, Quest style: rounded, solid-ish glass, a grab handle beneath. */
@@ -319,7 +321,7 @@ body::after { bottom: 0; height: 120px; background: linear-gradient(transparent,
   border-radius: 999px; background: rgba(243, 239, 231, 0.22);
   transition: background-color 0.25s, width 0.3s var(--spring);
 }
-.window:hover::after { background: rgba(243, 239, 231, 0.5); width: 72px; }
+@media (hover: hover) and (pointer: fine) { .window:hover::after { background: rgba(243, 239, 231, 0.5); width: 72px; } }
 
 /* Panels arranged on a gentle curve, like a wrap-around VR display. */
 .arc { display: grid; gap: clamp(14px, 1.6vw, 24px); perspective: 1600px; }
@@ -393,7 +395,7 @@ main { position: relative; z-index: 1; padding-bottom: 120px; }
 
 /* How it plays */
 .prompt { display: grid; align-content: start; gap: 14px; height: 100%; padding: 28px 24px 24px; transition: transform 0.45s var(--spring), --spot 0.35s var(--ease-out), box-shadow 0.4s; }
-.prompt:hover { transform: translateZ(40px) translateY(-6px); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 50px 90px -40px rgba(255, 107, 53, 0.45); }
+@media (hover: hover) and (pointer: fine) { .prompt:hover { transform: translateZ(40px) translateY(-6px); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 50px 90px -40px rgba(255, 107, 53, 0.45); } }
 .prompt__glyph {
   width: 56px; height: 56px; padding: 12px; border-radius: 18px;
   background: rgba(255, 181, 71, 0.1); border: 1px solid rgba(255, 181, 71, 0.25);
@@ -455,7 +457,7 @@ main { position: relative; z-index: 1; padding-bottom: 120px; }
 .reel__video { opacity: 0; transition: opacity 0.7s var(--ease-out); }
 .reel.is-live .reel__video { opacity: 1; }
 .reel__btn { position: absolute; right: 14px; bottom: 14px; z-index: 2; min-width: 44px; min-height: 44px; padding: 0 18px; border: 0; border-radius: 999px; background: rgba(7, 9, 15, 0.66); backdrop-filter: blur(8px); color: var(--bone); font: 500 0.78rem/1 var(--font-mono); letter-spacing: 0.1em; text-transform: uppercase; box-shadow: inset 0 0 0 1px var(--edge-strong); cursor: pointer; transition: background 0.2s; }
-.reel__btn:hover { background: rgba(23, 27, 41, 0.86); }
+@media (hover: hover) and (pointer: fine) { .reel__btn:hover { background: rgba(23, 27, 41, 0.86); } }
 .reel__icon { display: none; width: 20px; height: 20px; fill: currentColor; }
 .reel__icon path { display: none; }
 .reel__btn[data-state="paused"] .i-play, .reel__btn[data-state="playing"] .i-pause, .reel__btn[data-state="ended"] .i-replay { display: inline; }
@@ -476,7 +478,13 @@ main { position: relative; z-index: 1; padding-bottom: 120px; }
 .foot { position: relative; z-index: 1; width: min(100% - 2 * var(--gutter), var(--max)); margin: 0 auto; padding: 32px 0 130px; border-top: 1px solid var(--edge); display: grid; gap: 14px; justify-items: center; text-align: center; }
 .foot__links { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 24px; }
 .foot__links a { font: 500 0.78rem/1 var(--font-mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--dim); text-decoration: none; }
-.foot__links a:hover { color: var(--bone); }
+@media (hover: hover) and (pointer: fine) { .foot__links a:hover { color: var(--bone); } }
+/* Footer Quiet switch: reads like its neighbours, with a small marker that fills when motion is off. */
+.foot__quiet { appearance: none; background: none; border: 0; padding: 0; cursor: pointer; font: 500 0.78rem/1 var(--font-mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--dim); display: inline-flex; align-items: center; gap: 8px; min-height: 24px; }
+.foot__quiet::before { content: ""; width: 9px; height: 9px; border-radius: 50%; border: 1.5px solid currentColor; }
+.foot__quiet[aria-pressed="true"] { color: var(--bone); }
+.foot__quiet[aria-pressed="true"]::before { background: var(--sun); border-color: var(--sun); }
+@media (hover: hover) and (pointer: fine) { .foot__quiet:hover { color: var(--bone); } }
 .foot__legal { max-width: 72ch; color: var(--faint); font-size: 0.82rem; }
 
 /* =========================================================
@@ -690,9 +698,9 @@ main { position: relative; z-index: 1; padding-bottom: 120px; }
   content: ""; position: absolute; inset: -6px; border-radius: inherit; border: 1px solid rgba(160, 150, 255, 0.5);
   animation: halo 2.2s var(--ease-out) infinite; pointer-events: none;
 }
-.gate__enter:hover { transform: translateY(-2px) scale(1.02); }
+@media (hover: hover) and (pointer: fine) { .gate__enter:hover { transform: translateY(-2px) scale(1.02); } }
 .gate__enter svg { transition: transform 0.3s var(--ease-out); }
-.gate__enter:hover svg { transform: translateX(4px); }
+@media (hover: hover) and (pointer: fine) { .gate__enter:hover svg { transform: translateX(4px); } }
 @keyframes halo { from { opacity: 0.9; transform: scale(1); } to { opacity: 0; transform: scale(1.18); } }
 @keyframes rise { from { opacity: 0; transform: translateY(16px); } }
 
@@ -704,7 +712,7 @@ main { position: relative; z-index: 1; padding-bottom: 120px; }
   background: none; border: 0; color: rgba(223, 227, 238, 0.75);
   font: 500 0.95rem/1 var(--font-body); text-decoration: underline; text-underline-offset: 4px;
 }
-.gate__skip:hover { color: var(--text); }
+@media (hover: hover) and (pointer: fine) { .gate__skip:hover { color: var(--text); } }
 .gate__flash {
   position: absolute; inset: 0; z-index: 5; pointer-events: none; opacity: 0;
   background: radial-gradient(circle at 50% 50%, #fff 0, #fff4dd 22%, #ffb547 45%, #ff6b35 64%, #07090f 100%);
@@ -734,7 +742,7 @@ main { position: relative; z-index: 1; padding-bottom: 120px; }
    ========================================================= */
 .pagelinks { display: flex; gap: 4px; padding: 4px; border-radius: 999px; background: rgba(10, 12, 20, 0.6); border: 1px solid var(--edge); }
 .pagelinks a { padding: 8px 14px; border-radius: 999px; font: 500 0.72rem/1 var(--font-mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--dim); text-decoration: none; }
-.pagelinks a:hover { color: var(--bone); }
+@media (hover: hover) and (pointer: fine) { .pagelinks a:hover { color: var(--bone); } }
 .pagelinks a[aria-current] { background: var(--bone); color: var(--night); }
 
 .legal { width: min(100% - 2 * var(--gutter), 900px); margin: 0 auto; padding: 120px 0 80px; }
@@ -808,8 +816,8 @@ main { position: relative; z-index: 1; padding-bottom: 120px; }
   background: linear-gradient(180deg, var(--window-hi), var(--window)), var(--night);
 }
 .monitor.is-curved .prompt > * { position: relative; z-index: 1; }
-.monitor.is-curved .prompt:hover { transform: none; background: rgba(255, 181, 71, 0.6); }
-.monitor.is-curved .prompt:hover .prompt__glyph { box-shadow: 0 0 24px rgba(255, 181, 71, 0.35); }
+@media (hover: hover) and (pointer: fine) { .monitor.is-curved .prompt:hover { transform: none; background: rgba(255, 181, 71, 0.6); } }
+@media (hover: hover) and (pointer: fine) { .monitor.is-curved .prompt:hover .prompt__glyph { box-shadow: 0 0 24px rgba(255, 181, 71, 0.35); } }
 
 /* Stand: a neck under the screen and a base that holds the controls. */
 .monitor__controls {
@@ -829,7 +837,7 @@ main { position: relative; z-index: 1; padding-bottom: 120px; }
   transition: background-color 0.2s, opacity 0.2s, transform 0.25s var(--spring);
 }
 .monitor__btn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-.monitor__btn:hover:not(:disabled) { background: rgba(255, 181, 71, 0.18); transform: scale(1.06); }
+@media (hover: hover) and (pointer: fine) { .monitor__btn:hover:not(:disabled) { background: rgba(255, 181, 71, 0.18); transform: scale(1.06); } }
 .monitor__btn:disabled { opacity: 0.3; cursor: default; }
 .monitor__progress { position: relative; width: 120px; height: 4px; border-radius: 999px; background: rgba(243, 239, 231, 0.12); overflow: hidden; }
 .monitor__progress span { position: absolute; inset: 0 auto 0 0; width: 50%; border-radius: inherit; background: linear-gradient(90deg, var(--ember), var(--sun)); }
@@ -901,7 +909,7 @@ main { position: relative; z-index: 1; padding-bottom: 120px; }
 @media (max-width: 560px) { .facts div { grid-template-columns: 1fr; gap: 2px; } }
 .assets { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 14px; }
 .legal__body .asset { display: grid; gap: 8px; align-content: start; padding: 14px; border-radius: 12px; border: 1px solid var(--edge-strong); background: rgba(243, 239, 231, 0.03); color: var(--bone); text-decoration: none; }
-.legal__body .asset:hover { border-color: var(--sun); }
+@media (hover: hover) and (pointer: fine) { .legal__body .asset:hover { border-color: var(--sun); } }
 .asset img { width: 100%; height: 120px; object-fit: contain; }
 .asset span { font: 500 0.68rem/1.4 var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--dim); }
 .faq { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(14px, 1.6vw, 24px); max-width: 1100px; margin-inline: auto; }
@@ -970,7 +978,7 @@ main { position: relative; z-index: 1; padding-bottom: 120px; }
   fill: none; stroke: var(--sun); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
   opacity: 0.7; transition: opacity 0.3s;
 }
-.slot:hover .slot__sch { opacity: 1; }
+@media (hover: hover) and (pointer: fine) { .slot:hover .slot__sch { opacity: 1; } }
 .slot h3 { padding-right: 64px; }
 .sch__hand { fill: var(--sun); stroke: none; }
 .sch--gears .gear { stroke-width: 1.3; }
@@ -1002,7 +1010,7 @@ main { position: relative; z-index: 1; padding-bottom: 120px; }
   font: 600 0.72rem/1 var(--font-mono); letter-spacing: 0.12em; text-transform: uppercase;
   transition: border-color 0.2s, background-color 0.2s, transform 0.2s var(--spring);
 }
-.material:hover { border-color: rgba(255, 181, 71, 0.6); background: rgba(255, 181, 71, 0.16); }
+@media (hover: hover) and (pointer: fine) { .material:hover { border-color: rgba(255, 181, 71, 0.6); background: rgba(255, 181, 71, 0.16); } }
 .material:active { transform: scale(0.94); }
 @media (pointer: coarse) { .material { min-height: 44px; } }
 @keyframes ping { from { box-shadow: 0 0 0 0 rgba(255, 181, 71, 0.55); } to { box-shadow: 0 0 0 18px rgba(255, 181, 71, 0); } }
@@ -1034,3 +1042,28 @@ main { position: relative; z-index: 1; padding-bottom: 120px; }
   .brand span { font-size: 0.7rem; letter-spacing: 0.02em; }
   .status__toggle { padding: 0 8px; font-size: 0.66rem; }
 }
+
+/* =========================================================
+   Pieces landing (land.js): accent phrases in the headlines are made of letters that
+   are set down like wooden pieces on a table. Without scripting the phrase is plain text.
+   ========================================================= */
+.land__word { display: inline-block; white-space: nowrap; }
+.land__ch { display: inline-block; transform-origin: 50% 100%; will-change: transform; }
+/* A phrase further down the page waits, unseen, until it is mostly in view and drops in. */
+.land[data-land-state="held"] .land__ch { opacity: 0; }
+
+/* =========================================================
+   Quiet motion: the visitor's own switch (and the system's reduced-motion setting, which
+   sets the same marker). Nothing moves, everything stays readable.
+   ========================================================= */
+:root[data-calm="true"] :where(*):not(.gate):not(.gate *),
+:root[data-calm="true"] :where(*)::before,
+:root[data-calm="true"] :where(*)::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+:root[data-calm="true"] .reticle,
+:root[data-calm="true"] .env__rocket,
+:root[data-calm="true"] .env__blocks { display: none; }
+:root[data-calm="true"] .land[data-land-state="held"] .land__ch { opacity: 1; }
+:root[data-calm="true"] .io .window,
+:root[data-calm="true"] .io .zone__head,
+:root[data-calm="true"] .io .reel,
+:root[data-calm="true"] .io .zone--contact > * { opacity: 1; translate: none; }

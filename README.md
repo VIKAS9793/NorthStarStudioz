@@ -42,11 +42,16 @@ The website in [`website/`](website/) is plain HTML and CSS. It uses no framewor
 | `website/index.html` | Home page, including the intro screen |
 | `website/styles.css` | All styles: self-hosted fonts, design tokens and animations |
 | `website/assets/js/site.js` | Header, menu, scroll reveals and intro controller |
+| `website/assets/js/land.js` | Headline accent phrases land letter by letter like wooden pieces (Web Animations, loaded on idle, skipped in Quiet mode) |
 | `website/assets/js/gate-3d.js` | Generated 3D headset bundle. Do not edit by hand. |
 | `src/gate/headset.js` | Source for the 3D headset (three.js) |
 | `website/_headers` | HTTP security and caching headers (Cloudflare Pages) |
 | `scripts/verify.mjs` | Security checks that run in CI |
 | `scripts/attribution-guard.mjs` | Owner-only authorship: rejects commits by anyone else or carrying AI attribution |
+
+### Quiet motion
+
+A **Quiet** switch (header on wide screens, footer everywhere) turns all movement off: the landing letters, parallax, the reticle, the falling blocks and the intro. The choice is kept in this browser (`localStorage`, key `ns-quiet-motion`) and sent nowhere. The system's reduced-motion setting does the same without needing the switch. Hover effects apply only on devices that really hover, so touch screens never get a stuck hover state.
 
 ### AI-generated assets
 
