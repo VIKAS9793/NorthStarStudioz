@@ -853,11 +853,3 @@ function initMaterials() {
   card.querySelector('.prompt__step')?.before(row);
 }
 initMaterials();
-
-/* ---------- Pieces landing: accent phrases in the headlines set themselves down like wooden pieces ----------
-   Loaded on idle and only when motion is welcome; the module is tiny and runs on the compositor. */
-if (document.querySelector('[data-land]') && !calm() && 'animate' in Element.prototype && 'IntersectionObserver' in window) {
-  const later = window.requestIdleCallback || ((fn) => setTimeout(fn, 400));
-  const go = () => later(() => import('./land.js').then((m) => m.initLand(afterGate, calm)).catch(() => {}), { timeout: 3000 });
-  if (document.readyState === 'complete') go(); else addEventListener('load', go, { once: true });
-}

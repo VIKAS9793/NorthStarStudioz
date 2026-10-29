@@ -42,7 +42,6 @@ The website in [`website/`](website/) is plain HTML and CSS. It uses no framewor
 | `website/index.html` | Home page, including the intro screen |
 | `website/styles.css` | All styles: self-hosted fonts, design tokens and animations |
 | `website/assets/js/site.js` | Header, menu, scroll reveals and intro controller |
-| `website/assets/js/land.js` | Headline accent phrases land letter by letter like wooden pieces (Web Animations, loaded on idle, skipped in Quiet mode) |
 | `website/assets/js/gate-3d.js` | Generated 3D headset bundle. Do not edit by hand. |
 | `src/gate/headset.js` | Source for the 3D headset (three.js) |
 | `website/_headers` | HTTP security and caching headers (Cloudflare Pages) |
