@@ -47,6 +47,20 @@ function split(el) {
   return [...el.querySelectorAll('.land__ch')];
 }
 
+/**
+ * Tells every letter where it sits in its heading, so a gradient painted through the heading's text can be
+ * continued letter by letter (see .hero__title .land__ch). Layout offsets are used, not on-screen rectangles,
+ * so a letter that is mid-hop is measured where it rests.
+ */
+function align(heading) {
+  heading.style.setProperty('--title-h', `${heading.offsetHeight}px`);
+  for (const ch of heading.querySelectorAll('.land__ch')) {
+    // When the heading is the letter's offset parent (a filter makes it one) offsetTop is already relative to it.
+    const top = ch.offsetParent === heading ? ch.offsetTop : ch.offsetTop - heading.offsetTop;
+    ch.style.setProperty('--top', `${top}px`);
+  }
+}
+
 /** A fixed, scattered tilt for each piece, so every load lands the same way. */
 const tiltFor = (i) => ((i * 53) % 17 - 8) * 1.4;
 
@@ -109,6 +123,16 @@ export function initLand(afterGate, calm) {
 
   for (const el of phrases) {
     split(el);
+    const heading = el.closest('h1, h2');
+    if (heading) {
+      align(heading);
+      // A new line break (a narrower window, a rotated phone) moves the letters: measure again once things settle.
+      let settle;
+      new ResizeObserver(() => {
+        clearTimeout(settle);
+        settle = setTimeout(() => align(heading), 150);
+      }).observe(heading);
+    }
     if (el.closest('.hero')) {
       afterGate(() => {
         if (calm()) return;
