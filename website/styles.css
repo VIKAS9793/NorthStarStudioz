@@ -1016,26 +1016,6 @@ main { position: relative; z-index: 1; padding-bottom: 120px; }
 @keyframes ping { from { box-shadow: 0 0 0 0 rgba(255, 181, 71, 0.55); } to { box-shadow: 0 0 0 18px rgba(255, 181, 71, 0); } }
 @media (prefers-reduced-motion: no-preference) { .prompt__glyph.is-ping { animation: ping 0.7s ease-out; } }
 
-/* Under the hood: frame-budget targets under the release rules. */
-.spec__rules { grid-template-rows: auto auto 1fr; }
-.budget { align-self: end; display: grid; gap: 12px; padding-top: 18px; border-top: 1px dashed var(--edge-strong); }
-.budget__rows { display: grid; gap: 12px; }
-.budget__rows > div { display: grid; grid-template-columns: 1fr auto; align-items: baseline; gap: 6px 12px; }
-.budget__rows dt { font: 600 0.72rem/1 var(--font-mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim); }
-.budget__rows dd { font: 700 1.05rem/1 var(--font-display); color: var(--bone); font-variant-numeric: tabular-nums; }
-.budget__bar { grid-column: 1 / -1; position: relative; height: 6px; border-radius: 999px; background: rgba(243, 239, 231, 0.08); overflow: hidden; }
-.budget__bar::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 100%; border-radius: inherit; background: linear-gradient(90deg, #5fd48c, var(--sun)); transform-origin: left; }
-.budget__bar--120::before { width: 75%; }
-.budget__badges { display: flex; flex-wrap: wrap; gap: 6px; }
-.budget__badges li { padding: 6px 10px; border-radius: 8px; border: 1px solid rgba(255, 181, 71, 0.4); font: 500 0.66rem/1 var(--font-mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--sun); }
-.budget__note { font: 500 0.66rem/1.4 var(--font-mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--faint); }
-@keyframes fill { from { transform: scaleX(0); } }
-@media (prefers-reduced-motion: no-preference) {
-  @supports (animation-timeline: view()) {
-    .budget__bar::before { animation: fill linear both; animation-timeline: view(); animation-range: entry 30% cover 40%; }
-  }
-}
-
 /* Very narrow phones: keep the brand name and the Passthrough pill from touching. */
 @media (max-width: 400px) {
   .brand { gap: 8px; }
